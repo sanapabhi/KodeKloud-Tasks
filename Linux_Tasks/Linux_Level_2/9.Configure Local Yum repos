@@ -1,0 +1,66 @@
+QUESTION:9.The Nautilus production support team and security team had a meeting last month in which they decided to use local yum repositories for maintaing packages needed for their servers. 
+For now they have decided to configure a local yum repo on Nautilus Backup Server. This is one of the pending items from last month, so please configure a local yum repository on Nautilus Backup Server as per details given below.
+
+a. We have some packages already present at location /packages/downloaded_rpms/ on Nautilus Backup Server.
+b. Create a yum repo named local_yum and make sure to set Repository ID to local_yum. Configure it to use package's location /packages/downloaded_rpms/.
+c. Install package wget from this newly created repo.
+
+ANSWER:
+ 	Here are the detailed steps and commands to achieve this:
+	Step-by-Step Instructions
+	1. Connect to the Nautilus Backup Server
+	First, you need to connect to the Nautilus Backup Server via SSH.
+	 #ssh your_username@nautilus_backup_server
+	 
+	2. Switch to the Root User
+	Once connected, switch to the root user to have the necessary permissions.
+	 #sudo su -
+	 
+	3. Create the Yum Repository Configuration File
+	Navigate to the yum repository configuration directory and create a new repository file.
+	 #cd /etc/yum.repos.d/
+	 #vi yum_local.repo
+	 
+	4. Add Repository Configuration
+	Edit the yum_local.repo file to include the following configuration:
+	[yum_local]
+	name=yum_local
+	baseurl=file:///packages/downloaded_rpms/
+	enabled=1
+	gpgcheck=0
+	Save and exit the editor.
+
+	Expanation Configuration file:
+    • Repository ID: yum_local
+    • Name: yum_local
+    • Base URL: file:///packages/downloaded_rpms/
+    • Enabled: 1 (to enable the repository)
+    • GPG Check: 0 (to disable GPG check)
+
+	5. Clean Yum Cache and Verify Repository
+	Clean the yum cache to ensure the new repository is recognized and then verify the repository.
+	 #yum clean all
+	 #yum repolist
+	 
+	6. Install the wget Package
+	Finally, install the wget package from the newly created repository.
+	 #yum install wget
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a summary of the commands you will run:
+ssh your_username@nautilus_backup_server
+sudo su -
+cd /etc/yum.repos.d/
+vi local_yum.repo
+# Add the following content to the file:
+# [local_yum]
+# name=local_yum
+# baseurl=file:///packages/downloaded_rpms/
+# enabled=1
+# gpgcheck=0
+yum clean all
+yum repolist
+yum install wget
+This will configure the local yum repository and install the wget package from it. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,0 +1,161 @@
+QUESTION:4.The Nautilus application development team was working on a git repository /opt/games.git which is cloned under /usr/src/kodekloudrepos directory present on Storage server in Stratos DC. 
+The team want to setup a hook on this repository, please find below more details:
+
+1.Merge the feature branch into the master branch, but before pushing your changes complete below point.
+2.Create a post-update hook in this git repository so that whenever any changes are pushed to the master branch, it creates a release tag with name release-2023-06-15, where 2023-06-15 is supposed to be the current date. 
+For example if today is 20th June, 2023 then the release tag must be release-2023-06-20. Make sure you test the hook at least once and create a release tag for today's release.
+3.Finally remember to push your changes.
+
+ANSWER:
+
+#Solution to the Problem:
+
+The task involves working with a Git repository and setting up a Git hook that automatically creates a release tag whenever changes are pushed to the master branch. Here's a step-by-step guide to accomplish this:
+
+Step 1: Navigate to the Repository Directory
+First, navigate to the directory where the repository is located:
+
+		 #cd /usr/src/kodekloudrepos/games
+		 
+Step 2: Checkout and Merge the Feature Branch
+You need to merge a feature branch into the master branch. Assuming the feature branch is named feature-branch:
+    
+	1. Checkout the master branch:
+             
+		 #git checkout master
+		 
+    2. Merge the feature branch into the master branch:
+             
+		 #git merge feature-branch
+		 
+Step 3: Create a post-update Hook
+Git hooks are scripts that Git executes before or after events such as commit, push, and receive. In this case, we will create a post-update hook.
+    
+	1. Go to the hooks directory in the repository:
+              
+		 #cd /usr/src/kodekloudrepos/games/.git/hooks
+		 
+    2. Create a post-update hook script:
+              
+		 #touch post-update
+	   
+    3. Open the post-update file in a text editor (e.g., vim or nano):
+              
+		 #vim post-update
+		 
+    4. Add the following content to the post-update script:
+       
+       
+		 #!/bin/
+		
+		 # Get the current date
+		 DATE=$(date +'%Y-%m-%d')
+       
+		 # Create a release tag
+		 git tag "release-$DATE"   .................##{ e.g., git tag 2024-08-24 add here your current date which date you performed the task.}##
+       
+		 # Push the tags to the remote repository
+		 git push origin --tags
+	   
+    5. Save the file and exit the editor. 
+	
+    6. Make the post-update hook executable:
+       
+         #chmod +x post-update
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& step 3 perform on 2 different paths. &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+		 
+Step 3 :Create a post-update Hook
+Git hooks are scripts that Git executes before or after events such as commit, push, and receive. In this case, we will create a post-update hook.
+    
+	1. Go to the hooks directory in the repository:
+              
+		 #cd /opt/games.git/hooks
+		 
+    2. Create a post-update hook script:
+              
+		 #touch post-update
+	   
+    3. Open the post-update file in a text editor (e.g., vim or nano):
+              
+		 #vim post-update
+		 
+    4. Add the following content to the post-update script:
+       
+       
+		 #!/bin/
+		
+		 # Get the current date
+		 DATE=$(date +'%Y-%m-%d')
+       
+		 # Create a release tag
+		 git tag "release-$DATE"   .................##{ e.g., git tag 2024-08-24 add here your current date which date you performed the task.}##
+       
+		 # Push the tags to the remote repository
+		 git push origin --tags
+	   
+    5. Save the file and exit the editor. 
+	
+    6. Make the post-update hook executable:
+       
+         #chmod +x post-update
+		 
+Step 4: Test the Hook
+To ensure that the post-update hook works correctly, you need to push the changes to the remote repository.
+
+	# navigate to the directory where the repository is located:
+
+		 #cd /usr/src/kodekloudrepos/games
+		 
+    1. Add the changes to the master branch:
+             
+		 #git add .
+	   
+    2. Commit the changes:
+              
+		 #git commit -m "Merging feature branch and setting up post-update hook"
+	   
+    3. Push the changes to the remote repository:
+             
+		 #git push origin master
+	   
+After this push, the post-update hook should trigger, and it will automatically create a tag like release-2023-08-24 (assuming today's date is August 24, 2024) and push it to the remote repository.
+
+Step 5: Verify the Tag Creation
+To verify that the tag was created and pushed:
+
+	# Go to the hooks directory in the repository:
+              
+		 #cd /usr/src/kodekloudrepos/games/.git/hooks
+		 
+    1. List the tags in the repository:
+             
+		 #git tag
+	   
+    2. Check the remote repository for the new tag:
+              
+		 #git ls-remote --tags origin
+	   
+Output show: You should see a tag with the format release-YYYY-MM-DD, corresponding to the current date.
+
+
+Summary of Steps
+    1. Merged the feature branch into the master branch.
+    2. Created a post-update hook to generate a release tag on push.
+    3. Pushed the changes to trigger the hook and verify tag creation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

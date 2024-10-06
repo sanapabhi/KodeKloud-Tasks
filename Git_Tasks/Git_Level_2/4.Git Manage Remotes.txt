@@ -1,0 +1,128 @@
+QUESTION:4.The xFusionCorp development team added updates to the project that is maintained under /opt/demo.git repo and cloned under /usr/src/kodekloudrepos/demo. 
+Recently some changes were made on Git server that is hosted on Storage server in Stratos DC. The DevOps team added some new Git remotes, so we need to update remote on /usr/src/kodekloudrepos/demo repository as per details mentioned below:
+
+a. In /usr/src/kodekloudrepos/demo repo add a new remote dev_demo and point it to /opt/xfusioncorp_demo.git repository.
+b. There is a file /tmp/index.html on same server; copy this file to the repo and add/commit to master branch.
+c. Finally push master branch to this new remote origin.
+
+ANSWER:
+
+Step-by-Step Instructions
+a. Add a new remote dev_demo and point it to /opt/xfusioncorp_demo.git
+    1. Navigate to the repository directory:
+       #cd /usr/src/kodekloudrepos/demo
+    2. Add the new remote:
+       #git remote add dev_demo /opt/xfusioncorp_demo.git
+    3. Verify the new remote:
+       #git remote -v
+       This command should list the new remote dev_demo along with its URL.
+	   
+b. Copy /tmp/index.html to the repository and add/commit to the master branch
+    1. Copy the file to the repository:
+       #cp /tmp/index.html /usr/src/kodekloudrepos/demo/
+    2. Navigate to the repository directory (if not already there):
+       #cd /usr/src/kodekloudrepos/demo
+    3. Add the file to the staging area:
+       #git add index.html
+    4. Commit the changes:
+       #git commit -m "Add index.html to the repository"
+	   
+c. Push the master branch to the new remote dev_demo
+    1. Push the master branch to the new remote:
+       #git push dev_demo master
+	   
+OROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROR.
+Example Commands
+Here is a summary of all the commands you need to run:
+# Navigate to the repository directory
+cd /usr/src/kodekloudrepos/demo
+
+# Add the new remote
+git remote add dev_demo /opt/xfusioncorp_demo.git
+
+# Verify the new remote
+git remote -v
+
+# Copy the file to the repository
+cp /tmp/index.html /usr/src/kodekloudrepos/demo/
+
+# Navigate to the repository directory (if not already there)
+cd /usr/src/kodekloudrepos/demo
+
+# Add the file to the staging area
+git add index.html
+
+# Commit the changes
+git commit -m "Add index.html to the repository"
+
+# Push the master branch to the new remote
+git push dev_demo master
+
+OROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROROR.
+
+ 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PROBLEM SOLVE BY BASH SCRIPT
+
+
+Steps to execute a shell script in Linux
+The procedure is as follows:
+    1. Create a new file called demo.sh using a text editor such as nano or vi in Linux:
+	 #touch demo.sh
+	 #nano demo.sh
+	 
+    2. Add the following code:nano demo.sh
+	
+#!bin/bash
+# Navigate to the repository directory
+	 #cd /usr/src/kodekloudrepos/demo
+
+# Add the new remote
+	 #git remote add dev_demo /opt/xfusioncorp_demo.git
+
+# Verify the new remote
+	 #git remote -v
+
+# Copy the file to the repository
+	 #cp /tmp/index.html /usr/src/kodekloudrepos/demo/
+
+# Navigate to the repository directory (if not already there)
+	 #cd /usr/src/kodekloudrepos/demo
+
+# Add the file to the staging area
+	 #git add index.html
+
+# Commit the changes
+	 #git commit -m "Add index.html to the repository"
+
+# Push the master branch to the new remote
+	 #git push dev_demo master
+	 
+	 
+    3. Set the script executable permission by running chmod command in Linux:
+	 #chmod +x demo.sh
+    4. Execute a shell script in Linux:
+	 #./demo.sh
+
+
+OUTPUT OF BASH SCRIPT
+
+dev_demo   /opt/xfusioncorp_demo.git (fetch)
+dev_demo   /opt/xfusioncorp_demo.git (push)
+origin  /opt/demo.git (fetch)
+origin  /opt/demo.git (push)
+[master 5115071] Add index.html to the repository
+ 1 file changed, 10 insertions(+)
+ create mode 100644 index.html
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 36 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (6/6), 596 bytes | 596.00 KiB/s, done.
+Total 6 (delta 0), reused 0 (delta 0), pack-reused 0
+To /opt/xfusioncorp_demo.git
+ * [new branch]      master -> master
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

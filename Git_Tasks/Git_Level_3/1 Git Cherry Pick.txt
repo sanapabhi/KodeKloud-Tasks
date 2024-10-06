@@ -1,0 +1,133 @@
+QUESTION:1.The Nautilus application development team has been working on a project repository /opt/official.git. 
+This repo is cloned at /usr/src/kodekloudrepos on storage server in Stratos DC. They recently shared the following requirements with the DevOps team:
+
+There are two branches in this repository, master and feature. One of the developers is working on the feature branch and their work is still in progress, 
+however they want to merge one of the commits from the feature branch to the master branch, the message for the commit that needs to be merged into master is Update info.txt.
+Accomplish this task for them, also remember to push your changes eventually.
+
+ANSWER:
+
+Understanding the Task
+
+We need to:
+    1. Clone the repository /opt/official.git to /usr/src/kodekloudrepos on the Stratos DC storage server.
+    2. Checkout the master branch.
+    3. Find the specific commit on the feature branch with the message "Update info.txt".
+    4. Cherry-pick that commit to the master branch.
+    5. Push the changes to the remote repository.
+	
+Commands and Explanation
+Step 1: Clone the Repository
+
+	 #git clone /opt/official.git /usr/src/kodekloudrepos
+
+This command clones the repository located at /opt/official.git to the directory /usr/src/kodekloudrepos.
+
+Step 2: Checkout the Master Branch
+
+	 #cd /usr/src/kodekloudrepos/officials
+	 #git checkout master
+		 Output:
+				Switched to branch 'master'
+				Your branch is up to date with 'origin/master'.
+
+This command changes the current working directory to the cloned repository and checks out the master branch.
+
+Step 3: Find the Specific Commit
+
+	 #git log --grep="Update info.txt" --pretty=oneline feature
+		 Output:
+				d44cc0b6f991e58eb302df59b6e45ffe2d8cb727 Update info.txt
+
+This command searches for the commit on the feature branch with the message "Update info.txt" and displays the commit hash in a one-line format.
+
+Step 4: Cherry-Pick the Commit
+
+	 #git cherry-pick <commit_hash> 
+				e.g., Example Command: #git cherry-pick d44cc0b6f991e58eb302df59b6e45ffe2d8cb727
+			Output:
+					[master e6844c8] Update info.txt
+					Date: Sat Aug 17 09:39:12 2024 +0000
+					1 file changed, 1 insertion(+), 1 deletion(-)
+
+Replace <commit_hash> with the actual commit hash obtained in step 3. This command applies the changes from the specified commit to the current branch (master in this case).
+
+Step 5: Push the Changes
+
+	 #git push origin master
+		 Output:
+				Enumerating objects: 5, done.
+				Counting objects: 100% (5/5), done.
+				Delta compression using up to 36 threads
+				Compressing objects: 100% (2/2), done.
+				Writing objects: 100% (3/3), 316 bytes | 316.00 KiB/s, done.
+				Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+				To /opt/official.git
+				ce88f16..e6844c8  master -> master
+
+This command pushes the changes made to the master branch to the remote repository named origin.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example
+Assuming the commit hash for "Update info.txt" is 1234567890abcdef, the complete sequence of commands would be:
+
+git clone /opt/official.git /usr/src/kodekloudrepos
+cd /usr/src/kodekloudrepos
+git checkout master
+git cherry-pick 1234567890abcdef
+git push origin master
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Additional Considerations
+    • Conflicts: If there are conflicts during the cherry-pick, you'll need to resolve them before proceeding. Git will indicate the conflicting files.
+    • Author Information: The cherry-picked commit will have the original author information. If you need to change it, you can use the --author option with the git cherry-pick command.
+    • Verification: After pushing the changes, it's recommended to verify that the commit was successfully merged into the master branch on the remote repository.
+By following these steps, the specified commit from the feature branch will be merged into the master branch.
+Note: Ensure you have the necessary permissions to clone the repository, push changes, and access the storage server.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,173 @@
+Question:21.xFusionCorp Industries uses some monitoring tools to check the status of every service, application, etc running on the systems. 
+Recently, the monitoring system identified that Apache service is not running on some of the Nautilus Application Servers in Stratos Datacenter.
+
+
+1. Identify the faulty Nautilus Application Server and fix the issue. Also, make sure Apache service is up and running on all Nautilus Application Servers. Do not try to stop any kind of firewall that is already running.
+2. Apache is running on 8088 port on all Nautilus Application Servers and its document root must be /var/www/html on all app servers.
+3. Finally you can test from jump host using curl command to access Apache on all app servers and it should be reachable and you should get some static page. E.g. curl http://172.16.238.10:8088/.
+
+Answer:
+
+Prerequisites:
+You should have access to the servers (App Server 1, App Server 2, and App Server 3) and the jump host.
+All servers are running CentOS, and you should have sudo privileges to run administrative commands.
+
+Step 1: Identify the faulty server
+You can log in to each of the application servers and check if the Apache service is running on port 8088.
+
+From the jump host:
+
+		ssh tony@172.16.238.10  # App Server 1
+		ssh steve@172.16.238.11  # App Server 2
+		ssh banner@172.16.238.12  # App Server 3
+		
+Step 2: Check if Apache is running on port 8088
+On each server, verify if Apache is running and configured to use port 8088. Run the following commands:
+
+2.1 Check Apache service status
+
+
+		#sudo systemctl status httpd
+2.2 Check if Apache is listening on port 8088
+
+
+		#sudo netstat -tulnp | grep 8088
+		
+If you do not see any output or if Apache is not running, proceed to the next step to fix the issue.
+
+OR
+
+2.2
+
+		#cat /etc/httpd/conf/httpd.conf | grep 8088
+			Output:
+				Listen 8088
+
+Step 3: Fix Apache configuration
+3.1 Verify and edit Apache configuration
+The default Apache configuration file is usually located at /etc/httpd/conf/httpd.conf. We need to ensure that Apache is configured to run on port 8088 and the document root is /var/www/html.
+
+Open the configuration file for editing:
+
+		#sudo vi /etc/httpd/conf/httpd.conf
+		
+3.2 Update the port configuration
+Look for the line that starts with Listen and change it to:
+
+		Listen 8088
+		
+3.3 Verify the document root
+Ensure the document root is set to /var/www/html by looking for the following lines:
+
+		DocumentRoot "/var/www/html"
+		<Directory "/var/www/html">
+
+If these lines are missing or incorrect, update them accordingly.
+
+3.4 Save and exit the file
+After making changes, save the file and exit the editor.
+
+Step 4: Restart Apache service
+After configuring Apache, restart the service to apply the changes:
+
+		#sudo systemctl restart httpd
+
+Now, check the status again to confirm it is running:
+
+		#sudo systemctl status httpd
+		
+Step 5: Confirm Apache is running on port 8088
+Once Apache is restarted, confirm it is listening on the correct port:
+
+		#sudo netstat -tulnp | grep 8088
+		
+You should see output indicating that Apache is listening on 0.0.0.0:8088.
+
+OR
+
+		#cat /etc/httpd/conf/httpd.conf | grep 8088
+					Output:
+						Listen 8088
+
+Step 6: Test Apache from jump host
+Now that the Apache service is running, you can test it from the jump host using the curl command.
+
+From the jump host, run:
+
+
+
+curl http://172.16.238.10:8088/  # Test App Server 1
+curl http://172.16.238.11:8088/  # Test App Server 2
+curl http://172.16.238.12:8088/  # Test App Server 3
+
+---------------------------------------------------------------------------------------------------
+Eg.,
+		thor@jumphost ~$ curl http://172.16.238.10:8088/  # Test App Server 1
+		curl http://172.16.238.11:8088/  # Test App Server 2
+		curl http://172.16.238.12:8088/  # Test App Server 3
+
+			Output:
+				Welcome to xFusionCorp Industries!
+				Welcome to xFusionCorp Industries!
+				Welcome to xFusionCorp Industries!
+---------------------------------------------------------------------------------------------------
+
+You should receive a response containing the content of the default Apache welcome page or a custom static page if configured.
+
+
+Summary of Commands:
+
+	1.systemctl status httpd – Check the status of the Apache service.
+	2.netstat -tulnp | grep 8088 – Check if Apache is listening on port 8088.
+	3.vi /etc/httpd/conf/httpd.conf – Edit the Apache configuration file.
+	4.systemctl restart httpd – Restart Apache after configuration changes.
+	5.firewall-cmd – Manage the firewall to allow traffic on port 8088.
+	6.curl – Test the Apache service by accessing it from the jump host.
+	
+By following these steps, you should be able to identify and fix the Apache service issue and ensure it's running properly on port 8088 across all Nautilus Application Servers.
+
+
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+For Informantion:
+
+Application Server 1:
+
+No Error
+
+Application Server 2:
+
+Error.1: DocumentRoot /var/www/html; ---( In this error having semi colon instead of double coat) -- Correct Answer: DocumentRoot "/var/www/html"
+
+Error.2: "Listen 8088"   			 ---( In this error having double coat instead of no option ) -- Correct Answer: Listen 8088
+
+Application Server 3:
+
+Error.1: DocumentRoot "var/www/html;"---( In this error having semi colon and / not availaible)   -- Correct Answer:DocumentRoot "/var/www/html"
+
+Error.2: ServerRoot /var/www/html;   ---( In this error having semi colon )                       -- Correct Answer: ServerRoot /var/www/html
+
+
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

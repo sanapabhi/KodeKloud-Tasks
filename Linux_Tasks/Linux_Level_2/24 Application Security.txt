@@ -1,0 +1,371 @@
+Question:24.We have a backup management application UI hosted on Nautilus's backup server in Stratos DC. 
+That backup management application code is deployed under Apache on the backup server itself, and Nginx is running as a reverse proxy on the same server. 
+Apache and Nginx ports are 3000 and 8099, respectively. We have iptables firewall installed on this server. 
+Make the appropriate changes to fulfill the requirements mentioned below:
+
+We want to open all incoming connections to Nginx's port and block all incoming connections to Apache's port. Also make sure rules are permanent.
+
+Answer:
+
+Part:1.SSH into the Remote Server
+
+thor@jumphost ~$ ssh clint@stbkp01 
+The authenticity of host 'stbkp01 (172.16.238.16)' can't be established.
+ED25519 key fingerprint is SHA256:VjmgmDYH0sn3F3tu6mTaBtlVzJ0UioRpOcVeCYyBQDw.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'stbkp01' (ED25519) to the list of known hosts.
+clint@stbkp01's password: 
+
+Part:1.1.Swith to root user
+
+[clint@stbkp01 ~]$ sudo su -
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for clint: 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Step-by-Step Solution
+
+Check the Current iptables Rules First, we need to check the existing firewall rules to understand what’s configured.
+
+		[root@stbkp01 ~]# sudo iptables -L -v
+		
+This command lists all current iptables rules in detail (-v for verbose).
+
+				Output:
+						Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+					 pkts bytes target     prot opt in     out     source               destination         
+					   68  7035 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+						2   142 ACCEPT     all  --  lo     any     anywhere             anywhere            
+						1    60 INPUT_direct  all  --  any    any     anywhere             anywhere            
+						1    60 INPUT_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+						1    60 INPUT_ZONES  all  --  any    any     anywhere             anywhere            
+						0     0 DROP       all  --  any    any     anywhere             anywhere             ctstate INVALID
+						0     0 REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+
+					Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+					 pkts bytes target     prot opt in     out     source               destination         
+						0     0 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+						0     0 ACCEPT     all  --  lo     any     anywhere             anywhere            
+						0     0 FORWARD_direct  all  --  any    any     anywhere             anywhere            
+						0     0 FORWARD_IN_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+						0     0 FORWARD_IN_ZONES  all  --  any    any     anywhere             anywhere            
+						0     0 FORWARD_OUT_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+						0     0 FORWARD_OUT_ZONES  all  --  any    any     anywhere             anywhere            
+						0     0 DROP       all  --  any    any     anywhere             anywhere             ctstate INVALID
+						0     0 REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+
+					Chain OUTPUT (policy ACCEPT 50 packets, 6993 bytes)
+					 pkts bytes target     prot opt in     out     source               destination         
+						4   340 ACCEPT     all  --  any    lo      anywhere             anywhere            
+					   50  6993 OUTPUT_direct  all  --  any    any     anywhere             anywhere            
+
+					Chain FORWARD_IN_ZONES (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						0     0 FWDI_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+					Chain FORWARD_IN_ZONES_SOURCE (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FORWARD_OUT_ZONES (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						0     0 FWDO_public  all  --  any    +       anywhere             anywhere            [goto] 
+
+					Chain FORWARD_OUT_ZONES_SOURCE (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FORWARD_direct (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDI_public (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						0     0 FWDI_public_log  all  --  any    any     anywhere             anywhere            
+						0     0 FWDI_public_deny  all  --  any    any     anywhere             anywhere            
+						0     0 FWDI_public_allow  all  --  any    any     anywhere             anywhere            
+						0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+					Chain FWDI_public_allow (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDI_public_deny (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDI_public_log (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDO_public (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						0     0 FWDO_public_log  all  --  any    any     anywhere             anywhere            
+						0     0 FWDO_public_deny  all  --  any    any     anywhere             anywhere            
+						0     0 FWDO_public_allow  all  --  any    any     anywhere             anywhere            
+
+					Chain FWDO_public_allow (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDO_public_deny (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain FWDO_public_log (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain INPUT_ZONES (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						1    60 IN_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+					Chain INPUT_ZONES_SOURCE (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain INPUT_direct (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain IN_public (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						1    60 IN_public_log  all  --  any    any     anywhere             anywhere            
+						1    60 IN_public_deny  all  --  any    any     anywhere             anywhere            
+						1    60 IN_public_allow  all  --  any    any     anywhere             anywhere            
+						0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+					Chain IN_public_allow (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+						1    60 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh ctstate NEW,UNTRACKED
+
+					Chain IN_public_deny (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain IN_public_log (1 references)
+					 pkts bytes target     prot opt in     out     source               destination         
+
+					Chain OUTPUT_direct (1 references)
+					 pkts bytes target     prot opt in     out     source               destination   
+
+
+
+2.Allow Incoming Connections to Nginx (Port 8099)
+
+To allow traffic on port 8099 for Nginx, we need to add an iptables rule to accept incoming connections.
+
+		[root@stbkp01 ~]#iptables -A INPUT -p tcp --dport 8099 -j ACCEPT
+		
+o -A INPUT: Appends this rule to the INPUT chain, which handles incoming traffic.
+o -p tcp: Specifies that the protocol is TCP (used by HTTP traffic).
+o --dport 8099: Specifies that the destination port is 8099 (the Nginx port).
+o -j ACCEPT: The action is to accept the connection.
+
+
+3.Block Incoming Connections to Apache (Port 3000)
+
+Now, we add a rule to block any incoming connections to Apache on port 3000.
+
+
+
+		[root@stbkp01 ~]#iptables -A INPUT -p tcp --dport 3000 -j REJECT
+		
+o --dport 3000: Specifies that the destination port is 3000 (the Apache port).
+o -j REJECT: This action rejects the connection, meaning it will block the traffic.
+
+
+4.Verify the Rules
+
+After adding the rules, check if they have been applied correctly:
+
+
+
+		[root@stbkp01 ~]#iptables -L -v
+
+You should see the rules allowing connections on port 8099 and rejecting connections on port 3000.
+		
+				Output:
+					Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+				 pkts bytes target     prot opt in     out     source               destination         
+				  169 12627 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+					2   142 ACCEPT     all  --  lo     any     anywhere             anywhere            
+					1    60 INPUT_direct  all  --  any    any     anywhere             anywhere            
+					1    60 INPUT_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+					1    60 INPUT_ZONES  all  --  any    any     anywhere             anywhere            
+					0     0 DROP       all  --  any    any     anywhere             anywhere             ctstate INVALID
+					0     0 REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+					0     0 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:8099
+					0     0 REJECT     tcp  --  any    any     anywhere             anywhere             tcp dpt:hbci reject-with icmp-port-unreachable
+
+				Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+				 pkts bytes target     prot opt in     out     source               destination         
+					0     0 ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+					0     0 ACCEPT     all  --  lo     any     anywhere             anywhere            
+					0     0 FORWARD_direct  all  --  any    any     anywhere             anywhere            
+					0     0 FORWARD_IN_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+					0     0 FORWARD_IN_ZONES  all  --  any    any     anywhere             anywhere            
+					0     0 FORWARD_OUT_ZONES_SOURCE  all  --  any    any     anywhere             anywhere            
+					0     0 FORWARD_OUT_ZONES  all  --  any    any     anywhere             anywhere            
+					0     0 DROP       all  --  any    any     anywhere             anywhere             ctstate INVALID
+					0     0 REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+
+				Chain OUTPUT (policy ACCEPT 14 packets, 1328 bytes)
+				 pkts bytes target     prot opt in     out     source               destination         
+					4   340 ACCEPT     all  --  any    lo      anywhere             anywhere            
+				  155 23225 OUTPUT_direct  all  --  any    any     anywhere             anywhere            
+
+				Chain FORWARD_IN_ZONES (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					0     0 FWDI_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+				Chain FORWARD_IN_ZONES_SOURCE (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FORWARD_OUT_ZONES (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					0     0 FWDO_public  all  --  any    +       anywhere             anywhere            [goto] 
+
+				Chain FORWARD_OUT_ZONES_SOURCE (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FORWARD_direct (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDI_public (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					0     0 FWDI_public_log  all  --  any    any     anywhere             anywhere            
+					0     0 FWDI_public_deny  all  --  any    any     anywhere             anywhere            
+					0     0 FWDI_public_allow  all  --  any    any     anywhere             anywhere            
+					0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+				Chain FWDI_public_allow (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDI_public_deny (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDI_public_log (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDO_public (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					0     0 FWDO_public_log  all  --  any    any     anywhere             anywhere            
+					0     0 FWDO_public_deny  all  --  any    any     anywhere             anywhere            
+					0     0 FWDO_public_allow  all  --  any    any     anywhere             anywhere            
+
+				Chain FWDO_public_allow (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDO_public_deny (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain FWDO_public_log (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain INPUT_ZONES (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					1    60 IN_public  all  --  +      any     anywhere             anywhere            [goto] 
+
+				Chain INPUT_ZONES_SOURCE (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain INPUT_direct (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain IN_public (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					1    60 IN_public_log  all  --  any    any     anywhere             anywhere            
+					1    60 IN_public_deny  all  --  any    any     anywhere             anywhere            
+					1    60 IN_public_allow  all  --  any    any     anywhere             anywhere            
+					0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+
+				Chain IN_public_allow (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+					1    60 ACCEPT     tcp  --  any    any     anywhere             anywhere             tcp dpt:ssh ctstate NEW,UNTRACKED
+
+				Chain IN_public_deny (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain IN_public_log (1 references)
+				 pkts bytes target     prot opt in     out     source               destination         
+
+				Chain OUTPUT_direct (1 references)
+				 pkts bytes target     prot opt in     out     source               destination  
+		
+
+
+5.Make the iptables Rules Permanent
+
+To ensure the rules persist after reboot, use the iptables-save command to save the current configuration to a file that will be loaded on boot.
+
+
+
+		[root@stbkp01 ~]#service iptables save
+		
+			Output:
+				iptables: Saving firewall rules to /etc/sysconfig/iptables:[  OK  ]
+		
+This command saves the current iptables rules to the default configuration file (/etc/sysconfig/iptables), which is loaded when the system starts.
+
+
+6.Restart the iptables Service (if needed)
+
+If iptables service isn't running or you want to reload the rules, restart the iptables service:
+
+
+
+		[root@stbkp01 ~]#systemctl restart iptables
+		
+		
+7.Check iptables Status
+
+Confirm that the iptables service is running and the rules are still in place after the service restart:
+
+
+
+		[root@stbkp01 ~]#systemctl status iptables
+		
+			Output:
+				● iptables.service - IPv4 firewall with iptables
+			   Loaded: loaded (/usr/lib/systemd/system/iptables.service; disabled; vendor preset: disabled)
+			   Active: active (exited) since Thu 2024-10-03 16:29:04 UTC; 5s ago
+			  Process: 861 ExecStart=/usr/libexec/iptables/iptables.init start (code=exited, status=0/SUCCESS)
+			 Main PID: 861 (code=exited, status=0/SUCCESS)
+
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: iptables.service changed d...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: Starting IPv4 firewall wit...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[861]: Executing: /usr/libexec/...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com iptables.init[861]: iptables: Applying...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: Child 861 belongs to iptab...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: iptables.service: main pro...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: iptables.service changed s...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: Job iptables.service/start...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: Started IPv4 firewall with...
+			Oct 03 16:29:04 stbkp01.stratos.xfusioncorp.com systemd[1]: iptables.service: cgroup i...
+			Hint: Some lines were ellipsized, use -l to show in full.
+		
+You should see the service as "active (running)" with the rules applied.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Explanation of Commands:
+
+o iptables -A INPUT: This appends a rule to the INPUT chain (which handles incoming traffic).
+o -p tcp: Specifies the protocol to match, in this case, TCP (used for HTTP/S traffic).
+o --dport: Specifies the destination port of the packet. Nginx is on port 8099, Apache on port 3000.
+o -j ACCEPT/REJECT: Defines what action to take (ACCEPT to allow traffic, REJECT to block traffic).
+o service iptables save: Saves the current iptables rules so that they will be reloaded after a reboot.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+● Expected Output:
+
+After applying the rules and saving them, running sudo iptables -L -v should show something like this:
+
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:8099
+REJECT     tcp  --  anywhere             anywhere             tcp dpt:3000 reject-with icmp-port-unreachable
+This output shows that traffic on port 8099 (Nginx) is accepted and traffic on port 3000 (Apache) is rejected.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+

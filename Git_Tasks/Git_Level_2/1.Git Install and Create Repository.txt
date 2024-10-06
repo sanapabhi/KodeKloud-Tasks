@@ -1,0 +1,52 @@
+QUESTION: 1.The Nautilus development team shared with the DevOps team requirements for new application development, setting up a Git repository for that project. 
+Create a Git repository on Storage server in Stratos DC as per details given below:
+
+1.Install git package using yum on Storage server.
+2.After that, create/init a git repository named /opt/media.git (use the exact name as asked and make sure not to create a bare repository).
+
+ANSWER:
+
+Here are the detailed steps and commands to create a Git repository on the Storage server in Stratos DC:
+
+Step 1: Install Git Package Using yum
+    1. Connect to the Storage Server: First, you need to connect to the Storage server. You can use SSH to connect to the server. Replace username and storage_server_ip with your actual username and the IP address of the Storage server.
+       #ssh username@storage_server_ip
+	   
+    2. Install Git: Once connected, you need to install the Git package using yum. This command will install Git on your server.
+       #sudo yum install git -y
+	   
+Step 2: Create/Init a Git Repository
+    1. Create the Directory: Ensure the directory /opt exists and you have the necessary permissions to create a repository in it.
+       #sudo mkdir -p /opt
+	   
+    2. Initialize the Git Repository: Now, initialize a new Git repository named media.git in the /opt directory. Make sure not to create a bare repository.
+       #cd /opt
+       #sudo git init media.git
+		OR
+	   #sudo git init /opt/media.git
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a complete example of the commands you would run:
+# Connect to the Storage server
+ssh username@storage_server_ip
+
+# Install Git
+sudo yum install git -y
+
+# Create the directory (if it doesn't exist)
+sudo mkdir -p /opt
+
+# Initialize the Git repository
+cd /opt
+sudo git init media.git
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Explanation
+    • ssh username@storage_server_ip: Connects to the Storage server via SSH.
+    • sudo yum install git -y: Installs the Git package using yum with the -y flag to automatically answer ‘yes’ to prompts.
+    • sudo mkdir -p /opt: Creates the /opt directory if it doesn’t already exist.
+    • cd /opt: Changes the current directory to /opt.
+    • sudo git init media.git: Initializes a new Git repository named media.git in the /opt directory.
+	
+=======================================================================================================================================================================================================

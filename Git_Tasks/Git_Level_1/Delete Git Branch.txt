@@ -1,0 +1,76 @@
+QUESTION:
+The Nautilus developers are engaged in active development on one of the project repositories located at /usr/src/kodekloudrepos/cluster. 
+During testing, several test branches were created, and now they require cleanup. Here are the requirements provided to the DevOps team:
+
+1.On the Storage server in Stratos DC, delete a branch named xfusioncorp_cluster from the /usr/src/kodekloudrepos/cluster Git repository.
+
+ANSWER:
+STEPS TO DELETE THE BRANCH
+
+1.Access the Storage Server:
+	First, you need to connect to the Storage server where the repository is located. This is typically done using SSH.
+
+2.Navigate to the Repository Directory:
+	Once connected, navigate to the directory where the Git repository is located.
+
+3.Check the Current Branch:
+	Ensure you are not on the branch you want to delete. If you are, switch to another branch.
+
+4.Delete the Branch:
+	Use the Git command to delete the branch.
+
+
+DETAILED COMMANDS AND EXAMPLE
+
+1. Access the Storage Server
+Use SSH to connect to the Storage server. Replace username and storageserver with your actual username and server address.
+
+#ssh username@storageserver
+
+2. Navigate to the Repository Directory
+Change to the directory where the Git repository is located.
+
+#cd /usr/src/kodekloudrepos/cluster
+
+3. Check the Current Branch
+Ensure you are not on the xfusioncorp_cluster branch. You can check your current branch with:
+
+#git branch
+
+	If you are on the xfusioncorp_cluster branch, switch to another branch, such as main or master:
+
+#git checkout main
+
+4. Delete the Branch
+Now, delete the xfusioncorp_cluster branch locally:
+
+#git branch -d xfusioncorp_cluster
+
+	If the branch has not been merged and you want to force delete it, use:
+
+#git branch -D xfusioncorp_cluster
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Example
+Here is a complete example of the commands:
+
+	#ssh username@storageserver
+	#cd /usr/src/kodekloudrepos/cluster
+	#git branch
+	#git checkout main
+	#git branch -d xfusioncorp_cluster
+
+> Or, if you need to force delete:
+
+	#git branch -D xfusioncorp_cluster
+
+VERIFICATION	
+After deleting the branch, you can verify it by listing all branches:
+
+#git branch
+
+This should no longer show the xfusioncorp_cluster branch.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=======================================================================================================================================================================================================

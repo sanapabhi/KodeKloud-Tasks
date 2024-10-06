@@ -1,0 +1,191 @@
+QUESTION:2.A new developer just joined the Nautilus development team and has been assigned a new project for which he needs to create a new repository under his account on Gitea server. 
+Additionally, there is some existing data that need to be added to the repo. Below you can find more details about the task:
+
+Click on the Gitea UI button on the top bar. You should be able to access the Gitea UI. Login to Gitea server using username max and password Max_pass123.
+
+a. Create a new git repository story_news under max user.
+b. SSH into storage server using user max and password Max_pass123 and clone this newly created repository under user max home directory i.e /home/max.
+c. Copy all files from location /usr/dba to the repository and commit/push your changes to the master branch. The commit message must be "add stories" (must be done in single commit).
+d. Create a new branch max_games from master.
+e. Copy a file story-index-max.txt from location /tmp/stories/ to the repository. This file has a typo, which you can fix by changing the word Mooose to Mouse. Commit and push the changes to the newly created branch. Commit message must be "typo fixed for Mooose" (must be done in single commit).
+
+Note: For these kind of scenarios requiring changes to be done in a web UI, please take screenshots so that you can share it with us for review in case your task is marked incomplete. 
+You may also consider using a screen recording software such as loom.com to record and share your work.
+
+ANSWER:
+
+a. Create a New Git Repository story_news Under User max
+
+    1. Log in to Gitea:
+        ◦ Open your web browser and navigate to your Gitea server’s URL.
+        ◦ Log in with the credentials:
+            ▪ Username: max
+            ▪ Password: Max_pass123
+			
+    2. Create a New Repository:
+        ◦ After logging in, you should see the Gitea dashboard.
+        ◦ Click on the “+” icon in the top right corner or navigate to the “Repositories” section.
+        ◦ Click “New Repository”.
+        ◦ Fill out the repository creation form:
+            ▪ Repository Name: story_news
+            ▪ Description: (Optional) You can add a description if desired.
+            ▪ Repository Visibility: Choose whether it should be Public or Private.
+        ◦ Click “Create Repository”.
+       Screenshot/Recording: Capture the repository creation form filled out and the final confirmation screen.
+	   
+b. SSH into Storage Server and Clone the Repository
+    1. SSH into Storage Server:
+        ◦ Open a terminal on your local machine.
+        ◦ Connect to the storage server using SSH:
+          
+          
+          #ssh max@<storage-server-address>
+        ◦ Enter the password when prompted:
+            ▪ Password: Max_pass123
+			
+    2. Clone the Repository:
+        ◦ Once logged in, navigate to the home directory:
+          
+          #cd /home/max
+		  
+        ◦ Clone the newly created repository using Git:
+          
+          #git clone git@<gitea-server-address>:max/story_news.git    .........{Example-> http://git.stratos.xfusioncorp.com/max/story_news.git}
+		Output:
+			Cloning into 'story_news'...
+			warning: You appear to have cloned an empty repository.
+			Checking connectivity... done.
+
+       Screenshot/Recording: Capture the SSH session showing the commands and output of cloning the repository.
+	   
+c. Copy Files and Commit Changes
+    1. Copy Files from /usr/dba:
+        ◦ Still in the SSH session, copy all files from /usr/dba to the cloned repository directory:
+                    
+          #cp -r /usr/dba/* story_news/
+		  
+    2. Commit and Push Changes:
+        ◦ Navigate to the repository directory:
+                    
+          #cd story_news
+		  
+        ◦ Add all files to the staging area:
+                    
+          #git add .
+		  
+        ◦ Commit the changes:
+                   
+          #git commit -m "add stories"
+		Output:
+		[master (root-commit) 7810518] add stories
+		 Committer: Linux User <max@ststor01.stratos.xfusioncorp.com>
+		Your name and email address were configured automatically based
+		on your username and hostname. Please check that they are accurate.
+		You can suppress this message by setting them explicitly. Run the
+		following command and follow the instructions in your editor to edit
+		your configuration file:
+		
+		    git config --global --edit
+		
+		After doing this, you may fix the identity used for this commit with:
+		
+		    git commit --amend --reset-author
+		
+		 2 files changed, 42 insertions(+)
+		 create mode 100644 frogs-and-ox.txt
+		 create mode 100644 lion-and-mouse.txt
+		  
+        ◦ Push the changes to the master branch:
+                    
+          #git push origin master
+		Output:
+			Username for 'http://git.stratos.xfusioncorp.com': max
+			Password for 'http://max@git.stratos.xfusioncorp.com': 
+			Counting objects: 4, done.
+			Delta compression using up to 36 threads.
+			Compressing objects: 100% (4/4), done.
+			Writing objects: 100% (4/4), 1.19 KiB | 0 bytes/s, done.
+			Total 4 (delta 0), reused 0 (delta 0)
+			remote: . Processing 1 references
+			remote: Processed 1 references in total
+			To http://git.stratos.xfusioncorp.com/max/story_news.git
+			 * [new branch]      master -> master
+		  
+       Screenshot/Recording: Capture the terminal session showing the file copying, commit, and push commands.
+	   
+d. Create a New Branch max_games
+    1. Create and Switch to the New Branch:
+        ◦ Still in the repository directory, create a new branch and switch to it:
+                    
+          #git checkout -b max_games
+		Output:
+			Switched to a new branch 'max_games'
+		  
+       Screenshot/Recording: Capture the terminal session showing the branch creation and checkout.
+	   
+e. Copy File and Fix Typo in the New Branch
+    1. Copy the File:
+        ◦ Copy the story-index-max.txt file from /tmp/stories/ to the repository:
+                    
+          #cp /tmp/stories/story-index-max.txt story_news/
+		  
+    2. Fix the Typo:
+        ◦ Edit the file to correct the typo:
+          
+          
+          #nano story_news/story-index-max.txt
+		  OR
+		  #vi story_news/story-index-max.txt
+		  
+        ◦ Locate and replace "Mooose" with "Mouse".
+        ◦ Save and exit the editor.
+		
+    3. Commit and Push Changes:
+        ◦ Add the edited file to the staging area:
+          
+          
+          #git add story-index-max.txt
+        ◦ Commit the changes:
+          
+          
+          #git commit -m "typo fixed for Mooose"
+			 Output:
+				[max_games afcb820] typo fixed for Mooose
+				 Committer: Linux User <max@ststor01.stratos.xfusioncorp.com>
+				Your name and email address were configured automatically based
+				on your username and hostname. Please check that they are accurate.
+				You can suppress this message by setting them explicitly. Run the
+				following command and follow the instructions in your editor to edit
+				your configuration file:
+
+					git config --global --edit
+
+				After doing this, you may fix the identity used for this commit with:
+
+					git commit --amend --reset-author
+
+				 1 file changed, 4 insertions(+)
+				 create mode 100644 story-index-max.txt
+				 
+        ◦ Push the changes to the new branch:
+          
+          
+          #git push origin max_games
+			 Output:
+				Username for 'http://git.stratos.xfusioncorp.com': max
+				Password for 'http://max@git.stratos.xfusioncorp.com': 
+				Counting objects: 3, done.
+				Delta compression using up to 36 threads.
+				Compressing objects: 100% (3/3), done.
+				Writing objects: 100% (3/3), 415 bytes | 0 bytes/s, done.
+				Total 3 (delta 0), reused 0 (delta 0)
+				remote: 
+				remote: Create a new pull request for 'max_games':
+				remote:   http://git.stratos.xfusioncorp.com/max/story_news/compare/master...max_games
+				remote: 
+				remote: . Processing 1 references
+				remote: Processed 1 references in total
+				To http://git.stratos.xfusioncorp.com/max/story_news.git
+				 * [new branch]      max_games -> max_games
+		  
+Screenshot/Recording: Capture the terminal session showing the file copy, editing, commit, and push operations.

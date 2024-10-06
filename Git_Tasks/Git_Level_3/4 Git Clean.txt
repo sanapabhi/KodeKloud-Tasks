@@ -1,0 +1,69 @@
+QUESTION:4.The Nautilus application development team was working on a git repository /usr/src/kodekloudrepos/news present on Storage server in Stratos DC. 
+One of the developers mistakenly created a couple of files under this repository, but now they want to clean this repository without adding/pushing any new files. Find below more details:
+
+Clean the /usr/src/kodekloudrepos/news git repository without adding/pushing any new files, make sure git status is clean.
+
+ANSWER:
+
+Understanding the Problem:
+    • A git repository /usr/src/kodekloudrepos/news exists on a Storage server in Stratos DC.
+    • It contains unwanted files that need to be removed.
+    • The goal is to clean the repository without adding or pushing any new files.
+	
+Solution:
+
+We'll use the git clean command to remove untracked files and directories from the working directory.
+Steps:
+    1. SSH into the Storage server:
+       
+       #ssh user@storage_server_ip
+       
+       Replace user with the appropriate username and storage_server_ip with the server's IP address.
+    2. Navigate to the repository:
+       
+       #cd /usr/src/kodekloudrepos/news
+       
+    3. Check the status of the repository:
+       
+       #git status
+       
+       This command will show any untracked files or changes.
+    4. Dry run to see what would be removed:
+       
+       #git clean -n
+       
+       This command simulates the git clean operation without actually deleting anything. It will list the files and directories that would be removed.
+    5. Remove untracked files:
+       
+       #git clean -f
+       
+       This command forcefully removes all untracked files. Use with caution!
+    6. Remove untracked directories:
+       
+       #git clean -fd
+       
+       This command forcefully removes all untracked files and directories.
+    7. Verify the status:
+       
+       #git status
+       
+       This should show that the working directory is clean.
+	   
+Explanation of flags:
+    • -n: Dry run, shows what would be removed without actually deleting.
+    • -f: Forcefully removes untracked files.
+    • -d: Forcefully removes untracked directories.
+	
+Important Considerations:
+    • Caution: The git clean -f and -fd commands are destructive. Use them carefully, as they permanently delete files.
+    • Backup: Consider backing up the repository before running git clean to avoid data loss.
+    • Ignored files: Files listed in .gitignore will not be removed by git clean.
+    • Untracked files: Only files that are not tracked by git will be removed. Files that have been added but not committed will not be affected.
+	
+By following these steps and understanding the implications of the commands, you can effectively clean the git repository without affecting the committed history.
+
+Additional Notes:
+    • If you only want to remove specific files or directories, you can use wildcards with the git clean command. For example, git clean -f "tmp/*" would remove all files in the tmp directory.
+    • To remove untracked files recursively from all subdirectories, you can use the -r flag: git clean -rf.
+    • For more advanced usage and options, refer to the git clean documentation.
+By carefully using the git clean command and understanding its behavior, you 

@@ -1,0 +1,50 @@
+QUESTION:11.We have some users on all app servers in Stratos Datacenter. Some of them have been assigned some new roles and responsibilities, therefore their users need to be upgraded with sudo access so that they can perform admin level tasks.
+
+a. Provide sudo access to user john on all app servers.
+b. Make sure you have set up password-less sudo for the user.
+
+ANSWER:
+
+Step:1.Provide Sudo Access to User John on All App Servers:
+
+	 1.First, SSH into each app server one by one.
+	 
+	 2.Edit the sudoers file using the visudo command:
+
+		 #sudo visudo
+
+Step:2.Add the following line at the end of the file:
+
+		 john ALL=(ALL) ALL
+		 
+Replace john with the actual username.
+
+	 Save the changes and exit the editor (usually by pressing Ctrl+X, then Y, and finally Enter).
+	 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	 
+	 ((  NOTE:Repeat this process for all app servers.  ))
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	 
+
+
+OPTIONAL:
+
+Step:1.Set Up Password-less Sudo for User John:
+	 1.On the jump host (the server from which you SSH into other servers), generate an SSH key pair for user John (if not already done):
+	 
+		 #ssh-keygen -t rsa
+
+	 2.Copy the public key to each app server using the ssh-copy-id command:
+	 
+		 #ssh-copy-id john@app-server-ip
+		 
+		Replace app-server-ip with the actual IP address of each app server.
+
+	 3.Test the password-less SSH access:
+	 
+		 #ssh john@app-server-ip
+		 
+You should be able to log in without entering a password.
+
+Ensure that the sudoers file on each app server allows password-less sudo access (as mentioned in step 1).
+Remember to replace placeholders like john and app-server-ip with the actual values.
+		

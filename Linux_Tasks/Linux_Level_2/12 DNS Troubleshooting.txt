@@ -1,0 +1,61 @@
+QUESTION:12.The system admins team of xFusionCorp Industries has noticed intermittent issues with DNS resolution in several apps . 
+App Server 3 in Stratos Datacenter is having some DNS resolution issues, so we want to add some additional DNS nameservers on this server.
+
+As a temporary fix we have decided to go with Google public DNS (ipv4). Please make appropriate changes on this server.
+
+ANSWER:
+
+Logging in and switching to root user:
+        ◦ Connect to the app server using SSH:
+		
+			 #thor@jump_host ~$ ssh banner@stapp03
+		  
+        ◦ Confirm the authenticity of the host and continue connecting by typing ‘yes’.
+        ◦ Enter the password for the banner user.
+        ◦ Switch to the root user:
+		
+			 #[banner@stapp03 ~]$ sudo su -
+			 
+        ◦ You’ll receive the usual lecture from the local System Administrator.
+		
+    2. Verifying the existing resolve.conf file:
+	
+        ◦ Check the contents of the resolve.conf file:
+		
+			 #[root@stapp03 ~]# cat /etc/resolv.conf
+			 
+```````````````````````````````````````````````````````````````````````````````````````````````````			 
+        ◦ Expected output:
+          search stratos.xfusioncorp.com
+          nameserver 127.0.0.11
+          options ndots:0
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+    3. Editing the resolv.conf file to add public DNS (8.8.8.8):
+	
+        ◦ Open the resolv.conf file for editing:
+		
+			 #[root@stapp03 ~]# vi /etc/resolv.conf
+			 
+        ◦ Add the following line to the file:
+		
+          nameserver 8.8.8.8
+		  
+        ◦ Save the changes and exit the editor.
+		
+		◦ Check the contents of the resolve.conf file:
+		
+			 #[root@stapp03 ~]# cat /etc/resolv.conf
+			 
+```````````````````````````````````````````````````````````````````````````````````````````````````			 
+        ◦ Expected output:
+          search stratos.xfusioncorp.com
+          nameserver 127.0.0.11
+		  nameserver 8.8.8.8
+          options ndots:0
+```````````````````````````````````````````````````````````````````````````````````````````````````
+		
+    4. Completing the task:
+        ◦ Click on “Finish” and confirm to complete the task successfully.
+
+

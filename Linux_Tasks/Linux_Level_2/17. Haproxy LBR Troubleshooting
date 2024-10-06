@@ -1,0 +1,119 @@
+Question:17.xFusionCorp Industries has an application running on Nautlitus infrastructure in Stratos Datacenter. 
+The monitoring tool recognised that there is an issue with the haproxy service on LBR server. That needs to fixed to make the application work properly.
+
+Troubleshoot and fix the issue, and make sure haproxy service is running on Nautilus LBR server. 
+Once fixed, make sure you are able to access the website using StaticApp button on the top bar.
+
+Answer:
+
+Here are the detailed steps to troubleshoot and fix the HAProxy service issue on the Nautilus LBR server:
+
+Step 1:Login to the Server: First, you need to log in to the Nautilus LBR server. Use SSH to connect to the server.
+		 thor@jump_host/$ssh loki@stlb01
+
+
+Step 2:Switch to the root user:
+
+		 [root@stlb01 ~]$sudo su -
+
+		 
+step 3:Check the Status of HAProxy Service: Once logged in, check the status of the HAProxy service to understand its current state.
+
+		 [root@stlb01 ~]#systemctl status haproxy
+				 Output:
+						● haproxy.service - HAProxy Load Balancer
+						   Loaded: loaded (/usr/lib/systemd/system/haproxy.service; disabled; vendor preset: disabled)
+						   Active: inactive (dead)
+
+						Sep 29 16:17:23 stlb01.stratos.xfusioncorp.com systemd[1]: Collecting haproxy.service
+
+This command will show whether the service is active, inactive, or failed.
+
+
+Step 4:Validate the haproxy configuration file by running the below command
+
+		 [root@stlb01 ~]#haproxy -f /etc/haproxy/haproxy.cfg
+				Output:
+					[ALERT] 272/161759 (383) : parsing [/etc/haproxy/haproxy.cfg:7] : cannot find user id for 'haprox' (0:Success)
+					[ALERT] 272/161759 (383) : Error(s) found in configuration file : /etc/haproxy/haproxy.cfg
+					[ALERT] 272/161759 (383) : Fatal errors found in configuration.
+
+
+Step 5:Fix Configuration Issues: If there are any errors in the configuration file, edit the file to fix them. For example, if there is a syntax error, correct it.
+
+ [root@stlb01 ~]#vi /etc/haproxy/haproxy.cfg
+
+------------------------------------------Before---------------------------------------------------
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haprox
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+---------------------------------------------------------------------------------------------------
+
+-------------------------------------------After---------------------------------------------------
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy -----> haprox name here we were replace HAprox with HAproxy be Noted
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+	
+---------------------------------------------------------------------------------------------------
+
+Step 6:Check HAProxy Configuration: If the service fails to start, there might be an issue with the configuration file. Validate the configuration file for any syntax errors.
+
+		 [root@stlb01 ~]#haproxy -c -f /etc/haproxy/haproxy.cfg
+		 
+		 Output:( After you make changer in file(/etc/haproxy/haproxy.cfg)then below status showing
+		 
+				- Configuration file is valid
+
+This command will parse the configuration file and report any errors.
+
+
+Step 7:Enable and start HAProxy Service: Ensure that the HAProxy service is enabled to start on boot.
+
+		 [root@stlb01 ~]#systemctl enable haproxy
+			Output:
+				Created symlink from /etc/systemd/system/multi-user.target.wants/haproxy.service to /usr/lib/systemd/system/haproxy.service.
+		 
+		 [root@stlb01 ~]#systemctl start haproxy
+		 
+
+Step 8:Check the Status of HAProxy Service: after start the service, check the status of the HAProxy service to understand its current state.
+
+		 [root@stlb01 ~]#systemctl status haproxy
+
+			Output:
+				● haproxy.service - HAProxy Load Balancer
+   Loaded: loaded (/usr/lib/systemd/system/haproxy.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2024-09-29 16:23:11 UTC; 7s ago
+ Main PID: 501 (haproxy-systemd)
+   CGroup: /docker/382d17823dba9b604eb4d5dae40c5f31536294a90d88172e2d5b48de1a15969d/system.slice/haproxy.service
+           ├─501 /usr/sbin/haproxy-systemd-wrapper -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid
+           ├─502 /usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -Ds
+           └─503 /usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid -Ds
+
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[1]: About to execute: /usr/sbin/haproxy-systemd-wrapper -f /etc/haproxy/haproxy.cfg -p ...OPTIONS
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[1]: Forked /usr/sbin/haproxy-systemd-wrapper as 501
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[1]: haproxy.service changed dead -> running
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[1]: Job haproxy.service/start finished, result=done
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[1]: Started HAProxy Load Balancer.
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com systemd[501]: Executing: /usr/sbin/haproxy-systemd-wrapper -f /etc/haproxy/haproxy.cfg -p /run/...oxy.pid
+Sep 29 16:23:11 stlb01.stratos.xfusioncorp.com haproxy-systemd-wrapper[501]: haproxy-systemd-wrapper: executing /usr/sbin/haproxy -f /etc/haprox...d -Ds
+Hint: Some lines were ellipsized, use -l to show in full.

@@ -1,0 +1,123 @@
+QUESTION:5.The Nautilus application development team was working on a git repository /usr/src/kodekloudrepos/games present on Storage server in Stratos DC. 
+One of the developers stashed some in-progress changes in this repository, but now they want to restore some of the stashed changes. Find below more details to accomplish this task:
+
+
+
+Look for the stashed changes under /usr/src/kodekloudrepos/games git repository, and restore the stash with stash@{1} identifier. Further, commit and push your changes to the origin.
+
+ANSWER:
+Understanding the Task
+We need to restore a specific stashed change (stash@{1}) from a Git repository located on a storage server. After restoring, we need to commit and push the changes to the origin.
+
+Prerequisites
+    • Access to the storage server with SSH or similar.
+    • Basic Git knowledge.
+
+Steps
+1. Connect to the Storage Server
+    • Establish a secure connection to the storage server where the Git repository is located. Use SSH or any other appropriate method.
+	 thor@jumphost ~$ ssh natasha@ststor01 
+	 natasha@ststor01's password: 
+	 [natasha@ststor01 ~]$ sudo su -
+	 [sudo] password for natasha:
+	 
+2. Navigate to the Repository
+    • Once connected, use the command line to navigate to the repository's directory:
+      
+      #cd /usr/src/kodekloudrepos/games
+      
+3. List Stashed Changes
+    • To see available stashes, run:
+      
+      #git stash list
+	  OUTPUT:
+	  stash@{0}: WIP on master: e474d24 initial commit
+	  stash@{1}: WIP on master: e474d24 initial commit
+      
+      This will display a list of stashed changes with their respective identifiers.
+	  
+4. Restore the Desired Stash
+    • Apply the stashed changes with identifier stash@{1}:
+      
+      #git stash apply stash@{1}
+	  OUTPUT:
+	  On branch master
+	  Your branch is up to date with 'origin/master'.
+	  Changes to be committed:
+	  (use "git restore --staged <file>..." to unstage)
+      new file:   welcome.txt
+      
+      This will reapply the changes from the specified stash to your working directory.
+	  
+5. Review Changes
+    • Before committing, carefully review the applied changes using:
+      
+      #git status
+	  OUTPUT:
+	  On branch master
+	Your branch is up to date with 'origin/master'.
+	Changes to be committed:
+	(use "git restore --staged <file>..." to unstage)
+     new file:   welcome.txt
+      
+      and 
+      
+      #git diff
+      
+6. Commit Changes
+    • If the changes are as expected, commit them:
+      
+      #git commit -m "Restoring stashed changes from stash@{1}"
+	 OUTPUT:
+	 [master 97c56b0] Restoring stashed changes from stash@{1}
+	 1 file changed, 1 insertion(+)
+	 create mode 100644 welcome.txt
+      
+      Replace the message with a more descriptive one if needed.
+	  
+7. Push Changes to Origin
+    • Push the committed changes to the remote repository:
+      
+      #git push origin <branch_name>
+	  e.g., OUTPUT,
+	  [root@ststor01 games]#  git push origin master
+		Enumerating objects: 4, done.
+		Counting objects: 100% (4/4), done.
+		Delta compression using up to 36 threads
+		Compressing objects: 100% (2/2), done.
+		Writing objects: 100% (3/3), 325 bytes | 325.00 KiB/s, done.
+		Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+		To /opt/games.git
+		   e474d24..97c56b0  master -> master
+      
+      Replace <branch_name> with the actual name of your branch.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	  
+Example
+Assuming you're connected to the storage server and in the correct directory:
+
+# List stashes
+git stash list
+# Output:
+# stash@{0}: WIP on master: 315c32a Add new feature
+# stash@{1}: WIP on master: 9d2f1b5 Fix bug
+
+# Apply stash@{1}
+git stash apply stash@{1}
+# Review changes using git status and git diff
+
+# Commit changes
+git commit -m "Restored stashed changes from stash@{1}"
+
+# Push to origin
+git push origin master
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Additional Considerations
+    • Conflict Resolution: If applying the stash causes conflicts, you'll need to resolve them manually before committing.
+    • Stash Management: Consider using descriptive names for stashes to make them easier to identify later.
+    • Backup: It's recommended to keep backups of your repository, especially before making significant changes.
+
+
+

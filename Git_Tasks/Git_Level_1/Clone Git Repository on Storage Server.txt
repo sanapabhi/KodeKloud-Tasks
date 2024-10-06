@@ -1,0 +1,43 @@
+QUESTION:
+The DevOps team established a new Git repository last week, which remains unused at present. 
+However, the Nautilus application development team now requires a copy of this repository on the Storage Server in the Stratos DC. Follow the provided details to clone the repository:
+
+1.The repository to be cloned is located at /opt/ecommerce.git
+
+2.Clone this Git repository to the /usr/src/kodekloudrepos directory. Ensure no modifications are made to the repository during the cloning process.
+
+ANSWER:
+
+> Connect to the Storage Server: First, you need to connect to the Storage Server. This can be done using SSH. Replace username and storage_server_ip with the appropriate values
+
+#ssh username@storage_server_ip
+
+> Open a Terminal: Start by opening your terminal or command prompt.
+
+> Navigate to the Target Directory: Use the cd command to navigate to the directory where you want to clone the repository. In this case, it’s /usr/src/kodekloudrepos.
+
+#cd /usr/src/kodekloudrepos
+
+> Clone the Repository: Use the git clone command to clone the repository. The syntax for cloning a repository into a specific directory is git clone <repository_path> <target_directory>. 
+Since you want to clone the repository directly into /usr/src/kodekloudrepos, you can use the following command:
+
+#git clone /opt/ecommerce.git .
+
+---------------------------------------------------------------------------------------------------------------------------------
+Note: Here, the . at the end of the command specifies that the repository should be cloned into the current directory.
+---------------------------------------------------------------------------------------------------------------------------------
+
+Example
+Let’s go through an example step-by-step:
+
+> Open Terminal: Open your terminal.
+
+> Navigate to the Target Directory:
+
+#cd /usr/src/kodekloudrepos
+
+> Clone the Repository:
+
+git clone /opt/ecommerce.git .
+
+After running these commands, the repository located at /opt/ecommerce.git will be cloned into the /usr/src/kodekloudrepos directory without any modifications.

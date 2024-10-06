@@ -1,0 +1,255 @@
+Question:22.We have confidential data that needs to be transferred to a remote location, so we need to encrypt that data.
+We also need to decrypt data we received from a remote location in order to understand its content.
+
+On storage server in Stratos Datacenter we have private and public keys stored at /home/*_key.asc. Use these keys to perform the following actions.
+
+- Encrypt /home/encrypt_me.txt to /home/encrypted_me.asc.
+- Decrypt /home/decrypt_me.asc to /home/decrypted_me.txt. (Passphrase for decryption and encryption is kodekloud).
+- The user ID you can use is kodekloud@kodekloud.com.
+
+Answer:
+
+To achieve encryption and decryption on a CentOS-based system using the provided private and public keys, follow these steps. We will use GNU Privacy Guard (GPG), a tool for encryption and decryption, ensuring data security.
+
+Step-by-Step Solution
+Prerequisites
+
+Step:1.SSH into the Remote Server
+		thor@jumphost ~$ ssh natasha@ststor01 
+		The authenticity of host 'ststor01 (172.16.238.15)' can't be established.
+		ED25519 key fingerprint is SHA256:PTVzN2gC/j1xy3FJ652vufSdpeqAAjAwuPnc34Rhib8.
+		This key is not known by any other names
+		Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+		Warning: Permanently added 'ststor01' (ED25519) to the list of known hosts.
+		natasha@ststor01's password: Bl@kW
+
+Step:2. Swith to root user
+
+		[natasha@ststor01 ~]$ sudo su -
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+		[sudo] password for natasha: 
+
+Step:3.Ensure GPG is installed on your system:
+
+		[root@ststor01 ~]#sudo yum install gnupg -y
+
+`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`-`
+
+1. Encrypt /home/encrypt_me.txt to /home/encrypted_me.asc
+
+
+Step 1: Verify the existence of public and private keys
+We need to check if the keys exist in /home/. The files should be named as *_key.asc.
+
+List the files in the /home/ directory:
+
+		[root@ststor01 ~]#ls /home/*_key.asc
+			Output:
+				/home/private_key.asc  /home/public_key.asc
+		
+You should see files like public_key.asc and private_key.asc. These are your GPG keys.
+
+
+Step 2: Import the public key
+To encrypt data, you must import the public key:
+
+
+
+		[root@ststor01 ~]#gpg --import /home/public_key.asc
+			Output:
+				gpg: directory '/root/.gnupg' created
+				gpg: keybox '/root/.gnupg/pubring.kbx' created
+				gpg: /root/.gnupg/trustdb.gpg: trustdb created
+				gpg: key 8F17F26ECCE3AF51: public key "kodekloud <kodekloud@kodekloud.com>" imported
+				gpg: Total number processed: 1
+				gpg:               imported: 1
+		
+Explanation:
+
+gpg --import: Imports the provided key into the GPG keyring.
+/home/public_key.asc: Path to the public key.
+
+
+Step 3: Verify key import
+Check the imported key:
+
+		[root@ststor01 ~]#gpg --list-keys
+			Output:
+				/root/.gnupg/pubring.kbx
+				------------------------
+				pub   rsa2048 2020-01-19 [SC]
+					  FEA85011C456B5E9AE5A516F8F17F26ECCE3AF51
+				uid           [ unknown] kodekloud <kodekloud@kodekloud.com>
+				sub   rsa2048 2020-01-19 [E]
+		
+Look for an entry for kodekloud@kodekloud.com. This verifies the key is imported correctly.
+
+Step 4: Encrypt the file
+Now encrypt the file /home/encrypt_me.txt using the public key:
+
+
+
+		[root@ststor01 ~]#gpg --output /home/encrypted_me.asc --encrypt --recipient kodekloud@kodekloud.com /home/encrypt_me.txt
+			Output:
+				gpg: DD6B8506865C070D: There is no assurance this key belongs to the named user
+
+				sub  rsa2048/DD6B8506865C070D 2020-01-19 kodekloud <kodekloud@kodekloud.com>
+				 Primary key fingerprint: FEA8 5011 C456 B5E9 AE5A  516F 8F17 F26E CCE3 AF51
+					  Subkey fingerprint: 7B4B 5CFC 5E4F B4B6 EEC0  83E5 DD6B 8506 865C 070D
+
+				It is NOT certain that the key belongs to the person named
+				in the user ID.  If you *really* know what you are doing,
+				you may answer the next question with yes.
+
+				Use this key anyway? (y/N) y .............(type y and press for above process)
+Explanation:
+
+--output /home/encrypted_me.asc: Specifies the output file.
+--encrypt: Tells GPG to encrypt the file.
+--recipient kodekloud@kodekloud.com: Specifies the recipient's email tied to the public key.
+/home/encrypt_me.txt: The file to be encrypted.
+
+The file /home/encrypted_me.asc is now encrypted.
+
+Output:
+Run the following to verify the new file:
+
+
+
+		[root@ststor01 ~]#ls -l /home/encrypted_me.asc
+			Output:
+				-rw-r--r-- 1 root root 435 Oct  2 18:26 /home/encrypted_me.asc
+		
+You should see /home/encrypted_me.asc in the directory.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. Decrypt /home/decrypt_me.asc to /home/decrypted_me.txt
+
+Step 1: Import the private key
+To decrypt the data, you must import the private key:
+
+		[root@ststor01 ~]#gpg --import /home/private_key.asc
+		-----------------------------------------------------
+		When prompted with the message:
+
+		Please enter the passphrase to import the OpenPGP secret key:
+		"kodekloud <kodekloud@kodekloud.com>"
+		You should:
+
+		Type the passphrase: kodekloud
+		Press Enter to continue with the import process.
+		-----------------------------------------------------
+			Output:
+				gpg: key 8F17F26ECCE3AF51: "kodekloud <kodekloud@kodekloud.com>" not changed
+				gpg: key 8F17F26ECCE3AF51: secret key imported
+				gpg: Total number processed: 1
+				gpg:              unchanged: 1
+				gpg:       secret keys read: 1
+				gpg:   secret keys imported: 1
+	
+Explanation:
+
+gpg --import: Imports the private key necessary for decryption.
+/home/private_key.asc: Path to the private key.
+
+
+Step 2: Verify private key import
+List the private keys to confirm import:
+
+		[root@ststor01 ~]#gpg --list-secret-keys
+			Output:
+				/root/.gnupg/pubring.kbx
+				------------------------
+				sec   rsa2048 2020-01-19 [SC]
+					  FEA85011C456B5E9AE5A516F8F17F26ECCE3AF51
+				uid           [ unknown] kodekloud <kodekloud@kodekloud.com>
+				ssb   rsa2048 2020-01-19 [E]
+Look for the entry kodekloud@kodekloud.com to ensure the private key is imported successfully.
+
+Step 3: Decrypt the file
+Decrypt the file /home/decrypt_me.asc using the private key:
+
+		[root@ststor01 ~]#gpg --output /home/decrypted_me.txt --decrypt /home/decrypt_me.asc
+		------------------------------------------------------------------------------------
+		When you're prompted to enter the passphrase for decryption, you should:
+
+		Type the passphrase: kodekloud
+		Press Enter or select the <OK> button to proceed.
+		------------------------------------------------------------------------------------
+			Output:
+				gpg: AES.CFB encrypted data
+				gpg: encrypted with 1 passphrase
+				
+You will be prompted for a passphrase. Enter kodekloud as the passphrase.
+
+Explanation:
+
+--output /home/decrypted_me.txt: Specifies the output file.
+--decrypt: Tells GPG to decrypt the file.
+/home/decrypt_me.asc: The encrypted file to be decrypted.
+Output:
+Check the newly decrypted file:
+
+		[root@ststor01 ~]#ls -l /home/decrypted_me.txt
+			Output:
+				-rw-r--r-- 1 root root 80 Oct  2 18:33 /home/decrypted_me.txt
+				
+The decrypted file /home/decrypted_me.txt should now be present.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+3.Verification of File Contents
+
+Step:1.Encrypted File: To check if the encryption worked, open the encrypted file:
+
+		[root@ststor01 ~]#cat /home/encrypted_me.asc
+			Output:
+			i,t5$9
+			j0J'f_f9!rru7#Q8\T!˒S跘̕8{KN3ge4B|cH/؝Jj/"cs ob
+														  )fNMFO+a+-ĸOЊEOMןcfC@7ӹ,a>)H}ijMlcE|0wҢ@=v+fzjp
+				ބPsvIӄ)z8(6nE$UaB0beXUS+
+										IG&:fb6w^@>Ff,RB>QsfDS?>d   VxEǶ
+										
+The contents will be unreadable as it is encrypted.
+
+Step:2.Decrypted File: To confirm the decryption, view the contents of the decrypted file:
+
+		[root@ststor01 ~]#cat /home/decrypted_me.txt
+			Output:
+				Welcome to xFusionCorp Industries. This is KodeKloud System Administration Lab 
+		
+The contents should match the original text file.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Summary of Commands:
+
+1.Import public key:
+
+gpg --import /home/public_key.asc
+
+2.Encrypt file:
+
+gpg --output /home/encrypted_me.asc --encrypt --recipient kodekloud@kodekloud.com /home/encrypt_me.txt
+
+3.Import private key:
+
+gpg --import /home/private_key.asc
+
+4.Decrypt file:
+
+gpg --output /home/decrypted_me.txt --decrypt /home/decrypt_me.asc
+
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+This process securely encrypts and decrypts data using GPG with your specified keys and passphrase (kodekloud).
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+
+

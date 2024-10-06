@@ -1,0 +1,119 @@
+QUESTION:1.The Nautilus application development team has been working on a project repository /opt/ecommerce.git. 
+This repo is cloned at /usr/src/kodekloudrepos on storage server in Stratos DC. They recently shared the following requirements with DevOps team:
+
+One of the developers is working on feature branch and their work is still in progress, however there are some changes which have been pushed into the master branch, 
+the developer now wants to rebase the feature branch with the master branch without loosing any data from the feature branch, 
+also they don't want to add any merge commit by simply merging the master branch into the feature branch. Accomplish this task as per requirements mentioned.
+
+Also remember to push your changes once done.
+
+ANSWER:
+
+**To SSH STORAGE SERVER...............(use below credential to login storage server)**
+	 #ssh natasha@ststor01
+	 Password:Bl@kW
+
+Step 1: Fetch the Latest Changes from the Master Branch
+
+Purpose: Ensure that your local repository has the most recent changes from the master branch.
+Command:
+
+	 #cd /usr/src/kodekloudrepos/ecommerce.git
+
+	 #git fetch origin master
+		 Output:
+			 From /opt/ecommerce
+			 * branch            master     -> FETCH_HEAD
+
+*****************
+Explanation:
+cd /usr/src/kodekloudrepos/ecommerce.git: Navigates to the directory containing your Git repository.
+git fetch origin master: Fetches the latest commits from the master branch on the remote repository (origin) and stores them locally as a remote-tracking branch (origin/master).
+
+****************
+
+Step 2: Rebase the Feature Branch onto the Master Branch
+
+Purpose: Integrates the changes from the master branch into your feature branch without creating a merge commit.
+Commands:
+
+	 #git checkout feature
+
+	 #git rebase origin/master
+		 Output:
+			 Successfully rebased and updated refs/heads/feature
+
+*****************
+Explanation:
+git checkout feature_branch: Switches to your feature branch.
+git rebase origin/master: Rebases the feature branch onto the master branch. This means that Git will replay each commit from the feature branch onto the master branch, one by one. If there are conflicts, you'll need to resolve them manually before continuing.
+
+*****************
+
+Step 3: Resolve Conflicts (if necessary)
+
+Purpose: If conflicts arise during the rebase, you'll need to manually edit the affected files to resolve them.
+Command:
+
+	 #git rebase --continue
+
+*****************
+Explanation:
+git rebase --continue: Continues the rebase process after you've resolved the conflicts.
+
+
+*****************
+
+Step 4: Push the Rebased Feature Branch to the Remote Repository
+
+Purpose: Updates the remote repository with your rebased feature branch.
+Command:
+
+	 #git push origin feature --force 
+		 Output:
+				Enumerating objects: 4, done.
+				Counting objects: 100% (4/4), done.
+				Delta compression using up to 36 threads
+				Compressing objects: 100% (2/2), done.
+				Writing objects: 100% (3/3), 298 bytes | 298.00 KiB/s, done.
+				Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+				To /opt/ecommerce.git
+				 + 31eb022...fa84c5d feature -> feature (forced update)
+
+*****************
+Explanation:
+git push origin feature_branch: Pushes your rebased feature branch to the remote repository (origin).
+Overall Explanation
+
+Rebasing a feature branch onto the master branch without creating a merge commit provides several benefits:
+
+*****************
+
+Cleaner History: It results in a more linear history, making it easier to follow the development timeline.
+Reduced Complexity: It avoids merge conflicts that can occur when merging branches.
+Preservation of Branch History: It maintains the original commit history of the feature branch.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

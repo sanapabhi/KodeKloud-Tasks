@@ -1,0 +1,91 @@
+QUESTION:2.During the monthly compliance meeting, it was pointed out that several servers in the Stratos DC do not have a valid banner. 
+The security team has provided serveral approved templates which should be applied to the servers to maintain compliance. These will be displayed to the user upon a successful login.
+
+Update the message of the day on all application and db servers for Nautilus. Make use of the approved template located at /home/thor/nautilus_banner on jump host
+
+ANSWER:
+
+
+Here are the detailed steps to update the message of the day (MOTD) on all application and database servers for Nautilus using the approved template located at /home/thor/nautilus_banner on the jump host.
+Steps to Update the MOTD
+    1. Copy the Banner Template to Each Server
+        ◦ Use the scp (secure copy) command to transfer the banner template from the jump host to each application and database server.
+    2. Move the Banner to the Correct Location
+        ◦ Once the banner template is copied to each server, move it to the /etc/motd directory.
+		
+Detailed Commands and Examples
+
+1. Copy the Banner Template to Each Server
+First, log in to the jump host where the banner template is located.
+	 #ssh thor@jump_host
+
+Then, use the scp command to copy the banner template to each application and database server. Replace username and server_address with the appropriate values for each server.
+
+	 #scp /home/thor/nautilus_banner username@server_address:/tmp/nautilus_banner
+	 
+For example, if you have three application servers (app01, app02, app03) and one database server (db01), the commands would look like this:
+
+	 #scp /home/thor/nautilus_banner tony@app01:/tmp/nautilus_banner
+	 #scp /home/thor/nautilus_banner steve@app02:/tmp/nautilus_banner
+	 #scp /home/thor/nautilus_banner banner@app03:/tmp/nautilus_banner
+	 #scp /home/thor/nautilus_banner peter@db01:/tmp/nautilus_banner
+	 
+2. Move the Banner to the Correct Location
+Next, log in to each server and move the banner template to the /etc/motd directory.
+	 #ssh username@server_address
+	 
+Once logged in, use the mv command to move the banner template:
+	 #sudo mv /tmp/nautilus_banner /etc/motd
+	 
+For example, on app01:
+	 #ssh tony@app01
+	 
+	 #sudo mv /tmp/nautilus_banner /etc/motd
+
+Verify the Update: Check the MOTD to ensure it has been updated correctly.
+
+     #cat /etc/motd
+	 
+Repeat this process for each server:
+	 #ssh steve@app02
+	 #sudo mv /tmp/nautilus_banner /etc/motd
+
+	 #ssh banner@app03
+	 #sudo mv /tmp/nautilus_banner /etc/motd
+
+	 #ssh peter@db01
+	 #sudo mv /tmp/nautilus_banner /etc/motd
+	 
+Verification
+To verify that the banner has been updated correctly, you can log out and log back in to each server. The new message of the day should be displayed upon successful login.
+	 #ssh tony@app01
+
+Verify the Update: Check the MOTD to ensure it has been updated correctly.
+     #cat /etc/motd
+
+You should see the contents of the nautilus_banner file displayed as the message of the day.
+
+
+
+
+
+#######################################################################################################################################################################################################
+
+OPTIONAL: DO NOT DO APPLY BELOW DETAILS/POINTS ON ABOVE QUESTION.ITS JUST FOR INFORMATION OF LINUX BANNER.
+
+Banner:The banner command in Linux is used to display ASCII character strings in large letters on the terminal. This can be useful for creating visually prominent messages, such as welcome messages when someone logs into a system.
+
+Here’s a quick overview of how to use it:
+
+Installation: If the banner command is not already installed, you can install it using:
+sudo apt install sysvbanner
+
+Usage: The basic syntax is:
+banner text
+For example:
+banner Hello
+This will display the word “Hello” in large ASCII characters.
+Limitations: The banner command only displays the first 10 characters of the input string. If you input a longer string, it will be truncated
+
+#######################################################################################################################################################################################################
+

@@ -1,0 +1,154 @@
+Question:20.We are working on hardening Apache web server on all app servers. As a part of this process we want to add some of the Apache response headers for security purpose. 
+We are testing the settings one by one on all app servers. As per details mentioned below enable these headers for Apache:
+
+1.Install httpd package on App Server 3 using yum and configure it to run on 8084 port, make sure to start its service.
+2.Create an index.html file under Apache's default document root i.e /var/www/html and add below given content in it.
+
+Welcome to the xFusionCorp Industries!
+
+3.Configure Apache to enable below mentioned headers:
+
+X-XSS-Protection header with value 1; mode=block
+X-Frame-Options header with value SAMEORIGIN
+X-Content-Type-Options header with value nosniff
+
+Note: You can test using curl on the given app server as LBR URL will not work for this task.
+
+Answer:
+#SSH into the Remote Server
+
+		thor@jumphost ~$ ssh banner@stapp03 
+The authenticity of host 'stapp03 (172.16.238.12)' can't be established.
+ED25519 key fingerprint is SHA256:jXcmoS40BKMj6X9bPbGM6wfCMGtSW9dqKB0mD940lKc.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'stapp03' (ED25519) to the list of known hosts.
+banner@stapp03's password:BigGr33n
+
+1. Install the Apache Web Server (httpd) Package
+First, you need to install the Apache web server using the yum package manager.
+
+
+		[root@stapp01 ~]$sudo yum install httpd -y
+
+Explanation:
+sudo: Runs the command as a superuser (root).
+yum install httpd: Installs the Apache web server.
+-y: Automatically answers "yes" to any prompts during installation.
+
+2. Configure Apache to Listen on Port 8084
+After installing Apache, we need to change the default port from 80 to 8084.
+
+Open the Apache configuration file for editing:
+
+		[root@stapp01 ~]$sudo vi /etc/httpd/conf/httpd.conf
+
+Find the line that specifies the listening port:
+
+Listen 80
+Change the port from 80 to 8084:
+
+
+Listen 8084
+Save and exit the file.
+
+Explanation:
+vi /etc/httpd/conf/httpd.conf: Opens the Apache configuration file using the vi text editor.
+Listen 8084: Configures Apache to listen on port 8084.
+
+3. Start and Enable Apache
+Start the Apache service and enable it to run at boot.
+
+		[root@stapp01 ~]$sudo systemctl start httpd
+		
+		[root@stapp01 ~]$sudo systemctl enable httpd
+
+Explanation:
+systemctl start httpd: Starts the Apache service.
+systemctl enable httpd: Configures Apache to start automatically at boot.
+
+4. Create the index.html File
+Create the default webpage in the Apache document root directory.
+
+		[root@stapp01 ~]$echo "Welcome to the xFusionCorp Industries!" | sudo tee /var/www/html/index.html
+
+Explanation:
+echo: Outputs the specified text.
+| sudo tee /var/www/html/index.html: Creates and writes the text to the index.html file in the document root.
+
+OR
+
+4.Create the index.html file:
+Create a new file named index.html in the /var/www/html directory:
+
+		[root@stapp01 ~]$sudo vi /var/www/html/index.html
+
+Add the following content to the file:
+
+HTML
+Welcome to the xFusionCorp Industries!
+
+5. Configure Security Headers
+To enable the specified security headers, we'll edit the Apache configuration file or create a custom .conf file for headers.
+
+Open the Apache configuration file again:
+
+		[root@stapp01 ~]$sudo vi /etc/httpd/conf/httpd.conf
+		
+Add the following lines at the end of the file to configure the security headers:
+
+
+<IfModule mod_headers.c>
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>
+
+Save and exit the file.(Esq:wq)
+
+Explanation:
+<IfModule mod_headers.c>: Ensures the mod_headers module is enabled before setting headers.
+Header always set: Adds the specified HTTP headers to every response.
+
+6. Restart Apache to Apply the Changes
+After configuring the headers, restart Apache to apply the changes.
+
+		[root@stapp01 ~]$sudo systemctl restart httpd
+
+Explanation:
+systemctl restart httpd: Restarts the Apache service to apply the new configuration.
+
+
+7.Test the configuration:
+Use curl to access the index.html page on App Server 3:
+
+		[root@stapp03 ~]# curl  http://localhost:8084
+
+You should see the "Welcome to the xFusionCorp Industries!" message.
+
+8. Test the Configuration
+You can test the response headers using the curl command.
+
+		[root@stapp01 ~]$curl -I http://localhost:8084
+
+Explanation:
+curl -I: Sends a HEAD request to the specified URL to display only the headers.
+http://localhost:8084: The URL to test, where Apache is running on port 8084.
+
+9. Verify Output
+The output of the curl command should include the newly added security headers:
+
+HTTP/1.1 200 OK
+Date: Wed, 02 Oct 2024 15:32:57 GMT
+Server: Apache/2.4.62 (CentOS Stream)
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+Last-Modified: Wed, 02 Oct 2024 15:22:27 GMT
+ETag: "27-62380017c3edc"
+Accept-Ranges: bytes
+Content-Length: 39
+Content-Type: text/html; charset=UTF-8
+This confirms that the security headers have been successfully applied.
+
+

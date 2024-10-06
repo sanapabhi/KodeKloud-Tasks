@@ -1,0 +1,80 @@
+QUESTION:4.please give me below questions step by steps answer with commands and example in details
+There is some data on Nautilus App Server 2 in Stratos DC. Data needs to be altered in several of the files. On Nautilus App Server 2, alter the /home/BSD.txt file as per details given below:
+
+a. Delete all lines containing word code and save results in /home/BSD_DELETE.txt file. (Please be aware of case sensitivity)
+b. Replace all occurrence of word and to their and save results in /home/BSD_REPLACE.txt file.
+
+Note: Let's say you are asked to replace word to with from. In that case, make sure not to alter any words containing the string itself; for example upto, contributor etc.
+
+ANSWER:
+
+Understanding the Task
+Before we dive into the commands, let's clarify the task:
+    • We're working on a file named /home/BSD.txt on a server called Nautilus App Server 2 in the Stratos DC.
+    • We need to perform two modifications:
+        ◦ Delete all lines containing the word "code" (case-sensitive) and save the result in /home/BSD_DELETE.txt.
+        ◦ Replace all occurrences of the word "and" with "their" and save the result in /home/BSD_REPLACE.txt.
+        ◦ The replacement should be careful not to modify words like "upto" or "contributor".
+
+Prerequisites
+    • Basic understanding of Linux commands (cd, ls, cat, grep, sed, etc.)
+    • SSH access to the Nautilus App Server 2 as a user with appropriate permissions.
+
+Step-by-Step Guide
+a. Deleting lines containing "code"
+Command:
+
+	 #grep -v "code" /home/BSD.txt > /home/BSD_DELETE.txt
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Explanation:
+    • grep is a command for searching text patterns in files.
+    • -v inverts the match, meaning it will print lines that do not match the pattern.
+    • "code" is the pattern to search for.
+    • /home/BSD.txt is the input file.
+    • > redirects the output to a new file, /home/BSD_DELETE.txt.
+Example:
+If the /home/BSD.txt file contains the following lines:
+This is a line with code.
+Another line without code.
+A third line containing code.
+The output in /home/BSD_DELETE.txt would be:
+Another line without code.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+b. Replacing "and" with "their"
+Command:
+
+	 #sed 's/\band\b/their/g' /home/BSD.txt > /home/BSD_REPLACE.txt
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Explanation:
+    • sed is a stream editor used for filtering and transforming text.
+    • s is the substitution command.
+    • \b matches word boundaries, ensuring we only replace whole words.
+    • and is the pattern to be replaced.
+    • their is the replacement text.
+    • g replaces all occurrences in a line.
+    • /home/BSD.txt is the input file.
+    • > redirects the output to a new file, /home/BSD_REPLACE.txt.
+Example:
+If the /home/BSD.txt file contains the following line:
+This is a line with and without the word and.
+The output in /home/BSD_REPLACE.txt would be:
+This is a line with their without the word their.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Important Note:
+    • The \b in the sed command is crucial to avoid unintended replacements. Without it, words like "upto" and "contributor" might be incorrectly modified.
+    • Always test these commands on a copy of the file or in a controlled environment before applying them to the original data.
+By following these steps and commands, you should be able to successfully modify the /home/BSD.txt file as required.
+
+
+Additional Considerations:
+    • If you need to perform these operations on multiple files, you can use shell scripting or find combined with xargs.
+    • For more complex text manipulations, consider using tools like awk or Perl.
+    • Always backup your original data before making any changes.
+	
+	
+	
+=======================================================================================================================================================================================================

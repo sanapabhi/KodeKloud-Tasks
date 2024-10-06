@@ -1,0 +1,272 @@
+Question:5.Some new developers have joined xFusionCorp Industries and have been assigned Nautilus project. They are going to start development on a new application, 
+and some pre-requisites have been ared with the DevOps team to proceed with. Please note that all tasks need to be performed on storage server in Stratos DC.
+
+
+
+a. Install git, set up any values for user.email and user.name globally and create a bare repository /opt/apps.git.
+b. There is an update hook (to block direct pues to the master branch) under /tmp on storage server itself; use the same to block direct pues to the master branch in /opt/apps.git repo.
+c. Clone /opt/apps.git repo in /usr/src/kodekloudrepos/apps directory.
+d. Create a new branch named xfusioncorp_apps in repo that you cloned under /usr/src/kodekloudrepos directory.
+e. There is a readme.md file in /tmp directory on storage server itself; copy that to the repo, add/commit in the new branch you just created, and finally pu your branch to the origin.
+f. Also create master branch from your branch and remember you ould not be able to pu to the master directly as per the hook you have set up.
+
+ANSWER:
+
+1. Login to the Storage Server and Switch to Root User
+Command:
+
+thor@jump_host ~$ s nataa@ststor01
+
+Explanation:
+    • Use s to connect to the storage server ststor01 with the username nataa.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````
+Expected Output:
+
+The authenticity of host 'ststor01 (172.16.238.15)' can't be establied.
+ECDSA key fingerprint is A256:f6jRsuSNDtAzqGH07DEf/j413JApdFsLZOx2fSSjZtg.
+ECDSA key fingerprint is MD5:46:41:eb:b5:bd:7f:4c:77:50:ee:8b:00:92:2a:2a:82.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'ststor01,172.16.238.15' (ECDSA) to the list of known hosts.
+nataa@ststor01's password:
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+Command to Switch to Root User:
+
+[nataa@ststor01 ~]$ sudo su -
+
+Explanation:
+    • Use sudo su - to switch to the root user.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````
+Expected Output:
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+     #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for nataa:
+[root@ststor01 ~]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+2. Install Git Package
+Command:
+
+[root@ststor01 ~]# yum install -y git
+
+Explanation:
+    • Use yum to install the Git package along with its dependencies.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+
+Loaded plugins: fastestmirror, ovl
+Determining fastest mirrors
+ * base: mirrors.gigenet.com
+ * extras: linux-mirrors.fnal.gov
+ * updates: www.gtlib.gatech.edu
+base                                                                                                                | 3.6 kB  00:00:00    
+extras                                                                                                              | 2.9 kB  00:00:00    
+updates                                                                                                             | 2.9 kB  00:00:00    
+(1/4): base/7/x86_64/group_gz                                                                                       | 153 kB  00:00:00    
+(2/4): extras/7/x86_64/primary_db                                                                                   | 242 kB  00:00:00    
+(3/4): base/7/x86_64/primary_db                                                                                     | 6.1 MB  00:00:00    
+(4/4): updates/7/x86_64/primary_db                                                                                  | 8.8 MB  00:00:01    
+Resolving Dependencies
+--> Running transaction check
+---> Package git.x86_64 0:1.8.3.1-23.el7_8 will be installed
+--> Processing Dependency: perl-Git = 1.8.3.1-23.el7_8 for package: git-1.8.3.1-23.el7_8.x86_64
+--> Processing Dependency: perl >= 5.008 for package: git-1.8.3.1-23.el7_8.x86_64
+--> Processing Dependency: rsync for package: git-1.8.3.1-23.el7_8.x86_64
+Install  1 Package (+35 Dependent packages)
+ Total download size: 18 M
+Installed size: 66 M
+Downloading packages:
+(1/36): groff-base-1.22.2-8.el7.x86_64.rpm                                                                          | 942 kB  00:00:00    
+(2/36): git-1.8.3.1-23.el7_8.x86_64.rpm                                                                             | 4.4 MB  00:00:00    
+(3/36): libedit-3.0-12.20121213cvs.el7.x86_64.rpm                                                                   |  92 kB  00:00:00    
+(4/36): less-458-9.el7.x86_64.rpm                                                                                   | 120 kB  00:00:00    
+(5/36): perl-Carp-1.26-244.el7.noarch.rpm                                                                           |  19 kB  00:00:00
+Installed:
+  git.x86_64 0:1.8.3.1-23.el7_8                                                                                                            
+ Dependency Installed:
+    perl-constant.noarch 0:1.27-2.el7           perl-libs.x86_64 4:5.16.3-299.el7_9         perl-macros.x86_64 4:5.16.3-299.el7_9         
+  perl-parent.noarch 1:0.225-244.el7          perl-podlators.noarch 0:2.5.1-3.el7         perl-threads.x86_64 0:1.87-4.el7              
+  perl-threads-ared.x86_64 0:1.43-6.el7     rsync.x86_64 0:3.1.2-10.el7               
+ Complete!
+[root@ststor01 ~]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+3. Setup Git Config for User Email and Username Globally
+Commands:
+
+[root@ststor01 ~]# git config --global --add user.name nataa
+[root@ststor01 ~]# git config --global --add user.email nataa@stratos.xfusioncorp.com
+
+Explanation:
+    • Configure Git with the global username and email address.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+[root@ststor01 ~]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+4. Create a Bare Repository
+Command:
+
+[root@ststor01 ~]# git init --bare /opt/apps.git
+
+Explanation:
+    • Initialize a new bare Git repository at /opt/apps.git.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+
+Initialized empty Git repository in /opt/apps.git/
+[root@ststor01 ~]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+5. Copy the Update Hook to the Hooks Directory
+Command:
+
+
+[root@ststor01 ~]# cp /tmp/update /opt/apps.git/hooks/
+
+Explanation:
+    • Copy the update hook script from /tmp to the hooks directory of the repository.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+[root@ststor01 ~]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+6. Clone the Git Repository
+Commands:
+
+[root@ststor01 ~]# cd /usr/src/kodekloudrepos/
+[root@ststor01 kodekloudrepos]# git clone /opt/apps.git
+
+Explanation:
+    • Change to the target directory and clone the repository.
+
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+Cloning into 'apps'...
+warning: You appear to have cloned an empty repository.
+done.
+[root@ststor01 kodekloudrepos]# ll
+total 4
+drwxr-xr-x 3 root root 4096 Jul 20 16:33 apps
+[root@ststor01 kodekloudrepos]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+7. Navigate to the Clone Directory
+Command:
+
+[root@ststor01 kodekloudrepos]# cd apps
+
+Explanation:
+    • Move into the directory of the cloned repository.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+
+[root@ststor01 apps]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+8. Create a New Branch
+Command:
+
+[root@ststor01 apps]# git checkout -b xfusioncorp_apps
+
+Explanation:
+    • Create and switch to a new branch named xfusioncorp_apps.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+Switched to a new branch 'xfusioncorp_apps'
+[root@ststor01 apps]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+9. Add a README File, Commit, and Pu
+Commands:
+
+[root@ststor01 apps]# cp /tmp/readme.md .
+[root@ststor01 apps]# git add readme.md
+[root@ststor01 apps]# git commit -m "Readme file"
+[root@ststor01 apps]# git pu origin xfusioncorp_apps
+
+Explanation:
+    • Copy the readme.md file into the repository, add it to Git, commit the changes, and pu the branch to the remote repository.
+	
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+[root@ststor01 apps]# cp /tmp/readme.md .
+[root@ststor01 apps]# ll
+total 4
+-rw-r--r-- 1 root root 33 Jul 20 16:36 readme.md
+[root@ststor01 apps]# git add readme.md
+[root@ststor01 apps]# git commit -m "Readme file"
+[xfusioncorp_apps (root-commit) d277390] Readme file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.md
+[root@ststor01 apps]# git pu origin xfusioncorp_apps
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 251 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To /opt/apps.git
+ * [new branch]      xfusioncorp_apps -> xfusioncorp_apps
+[root@ststor01 apps]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+10. Validate Task by Attempting to Pu to Master
+Commands:
+
+[root@ststor01 apps]# git checkout -b master
+[root@ststor01 apps]# git branch
+[root@ststor01 apps]# git pu origin master
+
+Explanation:
+    • Switch to the master branch, check branches, and attempt to pu to master to ensure the hook restriction is working.
+
+```````````````````````````````````````````````````````````````````````````````````````````````````	
+Expected Output:
+
+[root@ststor01 apps]# git checkout -b master
+Switched to a new branch 'master'
+[root@ststor01 apps]# git branch
+* master
+  xfusioncorp_apps
+[root@ststor01 apps]# git pu origin master
+Total 0 (delta 0), reused 0 (delta 0)
+remote: Manual puing to this repo's master branch is restricted
+remote: error: hook declined to update refs/heads/master
+To /opt/apps.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to pu some refs to '/opt/apps.git'
+[root@ststor01 apps]#
+```````````````````````````````````````````````````````````````````````````````````````````````````
+
+
+11. Complete the Task
+Action:
+    • Click on "Fini & Confirm" to complete the task.

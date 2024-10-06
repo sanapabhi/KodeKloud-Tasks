@@ -1,0 +1,93 @@
+QUESTION:3.The Nautilus application development team was working on a git repository /usr/src/kodekloudrepos/blog present on Storage server in Stratos DC. 
+This was just a test repository and one of the developers just pushed a couple of changes for testing, but now they want to clean this repository along with the commit history/work tree, 
+so they want to point back the HEAD and the branch itself to a commit with message add data.txt file. Find below more details:
+
+1.In /usr/src/kodekloudrepos/blog git repository, reset the git commit history so that there are only two commits in the commit history i.e initial commit and add data.txt file.
+2.Also make sure to push your changes.
+
+ANSWER:
+
+Understanding the Problem
+
+We need to:
+    1. Identify the commit hash for "add data.txt file".
+    2. Reset the local repository to that commit.
+    3. Force push the changes to the remote repository.
+
+Solution:
+
+Step 1: Identify the Commit Hash
+Navigate to the repository on the Storage server:
+
+	 #cd /usr/src/kodekloudrepos/blog
+
+Use git log to find the commit with the message "add data.txt file":
+
+	 #git log --pretty=oneline
+OUTPUT:
+3ec815dc913babac51edc9957b009242348d8faa (HEAD -> master, origin/master) Test Commit10
+d09831b528502421e904ba46157c9329857d5657 Test Commit9
+6cabf38544d4c98abb08a755f973234dc9f64459 Test Commit8
+dd8c2a1ce385a0d5b2f60af87cd3af620ac2faab Test Commit7
+25af8a797b6b4419505c19f4d0d781577d7b56d1 Test Commit6
+33739ac0d3d32c00d2797207c82dc6ff82fb36c0 Test Commit5
+7bf572eb2dafd042968f6f0e5b758467a37d698f Test Commit4
+b46a9595f05bca38e2d8121291f694303cc33ae1 Test Commit3
+1faddc87f92bd1baeeb7269cee8ca47460d078bc Test Commit2
+854a9d206229016d319377211901fd73bdd84cfd Test Commit1
+e0c931d49965d3a24087c3b10af5ecedd027fa98 add data.txt file
+a9747a7b0e8d1769183c6dbd0234efe1a4061d8c initial commit
+
+This will output a list of commits with their corresponding hash. Find the one with the desired message.
+Step 2: Reset the Local Repository
+Use git reset --hard to reset the repository to the desired commit hash:
+
+	 #git reset --hard <commit_hash>
+	 e.g., command : git reset --hard a9747a7b0e8d1769183c6dbd0234efe1a4061d8c && git reset --hard e0c931d49965d3a24087c3b10af5ecedd027fa98
+	 OUTPUT:
+		HEAD is now at a9747a7 initial commit
+		HEAD is now at e0c931d add data.txt file
+	
+Replace <commit_hash> with the actual hash you found in step 1.
+
+	:check status
+	
+	#git status
+	OUTPUT:
+	On branch master
+	Your branch is behind 'origin/master' by 10 commits, and can be fast-forwarded.
+	(use "git pull" to update your local branch)
+
+nothing to commit, working tree clean
+
+Step 3: Force Push Changes
+Since we're modifying the commit history, we need to force push the changes:
+
+	 #git push -f origin <branch_name>
+	 e.g., command: git push -f origin master
+	 OUTPUT:
+		Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+		To /opt/blog.git
+		+ 3ec815d...e0c931d master -> master (forced update)
+
+Replace <branch_name> with the name of the branch you're working on.
+Important Note: Force pushing is generally discouraged as it can overwrite changes made by others. In this case, it's acceptable as it's a test repository and no one else is likely to be working on it.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example:
+Assuming the commit hash for "add data.txt file" is 1234567890abcdef1234567890abcdef12345678 and you're working on the main branch, the commands would be:
+
+	 #cd /usr/src/kodekloudrepos/blog
+	 #git reset --hard 1234567890abcdef1234567890abcdef12345678
+	 #git push -f origin main
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Additional Considerations
+    • Backup: It's always recommended to have a backup of the repository before performing such drastic changes.
+    • Remote Collaboration: If others are collaborating on the repository, carefully consider the impact of force pushing. It might overwrite their changes.
+    • Alternative Approaches: Depending on the specific use case, there might be alternative approaches like creating a new branch or using git revert to reverse specific commits.
+By following these steps, you should have successfully reset the repository to the desired state and pushed the changes.
+
+
+
+    1. 

@@ -1,0 +1,247 @@
+Question:5.The Nautilus DevOps team is testing various Ansible modules on servers in Stratos DC. They're currently focusing on file creation on remote hosts using Ansible. 
+Here are the details:
+
+a. Create an inventory file ~/playbook/inventory on jump host and include all app servers.
+b. Create a playbook ~/playbook/playbook.yml to create a blank file /tmp/web.txt on all app servers.
+c. Set the permissions of the /tmp/web.txt file to 0777.
+d. Ensure the user/group owner of the /tmp/web.txt file is tony on app server 1, steve on app server 2 and banner on app server 3.
+
+Note: Validation will execute the playbook using the command ansible-playbook -i inventory playbook.yml, so ensure the playbook functions correctly without any additional arguments.
+
+ANSWER:
+Step 1: Create Inventory File:
+On your jump host, create a file named ~/playbook/inventory with the following content:
+
+		 thor@jumphost ~$ cd playbook
+		 thor@jumphost ~/playbook$nano inventory   OR vi inventory
+		 
+[app_servers]
+app_server1 ansible_host=192.168.1.100
+app_server2 ansible_host=192.168.1.101
+app_server3 ansible_host=192.168.1.102
+
+e.g.,
+`````````````````````````````````````````````````
+stapp01 ansible_user=tony ansible_ssh_pass=Ir0nM@n 
+stapp02 ansible_user=steve ansible_ssh_pass=Am3ric@
+stapp03 ansible_user=banner ansible_ssh_pass=BigGr33n
+
+`````````````````````````````````````````````````
+Replace the IP addresses with the actual IP addresses of your app servers.
+
+Step 2: Create Playbook:
+Create a file named ~/playbook/playbook.yml with the following content:
+
+		 thor@jumphost ~/playbook$nano playbook.yml   OR    vi playbook.yml
+
+`````````````````````````````````````````````````
+YAML
+- name: Create a blank file and set permissions
+  hosts: app_servers
+  tasks:
+    - name: Create a blank file
+      file:
+        path: /tmp/web.txt
+        state: touch
+
+    - name: Set file permissions to 0777
+      file:
+        path: /tmp/web.txt
+        mode: "0777"
+
+    - name: Set file owner and group
+      file:
+        path: /tmp/web.txt
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      with_items:
+        - { owner: tony, group: tony }
+        - { owner: steve, group: steve }
+        - { owner: banner, group: banner }
+`````````````````````````````````````````````````
+
+OR
+
+`````````````````````````````````````````````````
+- hosts: all
+  become: yes
+  tasks:
+  - name: Create empty file
+    file:
+      path: /tmp/web.txt
+      state: touch
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0777"
+`````````````````````````````````````````````````
+
+OR
+
+`````````````````````````````````````````````````
+---
+- name: Manage /tmp/web.txt file on all app servers
+  hosts: app_servers
+  tasks:
+    - name: Create a blank file /tmp/web.txt
+      file:
+        path: /tmp/web.txt
+        state: touch
+    
+    - name: Set permissions of /tmp/web.txt to 0777
+      file:
+        path: /tmp/web.txt
+        mode: '0777'
+    
+    - name: Set owner of /tmp/web.txt to tony (app_server1), steve (app_server2), and banner (app_server3)
+      file:
+        path: /tmp/web.txt
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      with_items:
+        - { host: 'stapp01', owner: 'tony', group: 'tony' }
+        - { host: 'stapp02', owner: 'steve', group: 'steve' }
+        - { host: 'stapp03', owner: 'banner', group: 'banner' }
+      when: inventory_hostname == item.host
+`````````````````````````````````````````````````
+
+Explanation:
+•	The hosts: app_servers line specifies that this playbook will run on the hosts defined in the app_servers group in the inventory file.
+•	The tasks section contains three tasks:
+o	The first task creates a blank file named /tmp/web.txt using the file module.
+o	The second task sets the permissions of the file to 0777 using the mode parameter of the file module.
+o	The third task sets the owner and group of the file to the specified values using the owner and group parameters of the file module. The with_items loop iterates over a list of dictionaries, each containing the owner and group information for a specific app server.
+
+Step 3: Execute the Playbook:
+Run the following command from your jump host to execute the playbook:
+
+		 thor@jumphost ~/playbook$ansible-playbook -i ~/playbook/inventory ~/playbook/playbook.yml
+
+This will create the /tmp/web.txt file on all app servers, set its permissions to 0777, and set the owner and group to the specified values for each app server.
+
+Expected Output:
+
+
+PLAY [all] ******************************************************************************
+
+TASK [Gathering Facts] ******************************************************************
+ok: [stapp03]
+ok: [stapp02]
+ok: [stapp01]
+
+TASK [Create empty file] ****************************************************************
+changed: [stapp01]
+changed: [stapp02]
+changed: [stapp03]
+
+PLAY RECAP ******************************************************************************
+stapp01                    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+stapp02                    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+stapp03                    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+The output of the playbook execution will show the status of each task and any errors or warnings that may occur. 
+If the playbook runs successfully, you should see a message indicating that all tasks have been completed successfully.
+
+Additional Notes:
+•	You can customize the playbook to create files with different names, permissions, or ownership settings as needed.
+•	If you encounter any errors, check the playbook and inventory file for syntax errors or incorrect configurations.
+•	You can use the --check option with ansible-playbook to dry-run the playbook and see what changes would be made without actually making them.
+By following these steps, you should be able to successfully create the /tmp/web.txt file on all app servers and configure its permissions and ownership as required.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+QUESTION:2.Max want to push some new changes to one of the repositories but we don't want people to push directly to master branch, since that would be the final version of the code. 
+It should always only have content that has been reviewed and approved. We cannot just allow everyone to directly push to the master branch. So, let's do it the right way as discussed below:
+
+SSH into storage server using user max, password Max_pass123 . There you can find an already cloned repo under Max user's home.
+Max has written his story about The 🦊 Fox and Grapes 🍇
+Max has already pushed his story to remote git repository hosted on Gitea branch story/fox-and-grapes
+Check the contents of the cloned repository. Confirm that you can see Sarah's story and history of commits by running git log and validate author info, commit message etc.
+Max has pushed his story, but his story is still not in the master branch. Let's create a Pull Request(PR) to merge Max's story/fox-and-grapes branch into the master branch
+Click on the Gitea UI button on the top bar. You should be able to access the Gitea page.
+
+UI login info:
+- Username: max
+- Password: Max_pass123
+PR title : Added fox-and-grapes story
+PR pull from branch: story/fox-and-grapes (source)
+PR merge into branch: master (destination)
+
+Before we can add our story to the master branch, it has to be reviewed. So, let's ask tom to review our PR by assigning him as a reviewer
+
+Add tom as reviewer through the Git Portal UI
+Go to the newly created PR
+
+Click on Reviewers on the right
+
+Add tom as a reviewer to the PR
+Now let's review and approve the PR as user Tom
+
+Login to the portal with the user tom
+
+Logout of Git Portal UI if logged in as max
+
+UI login info:
+- Username: tom
+- Password: Tom_pass123
+PR title : Added fox-and-grapes story
+Review and merge it.
+Great stuff!! The story has been merged! 👏
+
+Note: For these kind of scenarios requiring changes to be done in a web UI, please take screenshots so that you can share it with us for review in case your task is marked incomplete. 
+You may also consider using a screen recording software such as loom.com to record and share your work.
+
+ANSWER:
+
+Pushing Changes with Review and Merge - A Walkthrough
+This scenario demonstrates how Max can securely push his story to the master branch of a Gitea repository with review and approval.
+
+Part 1: SSH and Local Verification (as Max)
+    1. SSH Login:
+
+	 #ssh max@storage_server_ip -p 22  # Replace with actual server IP and port
+
+Enter password: Max_pass123 (replace with actual password)
+    2. Verify Cloned Repository:
+
+	 #cd ~  # navigate to home directory
+	 #ls -l  # list directory contents (should show the cloned repository)
+
+    3. Check Commit History (Sarah's Story):
+
+	 #git log  # View commit history
+
+This will show commit messages, author information (including Sarah's name), and commit hashes.
+Note: These steps confirm Max has access to the cloned repository and can see previous commits (Sarah's story).
+
+
+Part 2: Create Pull Request (PR) (as Max)
+
+We'll assume Max has already pushed his "fox-and-grapes" story to the remote "story/fox-and-grapes" branch.
+    1. Access Gitea Web UI: Open a web browser and navigate to your Gitea server address. (Screenshots are recommended here)
+    2. Login: Username: max, Password: Max_pass123 (replace with actual credentials)
+    3. Create Pull Request: Locate the "Pull Requests" section or button in the Gitea interface and initiate a new PR.
+    4. PR Details:
+        ◦ Title: "Added fox-and-grapes story"
+        ◦ Pull from branch: "story/fox-and-grapes"
+        ◦ Merge into branch: "master"
+    5. Assign Reviewer: Locate the "Reviewers" section and add "tom" as a reviewer.
+    6. Submit PR: Click the button to create and submit the pull request.
+	
+Part 3: Review and Merge (as Tom)
+
+    1. Login to Gitea UI: Open a web browser and navigate to your Gitea server address.
+    2. Logout as Max (if needed): Ensure you're logged out of the Gitea UI if previously logged in as Max.
+    3. Login as Tom: Username: tom, Password: Tom_pass123 (replace with actual credentials)
+    4. Access Pull Request: Locate the "Pull Requests" section and find the PR titled "Added fox-and-grapes story."
+    5. Review the Code: Click on the PR to review Max's changes to the story. (Screenshots are recommended here)
+    6. Merge or Request Changes:
+        ◦ If satisfied, click the "Merge" button to approve and integrate Max's story into the master branch.
+        ◦ If changes are needed, provide feedback and request modifications from Max before merging.

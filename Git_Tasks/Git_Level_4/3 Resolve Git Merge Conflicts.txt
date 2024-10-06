@@ -1,0 +1,170 @@
+QUESTION:3.Sarah and Max were working on writting some stories which they have pushed to the repository. 
+Max has recently added some new changes and is trying to push them to the repository but he is facing some issues. Below you can find more details:
+
+a.SSH into storage server using user max and password Max_pass123. Under /home/max you will find the story-blog repository. Try to push the changes to the origin repo and fix the issues. 
+The story-index.txt must have titles for all 4 stories. Additionally, there is a typo in The Lion and the Mooose line where Mooose should be Mouse.
+
+b.Click on the Gitea UI button on the top bar. You should be able to access the Gitea page. You can login to Gitea server from UI using username sarah and password Sarah_pass123 or username max and password Max_pass123.
+
+Note: For these kind of scenarios requiring changes to be done in a web UI, please take screenshots so that you can share it with us for review in case your task is marked incomplete. 
+You may also consider using a screen recording software such as loom.com to record and share your work.
+
+
+ANSWER:
+	1. SSH into the Storage Server
+	
+    1. Open your terminal.
+    2. SSH into the storage server:
+             
+       #ssh max@<storage-server-ip>
+	   
+       Replace <storage-server-ip> with the actual IP address of the storage server.
+	   
+    3. Enter the password when prompted:       
+       Max_pass123
+	   
+	   
+2. Navigate to the Repository
+    1. Change directory to the repository location:
+             
+       #cd /home/max/story-blog
+	   
+	   #git status
+			Output:
+				On branch master
+				Your branch is ahead of 'origin/master' by 1 commit.
+				  (use "git push" to publish your local commits)
+				nothing to commit, working directory clean
+	   
+3. Check Repository Status and Fix Issues
+    1. Check the status of the repository:
+              
+		#git status
+       This will show you if there are any uncommitted changes or other issues.
+	   
+    2. If there are changes to be committed:
+         
+       #git add .
+	   
+       #git commit -m "Fix typo in story-index.txt"
+			Output:
+				On branch master
+				Your branch is ahead of 'origin/master' by 1 commit.
+				  (use "git push" to publish your local commits)
+				nothing to commit, working directory clean
+	   
+    3. To push the changes:       
+       
+       #git push origin Master --force 
+			 Output:
+				Username for 'http://git.stratos.xfusioncorp.com': max
+				Password for 'http://max@git.stratos.xfusioncorp.com': 
+				Counting objects: 18, done.
+				Delta compression using up to 36 threads.
+				Compressing objects: 100% (16/16), done.
+				Writing objects: 100% (18/18), 2.86 KiB | 0 bytes/s, done.
+				Total 18 (delta 5), reused 0 (delta 0)
+				remote: . Processing 1 references
+				remote: Processed 1 references in total
+				To http://git.stratos.xfusioncorp.com/sarah/story-blog.git
+				 + ad70783...ab326ee master -> master (forced update)
+	   
+       Make sure you are on the correct branch (Master in this example). Adjust if your branch name is different.
+	   
+    4. If you face issues while pushing (e.g., authentication errors, merge conflicts):
+        ◦ For authentication errors, ensure that SSH keys are correctly set up or use the correct credentials.
+        ◦ For merge conflicts, pull the latest changes first, resolve conflicts, commit, and then push:
+          
+          
+          #git pull origin Master'
+			Output:
+				From http://git.stratos.xfusioncorp.com/sarah/story-blog
+				 * branch            master     -> FETCH_HEAD
+				Already up-to-date.
+				
+        > Resolve conflicts in files
+		
+          #git add .
+		  
+          #git commit -m "Resolved merge conflicts"
+			 Output:
+				On branch master
+				Your branch is up-to-date with 'origin/master'.
+				nothing to commit, working directory clean
+		  
+          #git push origin Master --force
+				 Output:
+					Username for 'http://git.stratos.xfusioncorp.com': max
+					Password for 'http://max@git.stratos.xfusioncorp.com': 
+					Everything up-to-date
+		  
+4. Correct the Typo in story-index.txt
+    1. Open story-index.txt for editing:    
+       
+       #nano story-index.txt OR vi story-index.txt
+       or use any other text editor.
+	   
+    2. Find and correct the typo:
+        ◦ Locate the line with "The Lion and the Mooose".
+        ◦ Change "Mooose" to "Mouse".
+		
+    3. Save and exit the editor:
+        ◦ In nano, you can save by pressing Ctrl+O, then Enter, and exit by pressing Ctrl+X.
+		
+    4. Commit the typo fix:
+             
+       #git add story-index.txt
+	   
+       #git commit -m "Corrected typo in story-index.txt" 
+			 Output:
+				 [master 1573a15] Corrected typo in story-index.txt
+				 Committer: Linux User <max@ststor01.stratos.xfusioncorp.com>
+				Your name and email address were configured automatically based
+				on your username and hostname. Please check that they are accurate.
+				You can suppress this message by setting them explicitly. Run the
+				following command and follow the instructions in your editor to edit
+				your configuration file:
+
+					git config --global --edit
+
+				After doing this, you may fix the identity used for this commit with:
+
+					git commit --amend --reset-author
+
+				 1 file changed, 1 insertion(+), 1 deletion(-)
+		
+       #git push origin Master --force
+		 Output:
+			Username for 'http://git.stratos.xfusioncorp.com': max
+			Password for 'http://max@git.stratos.xfusioncorp.com': 
+			Counting objects: 3, done.
+			Delta compression using up to 36 threads.
+			Compressing objects: 100% (3/3), done.
+			Writing objects: 100% (3/3), 309 bytes | 0 bytes/s, done.
+			Total 3 (delta 2), reused 0 (delta 0)
+			remote: . Processing 1 references
+			remote: Processed 1 references in total
+			To http://git.stratos.xfusioncorp.com/sarah/story-blog.git
+			   ab326ee..1573a15  master -> master
+	   
+5. Verify and Use Gitea UI
+
+    1. Click on the Gitea UI button on the top bar to access the Gitea page.
+	
+    2. Log in to Gitea:
+        ◦ Use username: sarah and password: Sarah_pass123, or username: max and password: Max_pass123.
+		
+    3. Verify the changes:
+        ◦ Navigate to the repository in Gitea.
+        ◦ Check that the story-index.txt file has the correct titles and that the typo has been fixed.
+		
+6. Provide Evidence of Completion
+
+    1. Take screenshots of the changes in the Gitea UI or record a screen video using a tool like Loom.
+        ◦ Make sure to capture the following:
+            ▪ The corrected story-index.txt file.
+            ▪ The commit history showing your changes.
+            ▪ The successful push operation (if applicable).
+			
+    2. Save and share the screenshots or screen recording as required.
+

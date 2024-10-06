@@ -1,0 +1,89 @@
+QUESTION:1.An Ansible playbook needs completion on the jump host, where a team member left off. Below are the details:
+
+a.The inventory file /home/thor/ansible/inventory requires adjustments. The playbook must run on App Server 3 in Stratos DC. Update the inventory accordingly.
+b.Create a playbook /home/thor/ansible/playbook.yml. Include a task to create an empty file /tmp/file.txt on App Server 3.
+
+Note: Validation will run the playbook using the command ansible-playbook -i inventory playbook.yml. Ensure the playbook works without any additional arguments.
+
+ANSWER:
+
+1. Update the Inventory File
+
+The inventory file /home/thor/ansible/inventory needs to be updated to include App Server 3 in Stratos DC.
+Assume that App Server 3 has the hostname stapp03 (this is common in such exercises, but you should verify the exact hostname if known). You can update the inventory file like this:
+ini
+
+		 #vi /home/thor/ansible/inventory
+
+Inv
+
+[all]
+stapp03 ansible_host=<ip_of_stapp03> ansible_user=<username>
+
+[app]
+stapp03 ansible_host=<ip_of_stapp03> ansible_user=<username>
+
+e.g.,
+
+stapp03 ansible_host=172.16.238.12 ansible_user=banner ansible_password=BigGr33n ............{ add this line in inventory file}
+
+    • Replace <ip_of_stapp03> with the actual IP address of App Server 3.
+    • Replace <username> with the appropriate SSH username for connecting to the server.
+	
+	
+2. Create the Playbook
+Next, you need to create the playbook at /home/thor/ansible/playbook.yml. This playbook should include a task to create an empty file /tmp/file.txt on App Server 3.
+Here's how your playbook should look:
+
+		 #vi /home/thor/ansible/playbook.yml
+yaml
+
+---
+- hosts: stapp03
+  become: yes
+  tasks:
+    - name: Create an empty file at /tmp/file.txt
+      file:
+        path: /tmp/file.txt
+        state: touch
+		
+Explanation:
+    1. hosts: stapp03: This indicates that the playbook will run on stapp03, which corresponds to App Server 3 as defined in your inventory file.
+    2. become: yes: This line allows the playbook to escalate privileges, using sudo if necessary. This is important when working with file paths like /tmp that might require elevated permissions.
+    3. tasks: This section contains the list of tasks to perform. In this case, there is only one task.
+    4. name: A descriptive name for the task, making it easier to understand when reviewing logs.
+    5. file module: The file module is used to manage files and directories in Ansible.
+        ◦ path: Specifies the path to the file to be managed (/tmp/file.txt in this case).
+        ◦ state: touch: Ensures that the file exists. If the file does not exist, it will be created as an empty file. If it does exist, its modification time will be updated.
+		
+3. Validation
+Once you have updated the inventory and created the playbook, you can validate the setup by running the command:
+
+
+		 #ansible-playbook -i /home/thor/ansible/inventory /home/thor/ansible/playbook.yml
+		 
+This command will execute the playbook using the specified inventory file. It should connect to stapp03, and the task will create an empty file at /tmp/file.txt.
+
+```````````````````````````````````````````````````````````````````````````````````````````````````
+Expected Output :
+When you run the playbook, you should see output similar to the following:
+
+
+PLAY [stapp03] ******************************************************************
+
+TASK [Gathering Facts] **********************************************************
+ok: [stapp03]
+
+TASK [Create an empty file at /tmp/file.txt] ************************************
+changed: [stapp03]
+
+PLAY RECAP **********************************************************************
+stapp03                    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+
+```````````````````````````````````````````````````````````````````````````````````````````````````
+ 
+    • ok=2: Indicates that two tasks were executed successfully (Gathering Facts and the file creation).
+    • changed=1: Indicates that one task resulted in a change on the server (i.e., the file was created or its timestamp was updated).
+    • unreachable=0, failed=0: No errors occurred during the playbook execution.
+	
+This confirms that the playbook has run successfully and performed the expected task.

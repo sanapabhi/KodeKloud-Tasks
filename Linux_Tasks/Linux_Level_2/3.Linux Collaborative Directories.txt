@@ -1,0 +1,42 @@
+QUESTION 4:The Nautilus team doesn't want its data to be accessed by any of the other groups/teams due to security reasons and want their data to be strictly accessed by the sysadmin group of the team.
+
+1.Setup a collaborative directory /sysadmin/data on app server 1 in Stratos Datacenter.
+2.The directory should be group owned by the group sysadmin and the group should own the files inside the directory. The directory should be read/write/execute to the user and group owners, and others should not have any access.
+
+ANSWER:
+Here are the detailed steps and commands to achieve this:
+    1. Connect to App Server 1: First, you need to connect to App Server 1. You can use SSH to connect to the server.
+       #ssh your_username@app_server_1
+	   
+    2. Switch to the Root User: To perform administrative tasks, switch to the root user.
+       #sudo su -
+	   
+    3. Create the Directory: Create the directory /sysadmin/data using the mkdir command with the -p option to ensure that the parent directories are created as needed.
+       #mkdir -p /sysadmin/data
+	   
+    4. Create the sysadmin Group: If the sysadmin group does not already exist, you need to create it.
+       #groupadd sysadmin
+	   
+    5. Change the Group Ownership of the Directory: Change the group ownership of the directory to sysadmin.
+       #chgrp -R sysadmin /sysadmin/data
+	   
+    6. Set the Directory Permissions: Set the directory permissions to read, write, and execute for the user and group owners, and no permissions for others. The chmod command with the 2770 mode ensures that new files created within the directory inherit the group ownership.
+       #chmod 2770 /sysadmin/data
+	   
+    7. Verify the Permissions: Verify that the permissions are set correctly using the ls command.
+       #ls -ld /sysadmin/data
+	   
+       The output should look like this:
+       drwxrws--- 2 root sysadmin 4096 Aug 12 12:59 /sysadmin/data
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Explanation of Commands:
+    • ssh your_username@app_server_1: Connects to the remote server.
+    • sudo su -: Switches to the root user.
+    • mkdir -p /sysadmin/data: Creates the directory /sysadmin/data along with any necessary parent directories.
+    • groupadd sysadmin: Creates the sysadmin group if it does not already exist.
+    • chgrp -R sysadmin /sysadmin/data: Changes the group ownership of the directory and its contents to sysadmin.
+    • chmod 2770 /sysadmin/data: Sets the permissions to rwx for the owner and group, and no permissions for others. The 2 at the beginning sets the setgid bit, ensuring that new files inherit the group ownership.
+    • ls -ld /sysadmin/data: Lists the directory with detailed information to verify the permissions.
+By following these steps, you will ensure that the /sysadmin/data directory is accessible only to the sysadmin group, with the appropriate read, write, and execute permissions.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

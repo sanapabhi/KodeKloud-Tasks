@@ -1,0 +1,50 @@
+QUESTION:
+The Nautilus development team has provided requirements to the DevOps team for a new application development project, specifically requesting the establishment of a Git repository. 
+Follow the instructions below to create the Git repository on the Storage server in the Stratos DC:
+
+1.Utilize yum to install the git package on the Storage Server.
+
+2.Create a bare repository named /opt/ecommerce.git (ensure exact name usage).
+
+ANSWER:
+Step 1: Install Git using yum
+
+> Connect to the Storage Server: First, you need to connect to the Storage Server. This can be done using SSH. Replace username and storage_server_ip with the appropriate values
+
+#ssh username@storage_server_ip
+
+> Install Git: Once connected, use yum to install the Git package
+
+#sudo yum install git -y
+
+Step 2: Create a Bare Repository
+
+> Create the Bare Repository: After installing Git, create a bare repository named /opt/ecommerce.git. A bare repository is a repository that doesn’t have a working directory and is used for sharing.
+
+#sudo git init --bare /opt/ecommerce.git
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example
+Here is an example of how the commands would look when executed:
+
+# Connect to the Storage Server
+ssh username@storage_server_ip
+
+# Install Git
+sudo yum install git -y
+
+# Create a bare repository
+sudo git init --bare /opt/ecommerce.git
+
+Explanation
+ssh username@storage_server_ip: Connects to the Storage Server.
+sudo yum install git -y: Installs Git using yum with the -y flag to automatically answer “yes” to prompts.
+sudo git init --bare /opt/ecommerce.git: Initializes a bare Git repository at the specified location.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+=======================================================================================================================================================================================================

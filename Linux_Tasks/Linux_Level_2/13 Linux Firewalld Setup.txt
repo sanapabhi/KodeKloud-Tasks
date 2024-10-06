@@ -1,0 +1,71 @@
+QUESTION:3.To secure our Nautilus infrastructure in Stratos Datacenter we have decided to install and configure firewalld on all app servers. 
+We have Apache and Nginx services running on these apps. Nginx is running as a reverse proxy server for Apache. 
+We might have more robust firewall settings in the future, but for now we have decided to go with the given requirements listed below:
+
+a. Allow all incoming connections on Nginx port, i.e 80.
+b. Block all incoming connections on Apache port, i.e 8080.
+c. All rules must be permanent.
+d. Zone should be public.
+e. If Apache or Nginx services aren't running already, please make sure to start them.
+
+ANSWER:
+
+Step:1.Provide Sudo Access to User John on All App Servers:
+
+	 1.First, SSH into each app server one by one.   ......(steve@stapp02 & banner@stapp03 - are remaining)
+		 E.g.,
+	Logging in and switching to root user:
+		 
+        ◦ Connect to the app server using SSH:
+		
+				 #thor@jump_host ~$ ssh tony@stapp01
+		  
+        ◦ Confirm the authenticity of the host and continue connecting by typing ‘yes’.
+        ◦ Enter the password for the banner user.
+        ◦ Switch to the root user:
+		
+			 #[tony@stapp01 ~]$ sudo su -
+			 
+        ◦ You’ll receive the usual lecture from the local System Administrator.
+	 
+Step:2.Install firewalld (if not already installed):
+
+		 #sudo dnf install firewalld
+	   
+    1. Enable and start the firewalld service:
+	
+		 #sudo systemctl enable firewalld
+	   
+		 #sudo systemctl start firewalld
+		 
+    2. Configure the firewall rules:
+	
+        ◦ Allow incoming connections on Nginx port (80):
+		
+			 #sudo firewall-cmd --permanent --add-port=80/tcp
+			 
+        ◦ Block incoming connections on Apache port (8080):
+		
+			 #sudo firewall-cmd --permanent --remove-port=8080/tcp
+			 
+    3. Set the zone to “public” (assuming you want to use the public zone):
+	
+		 #sudo firewall-cmd --set-default-zone=public
+		 
+    4. Reload the firewall rules for changes to take effect:
+	
+		 #sudo firewall-cmd --reload
+		 
+    5. Start Apache and Nginx services (if not already running):
+	
+       #sudo systemctl start httpd   # Start Apache
+	   
+       #sudo systemctl start nginx   # Start Nginx
+	   
+	6. Status Apache and Nginx services (if not already running):
+	
+       #sudo systemctl status httpd   # Active Apache
+	   
+       #sudo systemctl status nginx   # Active Nginx
+	   
+Remember to replace the port numbers and zone as needed. These rules will persist across reboots due to the --permanent

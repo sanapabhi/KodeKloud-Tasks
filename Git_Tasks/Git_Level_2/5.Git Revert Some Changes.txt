@@ -1,0 +1,119 @@
+QUESTION:5.The Nautilus application development team was working on a git repository /usr/src/kodekloudrepos/demo present on Storage server in Stratos DC. 
+However, they reported an issue with the recent commits being pushed to this repo. They have asked the DevOps team to revert repo HEAD to last commit. 
+Below are more details about the task:
+
+1.	 In /usr/src/kodekloudrepos/demo git repository, revert the latest commit ( HEAD ) to the previous commit (JFYI the previous commit hash should be with initial commit message ).
+2.	 Use revert demo message (please use all small letters for commit message) for the new revert commit. 
+
+ANSWER:
+
+Scenario:
+•	The Nautilus application development team has encountered issues with recent commits pushed to their git repository located at /usr/src/kodekloudrepos/demo on the Stratos DC storage server.
+•	They've requested the DevOps team to revert the repository's HEAD (latest commit) to the previous commit.
+
+Solution:
+
+1. Connect to the Storage Server (if necessary):
+•	If you're not already logged in to the storage server (ststor01), use SSH to establish a connection. The specific steps might vary depending on your environment, but here's a general example:
+
+	 thor@jump_host $ ssh natasha@ststor01
+
+•	Provide your password for the natasha user when prompted.
+
+2. Switch to the Root User (with Caution):
+•	Be aware that using the root user should be done judiciously due to its elevated privileges. If possible, consider using a dedicated user with more restricted permissions for Git operations.
+
+	 natasha@ststor01's password:
+	 [natasha@ststor01 ~]$ sudo su -
+
+3. Navigate to the Git Repository:
+
+	 [root@ststor01 ~]# cd /usr/src/kodekloudrepos/demo
+
+4. Verify Uncommitted Changes (Optional):
+•	Check for any uncommitted changes using git status. If there are uncommitted modifications, you'll need to decide whether to discard or commit them before proceeding.
+
+	 [root@ststor01 demo]# git status
+	 
+OUTPUT:	 
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        apps.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+5. Check Git Log:
+•	Use git log to view the commit history, including the commit messages and hashes. This will help you confirm the commit you want to revert to.
+
+	 [root@ststor01 demo]# git log
+
+OUTPUT:	 
+commit ae88583e79b13d2c34b0d170c5437afdec6aa435 (HEAD -> master, origin/master)
+Author: Admin <admin@kodekloud.com>
+Date:   Tue Aug 13 16:09:30 2024 +0000
+
+    add data.txt file
+
+commit d3441e0e23c1bef80bffee70b6a09917faafb6fe
+Author: Admin <admin@kodekloud.com>
+Date:   Tue Aug 13 16:09:29 2024 +0000
+
+    initial commit
+
+
+6. Revert the Latest Commit (HEAD):
+•	Execute git revert HEAD to create a new commit that effectively undoes the changes introduced in the most recent commit (HEAD).
+
+	 [root@ststor01 demo]# git revert HEAD
+
+7. Add and Commit the Revert with a Clear Message:
+•	Git automatically creates a new commit during the revert process. Here, you can add any untracked files (if applicable) and commit the revert with a descriptive message using git add and git commit.
+
+	 [root@ststor01 demo]# git add .
+	 [root@ststor01 demo]# git commit -m "revert demo"
+
+OUTPUT:	 
+master c8ab690] revert apps
+ 2 files changed, 2 insertions(+)
+ create mode 100644 apps.txt
+ create mode 100644 info.txt	
+
+8. Validate the Reversion (Optional):
+•	Double-check your work by running git log again to confirm that the revert commit has been created and the previous commit message is now displayed.
+
+	 [root@ststor01 demo]# git log
+
+OUTPUT:	 
+commit c8ab690b6ddfca9a39e936134f220641c6171b19 (HEAD -> master)
+Author: Admin <admin@kodekloud.com>
+Date:   Tue Aug 13 16:20:58 2024 +0000
+
+    revert apps
+
+commit ae88583e79b13d2c34b0d170c5437afdec6aa435 (origin/master)
+Author: Admin <admin@kodekloud.com>
+Date:   Tue Aug 13 16:09:30 2024 +0000
+
+    add data.txt file
+
+commit d3441e0e23c1bef80bffee70b6a09917faafb6fe
+Author: Admin <admin@kodekloud.com>
+Date:   Tue Aug 13 16:09:29 2024 +0000
+
+    initial commit
+[root@ststor01 apps]# 
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Important Considerations:
+•	Data Loss Potential: Be mindful that reverting a commit can lead to data loss if the reverted changes were already pushed to a remote repository (e.g., a shared branch) that others might have pulled from.
+•	Alternative Approach: In some cases, using git reset --hard <commit_hash> might be a suitable option. However, this approach rewrites history, which can cause problems if the branch has been shared. It's generally recommended to use git revert for more safety and transparency.
+By following these steps and considering the potential consequences, you can effectively revert the latest commit in the /usr/src/kodekloudrepos/demo repository on the storage server.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

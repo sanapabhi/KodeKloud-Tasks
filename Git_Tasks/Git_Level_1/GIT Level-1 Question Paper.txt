@@ -1,0 +1,542 @@
+QUESTION:1.Recently a bare repository was created by one of the developers. Now, they were planning to add some content in this repository so this needs to be cloned somewhere so that one of the developers can start adding data in it. 
+Below you can find more details.
+
+1.Clone the repository /opt/story-blog-t1q11.git under sarah user's home on storage server.
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+'/opt/story-blog-t1q11.git' repository was cloned under Sarah's home?
+
+ANSWER:
+Steps to Clone the Repository
+    1. SSH into the Storage Server:
+        ◦ Open your terminal.
+        ◦ Use the provided credentials to SSH into the storage server.
+		
+       #ssh sarah@<storage_server_ip>
+	   
+       When prompted, enter the password S3cure321.
+       
+    2. Navigate to Sarah’s Home Directory:
+        ◦ Once logged in, navigate to Sarah’s home directory.
+		
+       #cd ~
+       
+    3. Clone the Repository:
+        ◦ Use the git clone command to clone the bare repository into Sarah’s home directory.
+		
+       #git clone /opt/story-blog-t1q11.git
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a step-by-step example of the commands you would run:
+# Step 1: SSH into the storage server
+ssh sarah@<storage_server_ip>
+# Enter the password when prompted
+# Password: S3cure321
+
+# Step 2: Navigate to Sarah's home directory
+cd ~
+
+# Step 3: Clone the repository
+git clone /opt/story-blog-t1q11.git
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Verification
+To verify that the repository was cloned successfully, you can list the contents of Sarah’s home directory:
+ls -la
+You should see a directory named story-blog-t1q11 (or similar) in the list.
+
+=======================================================================================================================================================================================================
+
+QUESTION:2.A couple of new Git repositories were created recently and this is still in progress. Recently a new requirement has emerged to create a repository on the storage server. Below are the details for this request.
+
+1.Create and initialize a git repository at /home/sarah/story-blog-t1q4 on Storage server.
+2.Let’s add a file named lion-and-mouse-t1q4.txt to our project inside /home/sarah/story-blog-t1q4, the file content must be A Lion lay asleep in the forest.
+3.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Step 1: SSH into the Storage Server
+First, you’ll need to SSH into the storage server using the provided credentials.
+
+#ssh sarah@<storage_server_ip>
+# Enter the password when prompted: S3cure321
+
+Step 2: Create and Initialize a Git Repository
+Once you’re logged in, navigate to the desired directory and initialize a new Git repository.
+# Navigate to the directory
+
+#cd /home/sarah/story-blog-t1q4
+
+# Initialize a new Git repository
+#git init
+
+Step 3: Add a File to the Repository
+Next, create the file lion-and-mouse-t1q4.txt with the specified content and add it to the repository.
+# Create the file with the specified content
+
+#echo "A Lion lay asleep in the forest." > lion-and-mouse-t1q4.txt
+
+# Add the file to the staging area
+#git add lion-and-mouse-t1q4.txt
+
+# Commit the file to the repository
+#git commit -m "Add lion-and-mouse-t1q4.txt with initial content"
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands in Detail
+Here is a step-by-step example of the commands you will run:
+    1. SSH into the server:
+	
+       #ssh sarah@<storage_server_ip>
+       # Enter the password: S3cure321
+	   
+    2. Navigate to the directory and initialize the repository:
+	
+       #cd /home/sarah/story-blog-t1q4
+       #git init
+	   
+    3. Create the file and add it to the repository:
+	
+       #echo "A Lion lay asleep in the forest." > lion-and-mouse-t1q4.txt
+       #git add lion-and-mouse-t1q4.txt
+       #git commit -m "Add lion-and-mouse-t1q4.txt with initial content"
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+=======================================================================================================================================================================================================
+
+QUESTION:3.As developers are currently in the process of creating Git repositories, a new requirement has emerged to create a bare repository on the storage server. Below are the details for this request.
+
+1.Create a bare repository named /home/sarah/ecommerce.git on Storage server.
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Steps to Create a Bare Repository
+    1. Open a Terminal: You will need to use a terminal or command prompt to execute the commands.
+	
+    2. SSH into the Storage Server: Use the provided credentials to log into the storage server. You can use the following command:
+	
+       #ssh sarah@<storage_server_ip>
+       Replace <storage_server_ip> with the actual IP address of the storage server. You will be prompted to enter the password S3cure321.
+	   
+    3. Navigate to the Desired Directory: Once logged in, navigate to the directory where you want to create the bare repository. In this case, it is /home/sarah.
+	
+       #cd /home/sarah
+	   
+    4. Create the Bare Repository: Use the git init command with the --bare option to create a bare repository named ecommerce.git.
+	
+       #git init --bare ecommerce.git
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+Example Commands
+
+Here is a step-by-step example of the commands you will run:
+    1. SSH into the server:
+       #ssh sarah@<storage_server_ip>
+       Enter the password when prompted.
+    2. Navigate to the directory:
+       #cd /home/sarah
+    3. Create the bare repository:
+       #git init --bare ecommerce.git
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Explanation
+    • ssh sarah@<storage_server_ip>: This command logs you into the storage server using SSH.
+    • cd /home/sarah: This command changes the current directory to /home/sarah.
+    • git init --bare ecommerce.git: This command initializes a new bare Git repository named ecommerce.git in the /home/sarah directory.
+
+=======================================================================================================================================================================================================
+
+QUESTION:4.
+One of the nautilus developers added some data under /usr/src/kodekloudrepos/ecommerce-t2q6 repository, however they later realised that there is a typo in one of the files. Let's fix the typo.
+
+1.In the lion-and-mouse.txt file, LION is mis-spelt as LIOON. Please fix it and then commit the changes with a commit message: Fix typo in story title
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Step 1: SSH into the Storage Server
+    1. Open your terminal.
+	
+    2. Use the following command to SSH into the storage server:
+	
+       #ssh sarah@<storage_server_ip>
+       Replace <storage_server_ip> with the actual IP address of the storage server. When prompted, enter the password S3cure321.
+	   
+Step 2: Navigate to the Repository
+    1. Once logged in, navigate to the repository directory:
+	
+       #cd /usr/src/kodekloudrepos/ecommerce-t2q6
+	   
+Step 3: Fix the Typo in the File
+    1. Open the lion-and-mouse.txt file using a text editor like nano or vim:
+       #nano lion-and-mouse.txt
+       or
+       #vim lion-and-mouse.txt
+	   
+    2. Locate the typo LIOON and change it to LION.
+	
+    3. Save the file and exit the editor:
+        ◦ For nano, press Ctrl + O to save and Ctrl + X to exit.
+        ◦ For vim, press Esc, type :wq, and press Enter.
+		
+Step 4: Commit the Changes
+    1. Stage the changes:
+       #git add lion-and-mouse.txt
+	   
+    2. Commit the changes with the specified commit message:
+       #git commit -m "Fix typo in story title"
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a summary of the commands you will use:
+
+#ssh sarah@<storage_server_ip>
+#cd /usr/src/kodekloudrepos/ecommerce-t2q6
+#nano lion-and-mouse.txt
+
+# Fix the typo in the file, then save and exit
+#git add lion-and-mouse.txt
+#git commit -m "Fix typo in story title"
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+=======================================================================================================================================================================================================
+
+QUESTION:5.The Nautilus application development team has been working on a project repository /opt/ecommerce-t2q3.git. 
+This repo is cloned at /usr/src/kodekloudrepos/ecommerce-t2q3 on storage server in Stratos DC. They recently shared the following requirements with DevOps team:
+
+1.Create a new branch datacenter-t2q3 in /usr/src/kodekloudrepos/ecommerce-t2q3 repo from master and copy the /tmp/index-t2q3.html file (present on storage server itself) into the repo. 
+2.Further, add/commit this file in the new branch and merge back that branch into master branch. Finally, push the changes to the origin for both of the branches.
+
+Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Step-by-Step Instructions:
+
+    1. SSH into the storage server: Open your terminal and use the following command to SSH into the storage server:
+	
+       #ssh sarah@<storage_server_ip>
+       Replace <storage_server_ip> with the actual IP address of the storage server. When prompted, enter the password S3cure321.
+	   
+    2. Navigate to the repository directory: Once logged in, navigate to the cloned repository directory:
+	
+       #cd /usr/src/kodekloudrepos/ecommerce-t2q3
+	   
+    3. Create a new branch datacenter-t2q3 from master: First, ensure you are on the master branch and pull the latest changes:
+	
+       #git checkout master
+       #git pull origin master
+	   
+       Then, create and switch to the new branch datacenter-t2q3:
+	   
+       #git checkout -b datacenter-t2q3
+	   
+    4. Copy the /tmp/index-t2q3.html file into the repository: Copy the specified file into the current directory of the repository:
+	
+       #cp /tmp/index-t2q3.html .
+	   
+    5. Add and commit the file to the new branch: Add the copied file to the staging area and commit it:
+	
+       #git add index-t2q3.html
+       #git commit -m "Add index-t2q3.html to datacenter-t2q3 branch"
+	   
+    6. Merge the datacenter-t2q3 branch back into master: Switch back to the master branch and merge the changes from datacenter-t2q3:
+	
+       #git checkout master
+       #git merge datacenter-t2q3
+	   
+    7. Push the changes to the origin for both branches: Finally, push the changes to the remote repository for both master and datacenter-t2q3 branches:
+	
+       #git push origin master
+       #git push origin datacenter-t2q3
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands:
+Here’s a summary of the commands you will run:
+
+#ssh sarah@<storage_server_ip>
+# Enter password: S3cure321
+
+#cd /usr/src/kodekloudrepos/ecommerce-t2q3
+
+#git checkout master
+#git pull origin master
+
+#git checkout -b datacenter-t2q3
+
+#cp /tmp/index-t2q3.html .
+
+#git add index-t2q3.html
+#git commit -m "Add index-t2q3.html to datacenter-t2q3 branch"
+
+#git checkout master
+#git merge datacenter-t2q3
+
+#git push origin master
+#git push origin datacenter-t2q3
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=======================================================================================================================================================================================================
+
+QUESTION:6.The developers are adding some content under new repositories. There was some data added under /home/sarah/story-blog-t1q8 repository on the storage server. 
+Commit the files that are currently in the staging area under this repository.
+
+1.First check the status of the file using the command git status. Then commit using the commit message as Added the lion and mouse story
+
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Step-by-Step Instructions
+    1. SSH into the Storage Server:
+        ◦ Open your terminal.
+        ◦ Use the following command to SSH into the storage server:
+          #ssh sarah@<storage_server_ip>
+        ◦ When prompted, enter the password: S3cure321.
+		
+    2. Navigate to the Repository:
+        ◦ Once logged in, navigate to the repository directory:
+          #cd /home/sarah/story-blog-t1q8
+		  
+    3. Check the Status of the Files:
+        ◦ Use the git status command to check the status of the files in the repository:
+          #git status
+        ◦ This command will show you the current status of the files, including which files are in the staging area.
+		
+    4. Commit the Files:
+        ◦ If the files are in the staging area and ready to be committed, use the following command to commit them with the specified commit message:
+          #git commit -m "Added the lion and mouse story"
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a complete example of the commands you would run:
+
+# SSH into the storage server
+	#ssh sarah@<storage_server_ip>
+# Enter the password when prompted
+# Navigate to the repository directory
+	#cd /home/sarah/story-blog-t1q8
+# Check the status of the files
+	#git status
+# Commit the files with the specified commit message
+	#git commit -m "Added the lion and mouse story"
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Replace <storage_server_ip> with the actual IP address of your storage server.
+
+=======================================================================================================================================================================================================
+
+QUESTION:7.Recently a bare repository was created by one of the developers. Now, they were planning to add some content in this repository so this needs to be cloned somewhere so that one of the developers can start adding data in it. 
+Below you can find more details.
+
+1.Clone the repository /opt/story-blog-t1q11.git under sarah user's home on storage server.
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+Steps to Clone the Repository
+    1. SSH into the Storage Server:
+        ◦ Open a terminal on your local machine.
+        ◦ Use the ssh command to connect to the storage server using the provided credentials.
+		#ssh sarah@<storage_server_ip>
+       When prompted, enter the password S3cure321.
+	   
+    2. Navigate to the Home Directory:
+        ◦ Once logged in, ensure you are in the home directory of the sarah user.
+       #cd ~
+	   
+    3. Clone the Bare Repository:
+        ◦ Use the git clone command to clone the bare repository located at /opt/story-blog-t1q11.git into the current directory.
+       #git clone /opt/story-blog-t1q11.git
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a step-by-step example of the commands you would run:
+    1. SSH into the Storage Server:
+       #ssh sarah@<storage_server_ip>
+       Enter the password when prompted:
+       #sarah@<storage_server_ip>'s password: S3cure321
+    2. Navigate to the Home Directory:
+       #cd ~
+    3. Clone the Repository:
+       #git clone /opt/story-blog-t1q11.git
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	   
+After running these commands, the repository will be cloned into the sarah user’s home directory, and you can start adding content to it.
+
+=======================================================================================================================================================================================================
+
+QUESTION:8.A developer was in the process of creating repositories on the Gitea server. Unfortunately, one repository was mistakenly created and now needs to be deleted. Below are further details regarding this issue.
+
+1.The repository name is story-blog-t1q1 and is located under the sarah user on the Gitea server. The Gitea login credentials are as follows:
+
+Username: sarah
+Password: S3cure321
+
+ANSWER:
+
+Steps to Delete a Repository on Gitea
+    1. Log in to Gitea:
+        ◦ Open your web browser and navigate to your Gitea server’s URL.
+        ◦ Enter the username sarah and password S3cure321 to log in.
+    2. Navigate to the Repository:
+        ◦ Once logged in, go to the sarah user’s profile.
+        ◦ Find the repository named story-blog-t1q1 in the list of repositories.
+    3. Access Repository Settings:
+        ◦ Click on the repository name story-blog-t1q1 to open it.
+        ◦ In the repository view, look for the Settings tab, usually located at the top or in a dropdown menu.
+    4. Delete the Repository:
+        ◦ In the Settings tab, scroll down to find the Danger Zone section.
+        ◦ Click on the Delete this repository button.
+        ◦ You will be prompted to confirm the deletion. Type the repository name story-blog-t1q1 to confirm and then click the Delete button.
+		
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
+Example Commands
+
+If you prefer using the command line or API, here is an example using the Gitea API:
+    1. Generate an API Token:
+        ◦ Go to your Gitea account settings.
+        ◦ Navigate to Applications and generate a new API token. Copy this token for use in the API request.
+    2. Delete the Repository via API:
+        ◦ Use the following curl command to delete the repository:
+          curl -X DELETE -H "Authorization: token YOUR_API_TOKEN" \
+          "https://your-gitea-server/api/v1/repos/sarah/story-blog-t1q1"
+       
+	Replace YOUR_API_TOKEN with the token you generated and https://your-gitea-server with your actual Gitea server URL.
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=======================================================================================================================================================================================================
+
+QUESTION:9.The Nautilus application development team has been working on a project repository /opt/official-t2q3.git. This repo is cloned at /usr/src/kodekloudrepos/official-t2q3 on storage server in Stratos DC. 
+They recently shared the following requirements with DevOps team:
+
+1.Create a new branch nautilus-t2q3 in /usr/src/kodekloudrepos/official-t2q3 repo from master and copy the /tmp/index-t2q3.html file (present on storage server itself) into the repo. 
+Further, add/commit this file in the new branch and merge back that branch into master branch. Finally, push the changes to the origin for both of the branches.
+2.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password:S3cure321
+
+ANSWER:
+Steps to Complete the Task
+    1. SSH into the Storage Server: Use the provided credentials to SSH into the storage server.
+       #ssh sarah@<storage_server_ip>
+       # Enter the password when prompted
+	   
+    2. Navigate to the Repository: Change directory to the cloned repository.
+       #cd /usr/src/kodekloudrepos/official-t2q3
+	   
+    3. Create a New Branch: Create a new branch named nautilus-t2q3 from the master branch.
+       #git checkout -b nautilus-t2q3
+	   
+    4. Copy the File: Copy the /tmp/index-t2q3.html file into the repository.
+       #cp /tmp/index-t2q3.html /usr/src/kodekloudrepos/official-t2q3/
+	   
+    5. Add and Commit the File: Add the copied file to the staging area and commit it to the new branch.
+       #git add index-t2q3.html
+       #git commit -m "Add index-t2q3.html to nautilus-t2q3 branch"
+	   
+    6. Merge the New Branch into Master: Switch back to the master branch and merge the nautilus-t2q3 branch into it.
+       #git checkout master
+       #git merge nautilus-t2q3
+	   
+    7. Push the Changes to the Origin: Push the changes for both branches to the remote repository.
+       #git push origin master
+       #git push origin nautilus-t2q3
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a complete example of the commands you would run:
+# SSH into the storage server
+ssh sarah@<storage_server_ip>
+# Enter the password when prompted
+
+# Navigate to the repository
+cd /usr/src/kodekloudrepos/official-t2q3
+
+# Create a new branch
+git checkout -b nautilus-t2q3
+
+# Copy the file
+cp /tmp/index-t2q3.html /usr/src/kodekloudrepos/official-t2q3/
+
+# Add and commit the file
+git add index-t2q3.html
+git commit -m "Add index-t2q3.html to nautilus-t2q3 branch"
+
+# Merge the new branch into master
+git checkout master
+git merge nautilus-t2q3
+
+# Push the changes to the origin
+git push origin master
+git push origin nautilus-t2q3
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+=======================================================================================================================================================================================================
+
+QUESTION:10.Nautilus developers are actively working on one of the project repositories, /usr/src/kodekloudrepos/official-t2q1. 
+Recently, they decided to implement some new features in the application, and they want to maintain those new changes in a separate branch. Below are the requirements that have been shared with the DevOps team:
+
+1.On Storage server in Stratos DC create a new branch xfusioncorp_official-t2q1 from master branch in /usr/src/kodekloudrepos/official-t2q1 git repo.
+2.Please do not try to make any changes in the code.
+3.Use below credentials to SSH into the storage server and to complete this task.
+
+Username: sarah
+Password: S3cure321	
+
+ANSWER:
+Steps to Create a New Branch
+    1. SSH into the Storage Server:
+        ◦ Open your terminal.
+        ◦ Use the provided credentials to SSH into the storage server.
+          #ssh sarah@<storage-server-ip>
+        ◦ When prompted, enter the password: S3cure321.
+		
+    2. Navigate to the Git Repository:
+        ◦ Once logged in, navigate to the Git repository directory.
+          #cd /usr/src/kodekloudrepos/official-t2q1
+		  
+    3. Create a New Branch from the Master Branch:
+        ◦ Ensure you are on the master branch.
+          #git checkout master
+		  
+        ◦ Create a new branch named xfusioncorp_official-t2q1.
+          #git checkout -b xfusioncorp_official-t2q1
+		  
+    4. Verify the New Branch:
+        ◦ Check the list of branches to confirm the new branch has been created.
+          #git branch
+		  
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		  
+Example Commands
+Here is a summary of the commands you will use:
+
+#ssh sarah@<storage-server-ip>
+# Enter password: S3cure321
+
+#cd /usr/src/kodekloudrepos/official-t2q1
+
+#git checkout master
+#git checkout -b xfusioncorp_official-t2q1
+#git branch
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This will create a new branch xfusioncorp_official-t2q1 from the master branch without making any changes to the code. 
+
+=======================================================================================================================================================================================================
+
+

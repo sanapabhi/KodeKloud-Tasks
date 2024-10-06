@@ -1,0 +1,68 @@
+Question: 2.Nautilus developers are actively working on one of the project repositories, /usr/src/kodekloudrepos/cluster. 
+Recently, they decided to implement some new features in the application, and they want to maintain those new changes in a separate branch. Below are the requirements that have been shared with the DevOps team:
+
+1.On Storage server in Stratos DC create a new branch xfusioncorp_cluster from master branch in /usr/src/kodekloudrepos/cluster git repo.
+2.Please do not try to make any changes in the code.
+
+ANSWER:
+
+xfusioncorp_cluster from the master branch in the /usr/src/kodekloudrepos/cluster git repository. Here are the steps:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SSH into the Storage Server:
+        ◦ Open your terminal.
+        ◦ Use the provided credentials to SSH into the storage server.
+		
+       #ssh natasha@<storage_server_ip>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	   
+    
+Step 1: Navigate to the Repository Directory
+First, you need to navigate to the directory where the repository is located. Open your terminal and run:
+	 #cd /usr/src/kodekloudrepos/cluster
+This command changes the current directory to /usr/src/kodekloudrepos/cluster.
+
+Step 2: Ensure You Are on the master Branch
+Next, make sure you are on the master branch. You can do this by running:
+	 #git checkout master
+This command switches to the master branch.
+
+Step 3: Pull the Latest Changes from the Remote Repository
+To ensure your local master branch is up to date with the remote repository, run:
+	 #git pull origin master
+This command fetches and merges the latest changes from the remote master branch.
+
+Step 4: Create the New Branch xfusioncorp_cluster
+Now, create the new branch xfusioncorp_cluster from the master branch by running:
+	 #git checkout -b xfusioncorp_cluster
+This command creates a new branch named xfusioncorp_cluster and switches to it.
+
+Step 5: Push the New Branch to the Remote Repository
+Finally, push the new branch to the remote repository with:
+	 #git push origin xfusioncorp_cluster
+This command uploads the new branch to the remote repository.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example
+
+Here is an example of how the commands would look in the terminal:
+$ cd /usr/src/kodekloudrepos/cluster
+$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+$ git pull origin master
+From https://your-repo-url
+ * branch            master     -> FETCH_HEAD
+Already up to date.
+
+$ git checkout -b xfusioncorp_cluster
+Switched to a new branch 'xfusioncorp_cluster'
+
+$ git push origin xfusioncorp_cluster
+Total 0 (delta 0), reused 0 (delta 0)
+To https://your-repo-url
+ * [new branch]      xfusioncorp_cluster -> xfusioncorp_cluster
+ 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+This will create and push the new branch without making any changes to the code.

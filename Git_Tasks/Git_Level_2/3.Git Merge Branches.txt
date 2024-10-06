@@ -1,0 +1,95 @@
+QUESTION:3.The Nautilus application development team has been working on a project repository /opt/beta.git. This repo is cloned at /usr/src/kodekloudrepos on storage server in Stratos DC. 
+They recently shared the following requirements with DevOps team:
+
+Create a new branch devops in /usr/src/kodekloudrepos/beta repo from master and copy the /tmp/index.html file (present on storage server itself) into the repo. 
+Further, add/commit this file in the new branch and merge back that branch into master branch. Finally, push the changes to the origin for both of the branches.
+ 
+ANSWER:
+ Here are the detailed steps and commands to achieve the requirements:
+
+> Navigate to the repository directory:
+	 #cd /usr/src/kodekloudrepos/beta
+
+> Create a new branch devops from master:
+	 #git checkout -b devops
+
+> Copy the /tmp/index.html file into the repository:
+	 #cp /tmp/index.html /usr/src/kodekloudrepos/beta/
+
+> Add the copied file to the staging area:
+	 #git add index.html
+
+> Commit the changes in the devops branch:
+	 #git commit -m "Add index.html to devops branch"
+
+> Switch back to the master branch:
+	 #git checkout master
+
+> Merge the devops branch into master:
+	 #git merge devops
+
+> Push the changes to the origin for both branches:
+	 #git push origin master
+	 #git push origin devops
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Walkthrough
+
+Let’s go through an example step-by-step:
+
+Navigate to the repository directory:
+#cd /usr/src/kodekloudrepos/beta
+
+Create a new branch devops from master:
+#git checkout -b devops
+Output:
+Switched to a new branch 'devops'
+
+Copy the /tmp/index.html file into the repository:
+#cp /tmp/index.html /usr/src/kodekloudrepos/beta/
+
+Verify the file is copied:
+#ls /usr/src/kodekloudrepos/beta/
+Output:
+index.html
+
+Add the copied file to the staging area:
+#git add index.html
+
+Commit the changes in the devops branch:
+#git commit -m "Add index.html to devops branch"
+
+Output:
+[devops 1a2b3c4] Add index.html to devops branch
+1 file changed, 1 insertion(+)
+create mode 100644 index.html
+
+Switch back to the master branch:
+#git checkout master
+Output:
+Switched to branch 'master'
+
+Merge the devops branch into master:
+#git merge devops
+Output:
+Updating 1a2b3c4..5d6e7f8
+Fast-forward
+index.html | 1 +
+1 file changed, 1 insertion(+)
+create mode 100644 index.html
+
+Push the changes to the origin for both branches:
+#git push origin master
+#git push origin devops
+Output:
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (5/5), 500 bytes | 500.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0)
+To <remote-repo-url>
+   5d6e7f8..9a0b1c2  master -> master
+   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+This should cover all the steps required to meet the Nautilus application development team’s requirements

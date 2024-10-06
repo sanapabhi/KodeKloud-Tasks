@@ -1,0 +1,71 @@
+QUESTION:5.The system admins team of xFusionCorp Industries has set up some scripts on jump host that run on regular intervals and perform operations on all app servers in Stratos Datacenter. 
+To make these scripts work properly we need to make sure the thor user on jump host has password-less SSH access to all app servers through their respective sudo users (i.e tony for app server 1). Based on the requirements, perform the following:
+
+1.Set up a password-less authentication from user thor on jump host to all app servers through their respective sudo users.
+
+ANSWER:
+
+ @1st check your login as thor user  on the server
+		#whoami
+		Output:
+			thor
+		 
+set up password-less SSH authentication from the thor user on the jump host to all app servers through their respective sudo users. Here are the detailed steps and commands:
+Steps to Set Up Password-less SSH Authentication
+    1. Log in to the Jump Host as the thor User:
+       #ssh thor@jump_host
+	   
+    2. Generate an SSH Key Pair for the thor User: If you haven’t already generated an SSH key pair, you can do so using the following command:
+       #ssh-keygen -t rsa
+	   
+       Follow the prompts to save the key pair in the default location (/home/thor/.ssh/id_rsa) and optionally set a passphrase.
+	   
+	   > Find the public key:
+
+	   #cat ~/.ssh/id_rsa.pub
+	   
+    3. Copy the Public Key to Each App Server: Use the ssh-copy-id command to copy the public key to each app server. Replace app_server_user with the respective sudo user for each app server (e.g., tony for app server 1).
+        
+       For App Server 1:
+       #ssh-copy-id tony@app_server_1
+		
+       For App Server 2:
+       #ssh-copy-id steve@app_server_2
+	   
+       #For App Server 3:
+       ssh-copy-id banner@app_server_3
+	   
+    4. Verify Password-less SSH Access: After copying the public key, verify that you can SSH into each app server without being prompted for a password.
+        
+       For App Server 1:
+       #ssh tony@app_server_1
+	   
+       For App Server 2:
+       #ssh steve@app_server_2
+	   
+       For App Server 3:
+       #ssh banner@app_server_3
+	   
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands:
+
+    1. Generate SSH Key Pair:
+       thor@jump_host:~$ ssh-keygen -t rsa -b 2048
+		 > Generating public/private rsa key pair.
+		 > Enter file in which to save the key (/home/thor/.ssh/id_rsa): [Press Enter]
+		 > Enter passphrase (empty for no passphrase): [Press Enter]
+		 > Enter same passphrase again: [Press Enter]
+		 > Your identification has been saved in /home/thor/.ssh/id_rsa.
+		 > Your public key has been saved in /home/thor/.ssh/id_rsa.pub.
+	   
+    2. Copy Public Key to App Server 1:
+       thor@jump_host:~$ ssh-copy-id tony@app_server_1
+	   
+    3. Verify SSH Access to App Server 1:
+       thor@jump_host:~$ ssh tony@app_server_1
+	   
+       [tony@app_server_1 ~]$
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	   
+By following these steps, you should be able to set up password-less SSH access from the thor user on the jump host to all app servers through their respective sudo users

@@ -1,0 +1,179 @@
+Question:23.The Nautilus DevOps team is ready to launch a new application, which they will deploy on app servers in Stratos Datacenter. 
+They are expecting significant traffic/usage of httpd on app servers after that. This will generate massive logs, creating huge log files. 
+To utilise the storage efficiently, they need to compress the log files and need to rotate old logs. Check the requirements shared below:
+
+a. In all app servers install httpd package.
+b. Using logrotate configure httpd logs rotation to monthly and keep only 3 rotated logs.
+
+(If by default log rotation is set, then please update configuration as needed)
+
+Answer:
+
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+
+Important Note:I have shown only for stapp01. You have to do this in all app server stapp01,stapp02, stapp03.
+
+X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X-X
+Part:1.SSH into the Remote Server
+
+thor@jumphost ~$ ssh tony@stapp01
+The authenticity of host 'stapp01 (172.16.238.10)' can't be established.
+ED25519 key fingerprint is SHA256:Wzqth218fKYsAMqat6xflivjdbQvzaJArkk9b5Lw4V0.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'stapp01' (ED25519) to the list of known hosts.
+tony@stapp01's password: 
+
+Part:1.1.Swith to root user
+
+[tony@stapp01 ~]$ sudo su -
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for tony: 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Part A: Install httpd package on all app servers
+
+Step 1: Update system packages Ensure that the system is up to date by updating the package manager.
+
+		[root@stapp01 ~]#sudo yum update -y
+		
+Explanation: This command updates the local package index and applies any available updates. The -y flag automatically accepts prompts.
+
+Step 2: Install the httpd package Install the httpd (Apache) web server package.
+
+		[root@stapp01 ~]#yum install httpd -y
+		
+Explanation: The yum install httpd command installs the httpd package. The -y flag automatically confirms the installation.
+
+Step 3: Start and enable httpd service After installation, start the httpd service and enable it to start on boot.
+
+		[root@stapp01 ~]# systemctl start httpd
+		
+		[root@stapp01 ~]# systemctl enable httpd
+		
+Explanation: systemctl start starts the Apache server, and systemctl enable ensures that Apache will start automatically at boot time.
+
+Step 4: Verify httpd is running Check the status of the httpd service to confirm it's running.
+
+		[root@stapp01 ~]# systemctl status httpd
+		
+Explanation: This command displays the current status of the Apache service.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Part B: Configure Log Rotation for httpd logs
+
+Step 1: Check existing logrotate configuration for httpd First, check if log rotation for httpd is already configured.
+
+		[root@stapp01 ~]#cat /etc/logrotate.d/httpd
+		
+Explanation: This file defines how logs for the httpd service should be rotated. If this file doesn't exist, we will create one.
+
+Step 2: Configure or update log rotation settings Edit the logrotate configuration file for httpd. If it doesn't exist, create it using a text editor like vi or nano.
+
+		[root@stapp01 ~]# vi /etc/logrotate.d/httpd
+		
+If the file exists, ensure it contains the following configuration:
+
+
+	# Note that logs are not compressed unless "compress" is configured,
+		# which can be done either here or globally in /etc/logrotate.conf.
+		/var/log/httpd/*log {
+			monthly
+			rotate 3
+			missingok
+			notifempty
+			sharedscripts
+			delaycompress
+			postrotate
+				/bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+			endscript
+		}
+	
+Explanation:
+
+	1./var/log/httpd/*log: This specifies the log files for Apache located in /var/log/httpd/.
+	2.monthly: Log files will be rotated once per month.
+	3.rotate 3: Only 3 rotated log files will be kept, and older logs will be removed.
+	4.missingok: If a log file is missing, the rotation will continue without throwing an error.
+	5.notifempty: Do not rotate the log file if it is empty.
+	6.sharedscripts: Ensure that post-rotation scripts (like restarting the service) run only once.
+	7.delaycompress: delay the compression of the most recent log file until the next rotation cycle.
+	8.postrotate block: This script reloads the Apache service to apply changes after log rotation.
+
+Step 3: Test logrotate configuration You can manually test the logrotate configuration to ensure it works correctly.
+
+		[root@stapp01 ~]# logrotate -d /etc/logrotate.d/httpd
+			Output:
+				WARNING: logrotate in debug mode does nothing except printing debug messages!  Consider using verbose mode (-v) instead if this is not what you want.
+
+				reading config file /etc/logrotate.d/httpd
+				Reading state from file: /var/lib/logrotate/logrotate.status
+				Allocating hash table for state file, size 64 entries
+				Creating new state
+				Creating new state
+
+				Handling 1 logs
+
+				rotating pattern: /var/log/httpd/*log  monthly (3 rotations)
+				empty log files are not rotated, old logs are removed
+				considering log /var/log/httpd/access_log
+				Creating new state
+				  Now: 2024-10-03 15:49
+				  Last rotated at 2024-10-03 15:00
+				  log does not need rotating (log has already been rotated)
+				considering log /var/log/httpd/error_log
+				Creating new state
+				  Now: 2024-10-03 15:49
+				  Last rotated at 2024-10-03 15:00
+				  log does not need rotating (log has already been rotated)
+				not running postrotate script, since no logs were rotated
+		
+Explanation: The -d flag runs logrotate in debug mode, showing what would happen during rotation without actually rotating the logs.
+
+Step 4: Force log rotation (for testing purposes) You can force log rotation to test if everything is set up correctly.
+
+		[root@stapp01 ~]# logrotate -f /etc/logrotate.d/httpd
+		
+Explanation: The -f flag forces the log rotation.
+
+Step 5: Verify the log rotation After rotation, verify that the logs have been rotated and compressed.
+
+
+
+		[root@stapp01 ~]#ls -lh /var/log/httpd/
+			Output:
+				total 4.0K
+				-rw-r--r-- 1 root root   0 Oct  3 15:49 access_log
+				-rw-r--r-- 1 root root 532 Oct  3 15:49 error_log
+		
+Explanation: This command lists the files in the /var/log/httpd/ directory, allowing you to check the rotated log files (e.g., access_log-YYYYMMDD.gz).
+
+-----------------------------------------------------------------------------------------------------------------------
+Output Example
+After installing httpd, running the systemctl status httpd should show:
+
+
+
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Wed 2024-10-03 12:34:56 UTC; 5min ago
+After forcing log rotation, you'll see rotated logs in /var/log/httpd/:
+
+
+
+-rw-r--r-- 1 root root 12K Oct  3 12:35 access_log
+-rw-r--r-- 1 root root 8.0K Oct  2 12:34 access_log-20241003.gz
+This setup ensures that the httpd logs are rotated monthly, old logs are compressed, and only 3 rotated logs are kept.
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+

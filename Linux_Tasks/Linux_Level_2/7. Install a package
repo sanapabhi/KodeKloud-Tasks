@@ -1,0 +1,85 @@
+QUESTION:7.As per new application requirements shared by the Nautilus project development team, serveral new packages need to be installed on all app servers in Stratos Datacenter. 
+Most of them are completed except for telnet.
+
+Therefore, install the telnet package on all app-servers.
+
+ANSWER:
+
+ Here are the detailed steps and commands to install the telnet package on all app servers in the Stratos Datacenter.
+Steps to Install Telnet
+    1. SSH into each app server:
+        ◦ You need to SSH into each app server using the appropriate credentials. For example, if you have three app servers with IP addresses 192.168.1.10, 192.168.1.11, and 192.168.1.12, you would SSH into each one.
+    2. Install the Telnet package:
+        ◦ Once you are logged into each server, you can install the telnet package using the package manager.
+Commands
+
+Example for CentOS/RHEL-based systems:
+
+    1. SSH into the server:
+       ssh user@192.168.1.10
+	   
+    2. Switch to the root user (if necessary):
+       sudo su -
+	   
+    3. Install the Telnet package:
+       yum install -y telnet
+	   
+    4. Verify the installation:
+       telnet -version
+	   
+Example for Ubuntu/Debian-based systems:
+    1. SSH into the server:
+       ssh user@192.168.1.10
+	   
+    2. Switch to the root user (if necessary):
+       sudo su -
+	   
+    3. Update the package list:
+       apt update
+	   
+    4. Install the Telnet package:
+       apt install -y telnet
+	   
+    5. Verify the installation:
+       telnet -version
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	   
+Automating the Process
+If you have multiple servers, you might want to automate this process using a script or a configuration management tool like Ansible.
+Example Bash Script:
+#!/bin/bash
+
+# List of app servers
+servers=("192.168.1.10" "192.168.1.11" "192.168.1.12")
+
+# Loop through each server and install telnet
+for server in "${servers[@]}"; do
+  #ssh user@$server << EOF
+  #sudo su -
+  #yum install -y telnet || apt install -y telnet
+  #telnet -version
+EOF
+done
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+*******************************************************************************************************************************************************************************************************
+Example Ansible Playbook:
+---
+- name: Install Telnet on all app servers
+  hosts: app_servers
+  become: yes
+  tasks:
+    - name: Install Telnet
+      package:
+        name: telnet
+        state: present
+Running the Ansible Playbook
+    1. Create an inventory file (hosts):
+       [app_servers]
+       192.168.1.10
+       192.168.1.11
+       192.168.1.12
+    2. Run the playbook:
+       ansible-playbook -i hosts install_telnet.yml
+This should help you install the telnet package on all app servers in the Stratos Datacenter.
+
+*******************************************************************************************************************************************************************************************************

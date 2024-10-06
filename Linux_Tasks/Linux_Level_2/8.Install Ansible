@@ -1,0 +1,38 @@
+QUESTION:8.During the weekly meeting, the Nautilus DevOps team discussed about the automation and configuration management solutions that they want to implement. 
+While considering several options, the team has decided to go with Ansible for now due to its simple setup and minimal pre-requisites. 
+The team wanted to start testing using Ansible, so they have decided to use jump host as an Ansible controller to test different kind of tasks on rest of the servers.
+
+Install ansible version 4.7.0 on Jump host using pip3 only. Make sure Ansible binary is available globally on this system
+
+ANSWER:
+Here are the detailed steps and commands to install Ansible version 4.7.0 on your Jump host using pip3, ensuring that the Ansible binary is available globally.
+Steps to Install Ansible 4.7.0
+    1. Update the package list and install pip3: Ensure your system’s package list is up-to-date and install pip3 if it’s not already installed.
+       #sudo apt update
+       #sudo apt install python3-pip -y
+	   
+    2. Install Ansible version 4.7.0 using pip3: Use pip3 to install the specific version of Ansible. This command will install Ansible globally.
+       #sudo pip3 install ansible==4.7.0
+	   
+    3. Verify the installation: Check if Ansible is installed correctly and verify its version.
+       #ansible --version
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example Commands
+Here is a step-by-step example of how you would execute these commands on your Jump host:
+    1. Update package list and install pip3:
+       sudo apt update
+       sudo apt install python3-pip -y
+    2. Install Ansible 4.7.0:
+       sudo pip3 install ansible==4.7.0
+    3. Verify the installation:
+       ansible --version
+	   
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Explanation
+    • sudo apt update: Updates the list of available packages and their versions.
+    • sudo apt install python3-pip -y: Installs pip3, the package installer for Python 3.
+    • sudo pip3 install ansible==4.7.0: Installs Ansible version 4.7.0 globally using pip3.
+    • ansible --version: Verifies the installation by displaying the installed version of Ansible.
+By following these steps, you should have Ansible 4.7.0 installed on your Jump host, ready for use in your automation and configuration management tasks.
+
