@@ -1,0 +1,283 @@
+Question:14.xFusionCorp Industries has planned to set up a common email server in Stork DC. After several meetings and recommendations they have decided to use postfix as their mail transfer agent and dovecot as an IMAP/POP3 server. We would like you to perform the following steps:
+
+1. Install and configure postfix on Stork DC mail server.
+2. Create an email account rose@stratos.xfusioncorp.com identified by TmPcZjtRQx.
+3. Set its mail directory to /home/rose/Maildir.
+4. Install and configure dovecot on the same server.
+
+Answer:
+
+To set up an email server with Postfix as the Mail Transfer Agent (MTA) and Dovecot as the IMAP/POP3 server on CentOS for xFusionCorp Industries, follow the steps below.
+
+Prerequisites:
+A CentOS server with root or sudo access.
+Basic understanding of Postfix and Dovecot.
+
+---------------------------------------------------------------------------------------------------
+● Login to Mail Server:
+
+thor@jumphost ~$ ssh groot@stmail01 
+The authenticity of host 'stmail01 (172.16.238.17)' can't be established.
+ED25519 key fingerprint is SHA256:7uB8P4nEDaXVH8cgWNKyT69D+6UzmCE8cLUzVRHUtYo.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'stmail01' (ED25519) to the list of known hosts.
+groot@stmail01's password: 
+
+● Switch Into root User:
+
+[groot@stmail01 ~]$ sudo su -
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for groot: 
+
+---------------------------------------------------------------------------------------------------
+
+Step 1: Install and configure Postfix
+
+1.Update system packages
+
+		[root@stmail01 ~]#yum update -y
+		
+This ensures your system is up to date.
+
+
+2.Install Postfix
+
+		[root@stmail01 ~]#yum install postfix -y
+
+This command installs Postfix, the mail transfer agent.
+
+● Check Hostname
+		[root@stmail01 ~]# hostname
+			Output:
+				stmail01.stratos.xfusioncorp.com
+
+
+3.Configure Postfix The main configuration file for Postfix is /etc/postfix/main.cf. Open it in a text editor like vi or nano.
+
+		[root@stmail01 ~]#vi /etc/postfix/main.cf
+
+Key changes to make in main.cf:
+
+● Set the domain name and origin:
+
+		myhostname = stmail01.stratos.xfusioncorp.com
+		mydomain = stratos.xfusioncorp.com
+		myorigin = $mydomain
+
+● Specify the network interface and IP address to listen on (for this example, localhost only):
+
+		inet_interfaces = all
+		inet_protocols = all
+
+● Set the destination:
+
+		mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+● Set up the mailbox location for users:
+
+		home_mailbox = Maildir/
+
+This ensures that each user's emails are stored in a Maildir format inside their home directories.
+
+
+4.Enable,start and check status Postfix After configuring Postfix, enable and start the service:
+
+		[root@stmail01 ~]#systemctl enable postfix
+				Output:
+					Created symlink /etc/systemd/system/multi-user.target.wants/postfix.service → /usr/lib/systemd/system/postfix.service.
+
+		[root@stmail01 ~]#systemctl start postfix
+		
+		[root@stmail01 ~]# systemctl status postfix
+				Output:
+					● postfix.service - Postfix Mail Transport Agent
+						 Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: disabled)
+						 Active: active (running) since Fri 2024-10-11 15:58:48 UTC; 30s ago
+						Process: 6356 ExecStartPre=/usr/sbin/restorecon -R /var/spool/postfix/pid (code=exited, status=0/SUCCESS)
+						Process: 6357 ExecStartPre=/usr/libexec/postfix/aliasesdb (code=exited, status=0/SUCCESS)
+						Process: 6361 ExecStartPre=/usr/libexec/postfix/chroot-update (code=exited, status=0/SUCCESS)
+						Process: 6362 ExecStart=/usr/sbin/postfix start (code=exited, status=0/SUCCESS)
+					   Main PID: 6430 (master)
+						  Tasks: 3 (limit: 1340692)
+						 Memory: 13.0M
+						 CGroup: /docker/05b3ca87c7ba58bfac2c81a8a544ea7622443cf8115f81ee682cf5f8ef80c2d8/system.slice/postfix.service
+								 ├─6430 /usr/libexec/postfix/master -w
+								 ├─6431 pickup -l -t unix -u
+								 └─6432 qmgr -l -t unix -u
+
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: New main PID 6430 belongs to service, we are happy.
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Main PID loaded: 6430
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Changed start -> running
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Job 420 postfix.service/start finished, result=done
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: Started Postfix Mail Transport Agent.
+					Oct 11 15:58:48 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Failed to send unit change signal for postfix.service: Connection reset by peer
+					Oct 11 15:59:12 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Trying to enqueue job postfix.service/start/replace
+					Oct 11 15:59:12 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Installed new job postfix.service/start as 462
+					Oct 11 15:59:12 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Enqueued job postfix.service/start as 462
+					Oct 11 15:59:12 stmail01.stratos.xfusioncorp.com systemd[1]: postfix.service: Job 462 postfix.service/start finished, result=done
+
+
+
+5. Firewall:
+	
+	1.Install Firewalld if its not installaed without firewalld you are unable to run firewall related command.
+		
+		[root@stmail01 ~]# yum install firewalld -y
+		
+	2.To enable Firewalld Service	
+		
+		[root@stmail01 ~]# systemctl enable firewalld
+	
+	3.Start Firewalld Service
+		[root@stmail01 ~]# systemctl start firewalld
+
+● Open firewall ports Postfix uses port 25 for SMTP. Allow this port through the firewall:
+
+		[root@stmail01 ~]#firewall-cmd --permanent --add-service=smtp
+			Output:
+				success
+		
+		[root@stmail01 ~]#firewall-cmd --reload
+			Output:
+				success
+		
+		
+		
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Step 2: Create the email account
+
+1.Add the user rose
+
+		[root@stmail01 ~]#useradd -m -s /bin/ rose
+		
+This creates a new user account with the home directory /home/rose.
+
+
+2.Set the password for rose
+
+		[root@stmail01 ~]#echo 'TmPcZjtRQx' | sudo passwd --stdin rose
+				Output:
+					Changing password for user rose.
+					passwd: all authentication tokens updated successfully.
+
+This command sets the password for the rose account to TmPcZjtRQx.
+
+
+3.Create the Maildir directory By default, Postfix will use /home/rose/Maildir to store emails. Create the directory for the user:
+
+		[root@stmail01 ~]#mkdir -p /home/rose/Maildir
+
+		[root@stmail01 ~]#chown -R rose:rose /home/rose/Maildir
+
+● This sets up the Maildir structure for the rose user.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Step 3: Install and configure Dovecot
+
+1.Install Dovecot
+
+		[root@stmail01 ~]#yum install dovecot -y
+		
+This installs the Dovecot IMAP/POP3 server.
+
+
+2.Configure Dovecot The main configuration file for Dovecot is located at /etc/dovecot/dovecot.conf. Additionally, some settings are configured in /etc/dovecot/conf.d/.
+
+● Open the main configuration file:
+
+		[root@stmail01 ~]#vi /etc/dovecot/dovecot.conf
+		
+● Ensure the following lines are present or modified as below:
+
+		protocols = imap pop3 lmtp
+		listen = *
+		
+● Configure the mail location by editing /etc/dovecot/conf.d/10-mail.conf:
+
+		[root@stmail01 ~]# vi /etc/dovecot/conf.d/10-mail.conf
+			Input:
+				mail_location = maildir:~/Maildir
+
+This tells Dovecot to look for user mail in Maildir format inside each user's home directory.
+
+● Enable user authentication by editing /etc/dovecot/conf.d/10-auth.conf:
+
+		[root@stmail01 ~]# vi /etc/dovecot/conf.d/10-auth.conf
+			Input:
+			disable_plaintext_auth = no
+			auth_mechanisms = plain login
+
+● Configure the user database to use system users by editing /etc/dovecot/conf.d/10-auth.conf:
+
+		[root@stmail01 ~]#vi /etc/dovecot/conf.d/10-auth.conf
+			Input:
+			{Add Below entry under heading of user database}
+				userdb {
+				  driver = passwd
+				}
+
+				passdb {
+				  driver = pam
+				}
+
+
+3.Enable and start Dovecot
+
+		[root@stmail01 ~]#systemctl enable dovecot
+				Output:
+					Created symlink /etc/systemd/system/multi-user.target.wants/dovecot.service → /usr/lib/systemd/system/dovecot.service.
+		
+		[root@stmail01 ~]#systemctl start dovecot
+		
+
+4.Open firewall ports for IMAP and POP3
+
+		[root@stmail01 ~]#firewall-cmd --permanent --add-service=imap
+				Output:success
+		
+		[root@stmail01 ~]#firewall-cmd --permanent --add-service=pop3
+				Output:success
+		
+		[root@stmail01 ~]#firewall-cmd --reload
+				Output:success
+		
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		
+Step 4: Verify the setup
+
+1.Send a test email Use the mail command to send a test email to rose@stratos.xfusioncorp.com.
+	
+		[root@stmail01 ~]#echo "This is a test email." | mail -s "Test Email" rose@stratos.xfusioncorp.com
+		
+Check email delivery Log in as the rose user and check the Maildir for new emails:
+
+		[root@stmail01 ~]#su - rose
+		
+		[rose@stmail01 ~]#ls ~/Maildir/new
+			Output:
+				1728663278.V801I5e80f50M768483.stmail01.stratos.xfusioncorp.com
+		
+If everything is configured correctly, you should see the email inside the new directory.
+
+=====================================================================================================================================================
+Explanation of Key Commands:
+
+● Postfix configuration (/etc/postfix/main.cf): This file is where you define your email server's domain, how it handles mail, and where it stores mail for users.
+
+● User creation (useradd and passwd): These commands create a new system user (rose) and set a password for that user.
+
+● Dovecot configuration (dovecot.conf and 10-mail.conf): These files define how Dovecot handles IMAP/POP3 requests and where it looks for mail directories.
+
+● Firewall rules (firewall-cmd): These commands open the necessary ports to allow incoming email and IMAP/POP3 connections.
+
+=====================================================================================================================================================
