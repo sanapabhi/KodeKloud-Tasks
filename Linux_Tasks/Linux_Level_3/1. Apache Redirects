@@ -1,0 +1,189 @@
+Question:1.The Nautilus devops team got some requirements related to some Apache config changes. They need to setup some redirects for some URLs. There might be some more changes need to be done. Below you can find more details regarding that:
+
+1. httpd is already installed on app server 3. Configure Apache to listen on port 5000.
+
+2.Configure Apache to add some redirects as mentioned below:
+
+a.) Redirect http://stapp03.stratos.xfusioncorp.com:<Port>/ to http://www.stapp03.stratos.xfusioncorp.com:<Port>/ i.e non www to www. This must be a permanent redirect i.e 301
+b.) Redirect http://www.stapp03.stratos.xfusioncorp.com:<Port>/blog/ to http://www.stapp03.stratos.xfusioncorp.com:<Port>/news/. This must be a temporary redirect i.e 302.
+
+
+Answer:
+
+Step 1: Connect to App Server 3
+
+Use SSH to connect to App Server 3, which hosts the Apache service.
+
+		thor@jumphost ~$ ssh banner@stapp03 
+
+		banner@stapp03's password:BigGr33n 
+
+After logging in, switch to the root user using sudo:
+
+		[banner@stapp03 ~]$ sudo su -
+
+You will need the password for banner to proceed.
+
+---------------------------------------------------------------------------------------------------
+
+Step 2: Verify the Apache Installation and Configuration
+
+Check if Apache (httpd) is installed by running the following command:
+
+
+
+		[root@stapp03 ~]# rpm -qa | grep httpd
+
+			Output:
+				httpd-tools-2.4.6-90.el7.centos.x86_64
+				httpd-2.4.6-90.el7.centos.x86_64
+				
+This confirms that Apache is installed.
+
+Check the listen port in Conf. File
+
+		[root@stapp02 ~]# cat /etc/httpd/conf/httpd.conf |grep Listen
+			
+			Output:
+				# Change this to Listen on specific IP addresses as shown below to
+				# prevent Apache from glomming onto all bound IP addresses.
+				#
+				#Listen 12.34.56.78:80
+				Listen 8080
+
+		[root@stapp03 ~]# cat /etc/httpd/conf/httpd.conf |grep redirect
+			
+			Output:
+				# 1) plain text 2) local redirects 3) external redirects
+
+
+---------------------------------------------------------------------------------------------------
+
+Step 3: Configure Apache to Listen on Port 5000
+
+Now, modify the Apache configuration to change the listening port to 5000.
+
+1. Open the Apache configuration file:
+
+		[root@stapp03 ~]# vi /etc/httpd/conf/httpd.conf
+
+2. Locate the Listen directive (use /Listen to search in vi):
+
+		Listen 80
+
+3. Change the line to:
+
+		Listen 5000
+
+4. Save and exit (:wq in vi).
+
+---------------------------------------------------------------------------------------------------
+
+Step 4: Set Up Permanent and Temporary Redirects
+
+1. Open or create a new configuration file (main.conf) in the /etc/httpd/conf.d/ directory:
+
+
+
+		[root@stapp03 ~]# vi /etc/httpd/conf.d/main.conf
+		
+2. Add the following configuration for the permanent redirect (non-www to www) and the temporary redirect (from /blog/ to /news/):
+
+		# Permanent Redirect (301) from non-www to www
+		<VirtualHost *:5000>
+		ServerName stapp03.stratos.xfusioncorp.com
+		Redirect 301 / http://www.stapp03.stratos.xfusioncorp.com:5000/
+		</VirtualHost>
+
+		# Temporary Redirect (302) from /blog/ to /news/
+		<VirtualHost *:5000>
+		ServerName www.stapp03.stratos.xfusioncorp.com:5003/blog/
+		Redirect 302 /blog/ http://www.stapp03.stratos.xfusioncorp.com:5000/news/
+		</VirtualHost>
+		
+3. Save and exit the file.
+
+---------------------------------------------------------------------------------------------------
+
+Step 5: Restart Apache and Verify
+
+1. Restart the Apache service to apply the new configuration:
+
+		[root@stapp03 ~]# systemctl restart httpd
+
+2. Check the status to ensure Apache is running:
+
+		[root@stapp03 ~]# systemctl status httpd
+Expected output:
+
+			● httpd.service - The Apache HTTP Server
+			   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+			   Active: active (running) since Tue 2024-10-15 16:23:40 UTC; 2min 17s ago
+				 Docs: man:httpd(8)
+					   man:apachectl(8)
+			  Process: 567 ExecStop=/bin/kill -WINCH ${MAINPID} (code=exited, status=1/FAILURE)
+			 Main PID: 574 (httpd)
+			   Status: "Total requests: 0; Current requests/sec: 0; Current traffic:   0 B/sec"
+			   CGroup: /docker/45da6e0c9a42c19c87d81d44f7813c8b1e90e1eed9520347a291ad9ffccfa8c5/system.slice/httpd.service
+					   ├─574 /usr/sbin/httpd -DFOREGROUND
+					   ├─575 /usr/sbin/httpd -DFOREGROUND
+					   ├─576 /usr/sbin/httpd -DFOREGROUND
+					   ├─577 /usr/sbin/httpd -DFOREGROUND
+					   ├─578 /usr/sbin/httpd -DFOREGROUND
+					   └─579 /usr/sbin/httpd -DFOREGROUND
+
+			Oct 15 16:23:39 stapp03.stratos.xfusioncorp.com systemd[1]: Starting The Apache HTTP S...
+			Oct 15 16:23:39 stapp03.stratos.xfusioncorp.com httpd[574]: AH00558: httpd: Could not ...
+			Oct 15 16:23:40 stapp03.stratos.xfusioncorp.com systemd[1]: Started The Apache HTTP Se...
+			Hint: Some lines were ellipsized, use -l to show in full.
+		   
+---------------------------------------------------------------------------------------------------
+
+Step 6: Test the Redirects
+
+1. Test the Permanent Redirect (non-www to www):
+
+Use curl to check the redirection from http://stapp03.stratos.xfusioncorp.com:5000/ to http://www.stapp03.stratos.xfusioncorp.com:5000/.
+
+		[root@stapp03 ~]# curl http://stapp03.stratos.xfusioncorp.com:5000
+			
+			Output:
+				<html><head><title>301 Moved Permanently</title></head>
+				<body><h1>Moved Permanently</h1>
+				<p>The document has moved <a href="http://www.stapp03.stratos.xfusioncorp.com:5000/">here</a>.</p>
+				</body></html>
+
+This confirms the 301 redirect is working.
+
+2. Test the Temporary Redirect (/blog/ to /news/):
+
+Check the redirection from /blog/ to /news/ using curl:
+
+		[root@stapp03 ~]# curl http://www.stapp03.stratos.xfusioncorp.com:5000/blog
+
+			Output:
+				<html><head><title>302 Found</title></head>
+				<body><h1>Found</h1>
+				<p>The document has moved <a href="http://www.stapp03.stratos.xfusioncorp.com:5000/news/">here</a>.</p>
+				</body></html>
+				
+This confirms the 302 redirect is working.
+
+3. Test the redirect 
+
+		[root@stapp03 ~]# curl http://www.stapp03.stratos.xfusioncorp.com:5000
+			Welcome to the Nautilus Group!
+
+---------------------------------------------------------------------------------------------------
+
+Step 7: Error Handling
+In case you receive a 404 Not Found error for /news/, it means the /news/ page does not exist. You can either create the page or update the redirection path to point to an existing page.
+
+Explanation of Commands:
+
+● ssh banner@stapp03: Connect to the server stapp03 via SSH.
+● sudo su -: Switch to the root user to perform administrative tasks.
+● rpm -qa | grep httpd: Verify if Apache (httpd) is installed by listing installed packages related to httpd.
+● vi /etc/httpd/conf/httpd.conf: Open the Apache configuration file using the vi editor.
+● curl http://example.com: Test the URL using curl to verify if the redirection works correctly.
+

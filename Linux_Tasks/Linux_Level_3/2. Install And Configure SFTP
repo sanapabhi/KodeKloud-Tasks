@@ -1,0 +1,137 @@
+question:2.Some of the developers from Nautilus project team have asked for SFTP access to at least one of the app server in Stratos DC. After going through the requirements, the system admins team has decided to configure the SFTP server on App Server 2 server in Stratos Datacenter. Please configure it as per the following instructions:
+
+a. Create a SFTP user ravi and set its password to TmPcZjtRQx. There is already a group called ftp, you can utilise the same.
+b. Password authentication should be enabled for this user.
+c. SFTP user should only be allowed to make SFTP connections.
+
+Answer:
+
+Step 1: Connect to App Server 2
+
+Use SSH to connect to App Server 3, which hosts the Apache service.
+
+		thor@jumphost ~$ ssh steve@stapp02 
+
+		steve@stapp02's password: Am3ric@
+
+After logging in, switch to the root user using sudo:
+
+		[steve@stapp02 ~]$ sudo su -
+		
+		[sudo] password for steve:Am3ric@ 
+
+You will need the password for steve to proceed.
+
+
+1. Create the SFTP User:
+
+● Create a user ravi and set the password to TmPcZjtRQx. Also, add ravi to the existing ftp group.
+
+
+		[root@stapp02 ~]#sudo useradd -m -g ftp -s /sbin/nologin ravi
+		
+		[root@stapp02 ~]#echo 'ravi:TmPcZjtRQx' | sudo chpasswd
+		
+Explanation:
+● useradd -m -g ftp -s /sbin/nologin ravi: Creates a user ravi with a home directory (-m), assigns the user to the ftp group (-g ftp), and sets the shell to /sbin/nologin (-s /sbin/nologin), which prevents the user from logging in via SSH.
+
+● chpasswd: Updates the password for ravi with the password TmPcZjtRQx.
+
+
+2. Configure Password Authentication:
+
+● Enable password authentication for SFTP by ensuring it is allowed in the SSH configuration file.
+
+Edit the SSH configuration file /etc/ssh/sshd_config:
+
+		[root@stapp02 ~]#sudo vi /etc/ssh/sshd_config
+		
+● Look for the following parameters and make sure they are set as follows:
+
+
+			PasswordAuthentication yes
+			PermitRootLogin no
+			
+Explanation:
+● PasswordAuthentication yes: Ensures password-based authentication is allowed.
+● PermitRootLogin no: Prevents root from logging in via SSH, which is a security best practice.
+
+
+3. Restrict ravi to SFTP-only:
+
+● To restrict the ravi user to SFTP connections only, you need to modify the sshd_config file.
+
+Add the following configuration at the end of the /etc/ssh/sshd_config file:
+
+		[root@stapp02 ~]#sudo vi /etc/ssh/sshd_config
+
+			Match User ravi
+				ForceCommand internal-sftp
+				PasswordAuthentication yes
+				ChrootDirectory /home/ravi
+				PermitTunnel no
+				AllowAgentForwarding no
+				AllowTcpForwarding no
+				X11Forwarding no
+	
+Explanation:
+● Match User ravi: This applies the following configuration specifically for the ravi user.
+● ForceCommand internal-sftp: Forces the user ravi to use the SFTP service instead of a normal SSH session.
+● ChrootDirectory /home/ravi: Restricts the user to their home directory.
+● PermitTunnel no, AllowAgentForwarding no, AllowTcpForwarding no, X11Forwarding no: These settings disable other forms of access and forwarding for security.
+
+
+4. Set Permissions:
+
+● Set the necessary ownership and permissions for the chroot directory. The directory must be owned by root and should not be writable by the user.
+
+
+		[root@stapp02 ~]#chown root:root /home/ravi
+		
+		[root@stapp02 ~]#chmod 755 /home/ravi
+		
+		[root@stapp02 ~]#mkdir /home/ravi/uploads
+		
+		[root@stapp02 ~]#chown ravi:ftp /home/ravi/uploads
+		
+Explanation:
+● chown root:root /home/ravi: The home directory must be owned by root for the chroot environment to work.
+● chmod 755 /home/ravi: Sets the directory permissions to 755 (read, write, and execute for root, read and execute for others).
+● mkdir /home/ravi/uploads: Creates a directory for ravi to upload files.
+● chown ravi:ftp /home/ravi/uploads: Assigns ownership of the uploads directory to ravi and the ftp group.
+
+
+5. Restart the SSH Service:
+
+● After making all changes, restart the SSH service to apply the new configuration.
+
+
+		[root@stapp02 ~]#systemctl restart sshd
+
+Explanation:
+
+● systemctl restart sshd: Restarts the SSH daemon to apply the new configuration settings.
+
+6. Testing SFTP Access:
+
+● Use an SFTP client or the command line to test the connection.
+
+
+		[root@stapp02 ~]# sftp ravi@stapp02
+		ravi@stapp02's password: TmPcZjtRQx
+		
+		Connected to stapp02.
+		sftp> 
+
+		
+● Enter the password TmPcZjtRQx when prompted.
+
+Expected Output:
+
+● You should be able to connect via SFTP but not SSH.
+● Once connected, ravi will be limited to the /home/ravi/uploads directory for file uploads.
+
+
+
+
+
