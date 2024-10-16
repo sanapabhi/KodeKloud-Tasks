@@ -1,0 +1,173 @@
+Question:4. Our monitoring tool has reported an issue in Stratos Datacenter. One of our app servers has an issue, as its Apache service is not reachable on port 6100 (which is the Apache port). The service itself could be down, the firewall could be at fault, or something else could be causing the issue.
+
+
+
+Use tools like telnet, netstat, etc. to find and fix the issue. Also make sure Apache is reachable from the jump host without compromising any security settings.
+
+Once fixed, you can test the same using command curl http://stapp01:6100 command from jump host.
+
+
+Answer:
+
+Step 1: Login to the Server
+
+
+		thor@jumphost ~$ssh tony@stapp01
+		
+		tony@stapp01's password:Ir0nM@n
+		
+● Command Explanation: This command uses SSH (Secure Shell) to log into the stapp01 server as the user tony.
+
+● Output: You will be prompted to enter the password for the tony account.
+
+
+Step 2: Switch to Root User
+
+
+		[tony@stapp01 ~]$ sudo su -
+		
+● Command Explanation: This command elevates your privileges to the root user. It requires you to enter your password for the tony user.
+
+● Output: You will see a change in the command prompt indicating that you are now the root user (typically it changes from $ to #).
+
+
+Step 3: Check the Status of httpd
+
+
+		[root@stapp01 ~]#systemctl status httpd
+			Output:
+					● httpd.service - The Apache HTTP Server
+					   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: di
+					sabled)
+					   Active: failed (Result: exit-code) since Wed 2024-10-16 06:34:37 UTC; 1
+					min 7s ago
+						 Docs: man:httpd.service(8)
+					  Process: 547 ExecStart=/usr/sbin/httpd $OPTIONS -DFOREGROUND (code=exited, 
+					status=1/FAILURE)
+					 Main PID: 547 (code=exited, status=1/FAILURE)
+					   Status: "Reading configuration..."
+					   
+● Command Explanation: This command checks the current status of the Apache HTTP server (httpd). It provides information on whether the service is active, inactive, or failed.
+
+● Output:
+		● If it shows inactive (dead) or failed, you need to troubleshoot further.
+		● If it shows active (running), the service is running correctly.
+		
+		
+Step 4: Check for Configuration Errors
+
+
+		[root@stapp01 ~]# httpd -t
+			Outut:
+				AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using stapp01.stratos.xfusioncorp.com. Set the 'ServerName' directive globally to suppress this message
+				Syntax OK
+		
+● Command Explanation: This command tests the configuration files for syntax errors.
+
+● Output:
+		● If there are errors, it will display messages indicating what needs to be fixed.
+		● If it says Syntax OK, your configuration files are valid.
+		
+		
+Step 5: Edit httpd.conf
+
+
+		[root@stapp01 ~]# vi /etc/httpd/conf/httpd.conf 
+		
+● Command Explanation: Opens the httpd.conf file in the vi text editor.
+● Steps in vi:
+			● 	Press i to enter insert mode.
+			●   Find the line containing #ServerName and uncomment it by removing the # and setting the ServerName to your desired IP and port (e.g., ServerName 172.16.238.10:6100).
+			●   Press Esc, then type :wq! and press Enter to save and exit.
+			
+			
+Step 6: Check for Port Conflicts
+
+
+		[root@stapp01 ~]# netstat -anp |grep LISTEN |grep ":6100"
+
+● Command Explanation: This command checks which services are currently listening on port 6100.
+
+● Output: You will see a line indicating which process is using the port, showing the PID (Process ID) as well. For example:
+
+Output of Above Command:
+
+		tcp        0      0 127.0.0.1:6100          0.0.0.0:*               LISTEN      485/sendmail: accep 
+
+
+Step 7: Kill the Conflicting Process
+
+		[root@stapp01 ~]# kill -9 485
+
+● Command Explanation: This command forcefully kills the process using PID 485, which is blocking the port.
+
+● Output: No output indicates success. You can verify the process is terminated by running the netstat command again.
+
+
+Step 8: Restart the httpd Service
+
+
+		[root@stapp01 ~]# systemctl restart httpd
+		
+● Command Explanation: This command restarts the httpd service.
+
+● Output: No output indicates success.
+
+
+Step 9: Verify the httpd Status Again
+
+
+		[root@stapp01 ~]# systemctl status httpd
+			Output:
+				● httpd.service - The Apache HTTP Server
+				   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: di
+				sabled)
+				   Active: active (running) since Wed 2024-10-16 06:38:04 UTC; 6s ago
+					 Docs: man:httpd.service(8)
+				 Main PID: 906 (httpd)
+				   Status: "Started, listening on: port 6100"
+					Tasks: 213 (limit: 1340692)
+				   Memory: 19.6M
+				   CGroup: /docker/e77bf1131b622689ac1fa1c57fb1c6fbe2622a0ce445ab36304d3b07916136c2/s
+				ystem.slice/httpd.service
+						   ├─906 /usr/sbin/httpd -DFOREGROUND
+						   ├─933 /usr/sbin/httpd -DFOREGROUND
+						   ├─934 /usr/sbin/httpd -DFOREGROUND
+						   ├─935 /usr/sbin/httpd -DFOREGROUND
+						   └─936 /usr/sbin/httpd -DFOREGROUND
+		
+● Command Explanation: Check the status of the httpd service again to ensure it is running.
+
+● Output: You should see active (running) if everything is configured correctly.
+
+
+Step 10: Configure Firewall Rules
+
+
+		[root@stapp01 ~]# sudo iptables -I INPUT -p tcp -m tcp --dport 6100 -j ACCEPT  && sudo iptables-save > /etc/sysconfig/iptables &&  cat /etc/sysconfig/iptables
+	
+			Output:
+				# Warning: iptables-legacy tables present, use iptables-legacy-save to see them
+				# Generated by iptables-save v1.8.4 on Wed Oct 16 06:38:46 2024
+				*filter
+				:INPUT ACCEPT [0:0]
+				:FORWARD ACCEPT [0:0]
+				:OUTPUT ACCEPT [478:59173]
+				-A INPUT -p tcp -m tcp --dport 6100 -j ACCEPT
+				-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+				-A INPUT -p icmp -j ACCEPT
+				-A INPUT -i lo -j ACCEPT
+				-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+				-A INPUT -j REJECT --reject-with icmp-host-prohibited
+				-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+				COMMIT
+				# Completed on Wed Oct 16 06:38:46 2024
+				
+● Command Explanation: This command does several things:
+
+	1. Inserts a rule to allow incoming TCP connections on port 6100.
+	2.Saves the current iptables rules to /etc/sysconfig/iptables to ensure they persist after a reboot.
+	3.Displays the current iptables rules.
+
+● Output: The last command will show you the list of active firewall rules. You should see a rule allowing traffic on port 6100.
+
