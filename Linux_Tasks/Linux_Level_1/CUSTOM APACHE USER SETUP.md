@@ -65,11 +65,11 @@ id ravi: Displays information about the user ravi.
 
 
 Additional Considerations
-Home Directory: Ensure that the /var/www/ravi directory exists. If not, create it with appropriate permissions.
-Group Membership: You might want to add the user to a specific group (e.g., apache).
-Shell: Specify a default shell for the user if required (e.g., /bin/bash).
-Security: Implement strong password policies and consider using a password manager.
-Permissions: Set appropriate permissions for the home directory and its contents.
+● Home Directory: Ensure that the /var/www/ravi directory exists. If not, create it with appropriate permissions.
+● Group Membership: You might want to add the user to a specific group (e.g., apache).
+● Shell: Specify a default shell for the user if required (e.g., /bin/bash).
+● Security: Implement strong password policies and consider using a password manager.
+● Permissions: Set appropriate permissions for the home directory and its contents.
 
 
 
