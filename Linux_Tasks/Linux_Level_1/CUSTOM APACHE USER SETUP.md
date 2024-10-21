@@ -27,32 +27,32 @@ You have the necessary permissions to create users with specific UIDs.
 Step 1: Access App Server 3
 Establish a secure SSH connection to App Server 3:
 
-#ssh user@appserver3
+    #ssh user@appserver3
 
 ##Replace user with your username and appserver3 with the actual hostname or IP address.
 
 Step 2: Switch to Root or Equivalent
 Obtain root privileges or equivalent user privileges:
 
-#sudo su -
+    #sudo su -
 
 
 Step 3: Create the User
 Use the useradd command with the -u option to specify the UID:
 
-#useradd -u 1129 -d /var/www/ravi ravi
+    #useradd -u 1129 -d /var/www/ravi ravi
 
 ##This command creates a user named ravi with UID 1129 and sets the home directory to /var/www/ravi.
 
 Step 4: Set Password (Optional)
 If you want to set a password for the user, use the passwd command:
 
-#passwd ravi
+    #passwd ravi
 
 Step 5: Verify User Creation
 Check the user information using the id command:
 
-#id ravi
+    #id ravi
 
 ##This will output details about the user, including the UID and home directory.
 
