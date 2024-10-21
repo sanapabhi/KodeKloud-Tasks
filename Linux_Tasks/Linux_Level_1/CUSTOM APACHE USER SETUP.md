@@ -24,7 +24,7 @@ Assumptions:
 You have SSH access to App Server 3.
 You have the necessary permissions to create users with specific UIDs.
 
-Step 1: Access App Server 3
+# Step 1: Access App Server 3
 ● Establish a secure SSH connection to App Server 3:
 
     #ssh user@appserver3
@@ -33,14 +33,14 @@ Step 1: Access App Server 3
 
 -------------------------------------------------------------------------------------------------
 
-Step 2: Switch to Root or Equivalent
+# Step 2: Switch to Root or Equivalent
 ● Obtain root privileges or equivalent user privileges:
 
     #sudo su -
 
 -------------------------------------------------------------------------------------------------
 
-Step 3: Create the User
+# Step 3: Create the User
 ● Use the useradd command with the -u option to specify the UID:
 
     #useradd -u 1129 -d /var/www/ravi ravi
