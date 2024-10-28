@@ -149,3 +149,6 @@ What steps do you take to troubleshoot kernel panics?
 How do you troubleshoot segmentation faults in applications?
 Explain how to troubleshoot and resolve a deadlock in Linux.
 How do you perform a kernel upgrade, and what checks do you perform after?
+
+
+
