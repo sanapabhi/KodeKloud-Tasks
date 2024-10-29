@@ -1,3 +1,9 @@
+
+
+
+
+
+
 Here’s a list of over 50 Linux troubleshooting interview questions covering essential skills and problem-solving areas for a Linux administrator role:
 
 **1. Basic Troubleshooting
