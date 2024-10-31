@@ -1,6 +1,4 @@
-# Tasks
-
-● A Comprehensive List of Basic and Advanced Linux Commands
+# A Comprehensive List of Basic and Advanced Linux Commands
 
 # Basic Commands:
 
