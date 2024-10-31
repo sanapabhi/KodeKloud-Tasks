@@ -1512,3 +1512,448 @@ This edition expands into monitoring, security hardening, advanced networking, f
    - **Syntax**: `tar [options] [archive-file] [file(s)]`
    - **Example**: `tar -cvf archive.tar directory/`
    - **Usage**: Archiving and extracting files.
+
+
+
+-----------------------------------------------------------------------------------------------
+# Bash Scripting
+
+# Advanced Bash Commands for Production-Level Shell Scripting
+
+# Creating a Markdown file with advanced Bash commands for production-level shell scripting.
+bash_commands_content = """
+
+
+## 1. File and Directory Operations
+- `mkdir -p /path/to/directory` : Creates a directory and its parents if they do not exist.
+- `rm -rf /path/to/directory` : Removes a directory and its contents forcefully and recursively.
+- `cp -r /source/path /destination/path` : Recursively copies files and directories.
+- `mv /old/path /new/path` : Moves or renames files and directories.
+
+## 2. File Content Manipulation
+- `cat file.txt` : Displays the content of a file.
+- `tac file.txt` : Displays the content of a file in reverse.
+- `head -n 10 file.txt` : Displays the first 10 lines of a file.
+- `tail -n 10 file.txt` : Displays the last 10 lines of a file.
+- `grep "pattern" file.txt` : Searches for a pattern in a file.
+- `sed 's/old/new/g' file.txt` : Replaces occurrences of 'old' with 'new' in a file.
+- `awk '{print $1}' file.txt` : Prints the first column of a file.
+
+## 3. Process Management
+- `ps aux` : Lists all running processes.
+- `top` : Displays real-time system resource usage.
+- `htop` : Interactive process viewer.
+- `kill -9 PID` : Forcefully terminates a process by its PID.
+- `bg` : Resumes a suspended job in the background.
+- `fg` : Brings a background job to the foreground.
+
+## 4. User and Group Management
+- `useradd username` : Adds a new user.
+- `usermod -aG groupname username` : Adds a user to a group.
+- `passwd username` : Changes a user's password.
+- `groupadd groupname` : Creates a new group.
+- `chown user:group file.txt` : Changes the owner and group of a file.
+
+## 5. Network Operations
+- `ping -c 4 google.com` : Pings a host to check connectivity.
+- `ifconfig` : Displays network interface configuration (deprecated, use `ip addr`).
+- `ip addr show` : Shows IP addresses assigned to all interfaces.
+- `curl -O http://example.com/file` : Downloads a file from the web.
+- `scp file.txt user@remote:/path` : Securely copies a file to a remote server.
+
+## 6. System Information
+- `df -h` : Displays disk space usage in a human-readable format.
+- `du -sh /path/to/directory` : Displays the size of a directory.
+- `free -h` : Displays memory usage.
+- `uname -a` : Displays system information including kernel version.
+- `uptime` : Shows how long the system has been running and load averages.
+
+## 7. Environment Variables
+- `export VAR=value` : Sets an environment variable.
+- `echo $VAR` : Displays the value of an environment variable.
+- `env` : Lists all environment variables.
+- `unset VAR` : Unsets an environment variable.
+
+## 8. Conditional Statements
+- `if [ condition ]; then commands; fi` : Executes commands based on a condition.
+- `case $variable in pattern1) commands;; pattern2) commands;; esac` : Multi-way branching.
+
+## 9. Loops
+- `for i in {1..10}; do commands; done` : Loops from 1 to 10.
+- `while [ condition ]; do commands; done` : Executes commands while a condition is true.
+- `until [ condition ]; do commands; done` : Executes commands until a condition is true.
+
+## 10. Functions
+- `function_name() { commands; }` : Defines a function.
+- `function_name` : Calls a function.
+
+## 11. Input and Output Redirection
+- `command > file.txt` : Redirects output to a file.
+- `command >> file.txt` : Appends output to a file.
+- `command < input.txt` : Uses a file as input for a command.
+- `command 2> error.log` : Redirects error messages to a log file.
+
+## 12. Script Execution
+- `bash script.sh` : Executes a Bash script.
+- `chmod +x script.sh` : Makes a script executable.
+- `./script.sh` : Executes a script in the current directory.
+
+## 13. Scheduling Tasks
+- `crontab -e` : Edits the cron jobs for the current user.
+- `* * * * * /path/to/script.sh` : Schedules a script to run every minute.
+
+## 14. Archive and Compression
+- `tar -czvf archive.tar.gz /path` : Creates a compressed archive.
+- `tar -xzvf archive.tar.gz` : Extracts a compressed archive.
+
+## 15. Miscellaneous
+- `history` : Displays command history.
+- `alias ll='ls -l'` : Creates an alias for a command.
+- `chmod 755 script.sh` : Sets read, write, and execute permissions for the owner and read and execute for others.
+- `find /path -name "*.log"` : Finds files with a .log extension in a directory.
+
+## 16. Archive and Compression
+- `tar -czvf archive.tar.gz /path` : Creates a compressed archive.
+- `tar -xzvf archive.tar.gz` : Extracts a compressed archive.
+- `zip -r archive.zip /path` : Creates a zip archive of a directory.
+- `unzip archive.zip` : Extracts files from a zip archive.
+
+## 17. Process Substitution and Command Substitution
+- `result=$(command)` : Captures the output of a command into a variable.
+- `diff <(command1) <(command2)` : Compares the output of two commands.
+
+## 18. Scripting Best Practices
+- `#!/bin/bash` : Shebang line to specify the script interpreter.
+- `set -e` : Causes the script to exit immediately if a command exits with a non-zero status.
+- `set -u` : Treats unset variables as an error when substituting.
+- `set -o pipefail` : Causes a pipeline to return the exit status of the last command to exit with a non-zero status.
+
+## 19. Debugging Scripts
+- `bash -x script.sh` : Runs a script in debug mode, showing each command as it's executed.
+- `trap 'commands' ERR` : Executes commands when an error occurs.
+
+## 20. Working with Arrays
+- `array=(value1 value2 value3)` : Declares an array.
+- `echo ${array[0]}` : Accesses the first element of an array.
+- `for value in "${array[@]}"; do commands; done` : Loops through all elements in an array.
+
+## 21. Using `xargs`
+- `find /path -name "*.txt" | xargs wc -l` : Counts lines in all .txt files found.
+- `echo "file1 file2 file3" | xargs -n 1 cp -t /destination/` : Copies each file to the destination directory.
+
+## 22. Temporary Files and Directories
+- `tmpfile=$(mktemp)` : Creates a temporary file.
+- `trap 'rm -f $tmpfile' EXIT` : Ensures the temporary file is deleted on exit.
+
+## 23. Conditional Execution
+- `command1 && command2` : Executes command2 only if command1 succeeds.
+- `command1 || command2` : Executes command2 only if command1 fails.
+
+## 24. Network Monitoring Tools
+- `iftop` : Displays bandwidth usage on an interface.
+- `nmap -sP 192.168.1.0/24` : Scans a subnet for active hosts.
+
+## 25. Disk Usage and Management
+- `fsck /dev/sda1` : Checks and repairs a Linux filesystem.
+- `mount -o loop file.iso /mnt` : Mounts an ISO file.
+
+## 26. User Input
+- `read -p "Enter your name: " name` : Prompts the user for input and stores it in a variable.
+- `select option in option1 option2 option3; do commands; done` : Creates a menu from which the user can select an option.
+
+## 27. File Permissions and Ownership
+- `chmod +x script.sh` : Makes a script executable.
+- `getfacl file.txt` : Displays the file access control list (ACL).
+- `setfacl -m u:username:rwx file.txt` : Sets an ACL for a user on a file.
+
+## 28. Working with Cron Jobs
+- `crontab -l` : Lists the current user's cron jobs.
+- `* * * * * /path/to/script.sh` : Schedules a script to run every minute.
+
+## 29. Using `curl` for API Requests
+- `curl -X GET "https://api.example.com/data"` : Sends a GET request to an API.
+- `curl -X POST -d "param1=value1&param2=value2" "https://api.example.com/submit"` : Sends a POST request with data.
+
+## 30. Logging and Monitoring
+- `logger "Log message"` : Sends a message to the system log.
+- `tail -f /var/log/syslog` : Monitors the system log file in real-time.
+
+## 31. Security and File Integrity
+- `gpg --encrypt file.txt` : Encrypts a file using GPG.
+- `gpg --decrypt file.txt.gpg` : Decrypts a GPG encrypted file.
+- `sha256sum file.txt` : Computes and displays the SHA-256 hash of a file.
+- `md5sum file.txt` : Computes and displays the MD5 hash of a file.
+- `chmod 400 sensitive_file.txt` : Sets the file to be readable only by the owner.
+
+## 32. System Administration
+- `systemctl start service` : Starts a system service.
+- `systemctl stop service` : Stops a system service.
+- `systemctl restart service` : Restarts a system service.
+- `systemctl status service` : Displays the status of a system service.
+
+## 33. Backup and Restore
+- `rsync -av /source/ /destination/` : Synchronizes files and directories, preserving attributes.
+- `tar -czvf backup.tar.gz /important/data` : Creates a compressed backup of important data.
+- `cp -r /path/to/data /path/to/backup` : Copies data to a backup location.
+
+## 34. Package Management (Debian/Ubuntu)
+- `apt update` : Updates the list of available packages.
+- `apt upgrade` : Upgrades all installed packages to their latest versions.
+- `apt install package_name` : Installs a package.
+- `apt remove package_name` : Removes a package.
+
+## 35. Package Management (Red Hat/CentOS)
+- `yum update` : Updates all installed packages to their latest versions.
+- `yum install package_name` : Installs a package.
+- `yum remove package_name` : Removes a package.
+
+## 36. Searching for Files
+- `locate filename` : Quickly finds files by name (requires updatedb to be run).
+- `grep -r "search_term" /path` : Recursively searches for a term within files in a directory.
+
+## 37. Performance Monitoring
+- `vmstat 1` : Reports virtual memory statistics every second.
+- `iostat -x 1` : Displays CPU and I/O statistics every second.
+
+## 38. Text Formatting
+- `fmt -w 72 file.txt` : Formats text to a specified line width.
+- `column -t -s, file.csv` : Formats CSV files into a well-aligned table.
+
+## 39. Disk Management
+- `fdisk -l` : Lists all disk partitions.
+- `df -i` : Displays inode usage on filesystems.
+
+## 40. Environmental Management
+- `env -i VAR=value command` : Runs a command with an empty environment except for the specified variable.
+- `declare -p` : Displays all currently declared variables and their values.
+
+## 41. Command Line Editing
+- `Ctrl + R` : Initiates a reverse search of command history.
+- `!!` : Repeats the last command.
+- `!n` : Repeats the command at history position n.
+
+## 42. Working with JSON
+- `jq '.' file.json` : Pretty-prints a JSON file using jq.
+- `jq '.key' file.json` : Extracts the value associated with "key" in a JSON file.
+
+## 43. Using `sed` for Stream Editing
+- `sed -i 's/old/new/g' file.txt` : Edits a file in place, replacing 'old' with 'new'.
+- `sed -n '10,20p' file.txt` : Prints lines 10 to 20 from a file.
+
+## 44. Using `awk` for Text Processing
+- `awk '{print $NF}' file.txt` : Prints the last field of each line in a file.
+- `awk -F: '{print $1}' /etc/passwd` : Prints the first field from the /etc/passwd file.
+
+## 45. Command-Line Utilities
+- `wget --limit-rate=200k http://example.com/file` : Downloads a file with a limit on the download rate.
+- `ssh user@host 'command'` : Executes a command on a remote server via SSH.
+
+## 46. Virtualization Tools
+- `virsh list` : Lists running virtual machines (if using KVM).
+- `docker ps` : Lists running Docker containers.
+
+## 47. Using `screen` or `tmux`
+- `screen` : Starts a new screen session.
+- `tmux` : Starts a new tmux session for terminal multiplexing.
+- `Ctrl + A, D` : Detaches a screen session.
+
+## 48. Using `find` with Actions
+- `find /path -type f -exec chmod 644 {} \;` : Changes permissions of all files found.
+- `find /path -name "*.log" -delete` : Deletes all .log files in a directory.
+
+## 49. Monitoring System Logs
+- `tail -f /var/log/auth.log` : Monitors authentication log in real-time.
+- `journalctl -xe` : Views systemd logs and shows recent entries with errors.
+
+## 50. File Sharing
+- `scp -r /local/path user@remote:/remote/path` : Securely copies a directory to a remote host.
+- `rsync -avz --progress /local/path user@remote:/remote/path` : Efficiently syncs files over SSH.
+
+## 51. Using `basename` and `dirname`
+- `basename /path/to/file.txt` : Returns the filename without the path.
+- `dirname /path/to/file.txt` : Returns the directory path without the filename.
+
+## 52. Using `tee`
+- `command | tee output.txt` : Displays output and saves it to a file simultaneously.
+- `command | tee -a output.txt` : Appends output to a file while displaying it.
+
+## 53. Manipulating Environment Variables
+- `unset VAR` : Removes a variable from the environment.
+- `alias ll='ls -la'` : Creates a shortcut for a command using an alias.
+
+## 54. Using `xargs` with Parallel Execution
+- `find . -name "*.txt" | xargs -P 4 -n 1 wc -l` : Counts lines in text files using parallel execution.
+
+## 55. Creating Persistent Aliases
+- `echo "alias ll='ls -la'" >> ~/.bashrc` : Adds a persistent alias to your bash configuration.
+
+## 56. System Cleanup
+- `sudo apt autoremove` : Removes unnecessary packages and dependencies.
+- `sudo apt clean` : Clears the local repository of retrieved package files.
+
+## 57. Using `cut` for Field Extraction
+- `cut -d ':' -f 1 /etc/passwd` : Extracts the first field from the passwd file using ':' as the delimiter.
+- `cut -f 1,3 -d ',' file.csv` : Extracts the first and third fields from a CSV file.
+
+## 58. Using `diff` for File Comparison
+- `diff file1.txt file2.txt` : Compares two files line by line.
+- `diff -u file1.txt file2.txt` : Shows the differences in unified format.
+
+## 59. File Ownership Management
+- `chown user:group file.txt` : Changes the owner and group of a file.
+- `chown -R user:group /path/to/directory` : Recursively changes ownership of a directory.
+
+## 60. Creating Symbolic Links
+- `ln -s /path/to/target /path/to/link` : Creates a symbolic link to a target file.
+
+## 61. Using `ps` to View Processes
+- `ps aux` : Displays all running processes with detailed information.
+- `ps -ef | grep process_name` : Searches for a specific process.
+
+## 62. Disk Space Analysis
+- `du -sh *` : Displays the size of each file and directory in the current location.
+- `df -h` : Shows disk space usage in a human-readable format.
+
+## 63. Using `tr` for Character Translation
+- `echo "hello" | tr 'h' 'H'` : Translates 'h' to 'H' in the output string.
+- `cat file.txt | tr -d '[:space:]'` : Removes all whitespace characters from the file.
+
+## 64. System Information
+- `uname -a` : Displays system information including the kernel version.
+- `lscpu` : Displays CPU architecture information.
+
+## 65. Process Management
+- `kill PID` : Terminates a process by its Process ID (PID).
+- `pkill process_name` : Terminates processes by name.
+
+## 66. Scheduling Tasks with `at`
+- `echo "command" | at now + 1 minute` : Schedules a command to run in one minute.
+- `atq` : Lists scheduled `at` jobs.
+
+## 67. Using `whois` for Domain Lookup
+- `whois example.com` : Retrieves registration information for a domain.
+
+## 68. Using `ssh` for Remote Access
+- `ssh user@hostname` : Connects to a remote host via SSH.
+- `ssh -i ~/.ssh/id_rsa user@hostname` : Connects to a remote host using a specific SSH key.
+
+## 69. File Sharing with `rsync`
+- `rsync -avz /local/dir/ remote:/remote/dir/` : Synchronizes a directory with a remote directory.
+
+## 70. Network Configuration
+- `ifconfig` : Displays network interface configuration.
+- `ip addr show` : Displays IP addresses assigned to all network interfaces.
+
+## 71. Network Testing
+- `ping -c 4 google.com` : Pings a server to test connectivity.
+- `traceroute google.com` : Traces the path packets take to reach a destination.
+
+## 72. Using `basename` and `dirname` in Scripts
+- `file="/path/to/file.txt"; echo $(basename "$file")` : Gets the filename from a full path.
+- `file="/path/to/file.txt"; echo $(dirname "$file")` : Gets the directory from a full path.
+
+## 73. Working with `tar` for Backups
+- `tar -cvf backup.tar /path/to/dir` : Creates a tarball of a directory.
+- `tar -xvf backup.tar` : Extracts a tarball.
+
+## 74. Environment Variables Management
+- `export VAR=value` : Sets an environment variable.
+- `echo $VAR` : Displays the value of an environment variable.
+
+## 75. Text Processing with `sed` and `awk`
+- `sed 's/foo/bar/g' file.txt` : Replaces 'foo' with 'bar' in a file.
+- `awk '{print $1}' file.txt` : Prints the first column of a file.
+
+## 76. File Searching with `find`
+- `find /path -name "*.sh"` : Finds all shell scripts in a directory.
+- `find /path -type f -size +1M` : Finds files larger than 1MB.
+
+## 77. Using `gzip` and `gunzip`
+- `gzip file.txt` : Compresses a file using gzip.
+- `gunzip file.txt.gz` : Decompresses a gzip file.
+
+## 78. Using `chattr` for File Attributes
+- `chattr +i file.txt` : Makes a file immutable (not deletable).
+- `chattr -i file.txt` : Removes the immutable attribute from a file.
+
+## 79. File Transfer Protocols
+- `ftp` : Starts an FTP session to transfer files.
+- `sftp user@host` : Starts a secure file transfer session.
+
+## 80. Creating Persistent Variables
+- `declare -r readonly_var="constant"` : Declares a read-only variable.
+
+## 81. Using `wget` for Downloads
+- `wget http://example.com/file.zip` : Downloads a file from the web.
+- `wget -r -np -k http://example.com` : Downloads an entire website recursively.
+
+## 82. Using `curl` for API Testing
+- `curl -H "Content-Type: application/json" -X POST -d '{"key":"value"}' http://example.com/api` : Sends a JSON payload to an API.
+
+## 83. Using `dig` for DNS Queries
+- `dig example.com` : Queries DNS information for a domain.
+
+## 84. Managing Users and Groups
+- `useradd newuser` : Adds a new user.
+- `usermod -aG groupname username` : Adds a user to a group.
+
+## 85. Using `history` Command
+- `history` : Displays the command history.
+- `!n` : Executes the command at history position n.
+
+## 86. Using `nano` and `vim` Editors
+- `nano file.txt` : Opens a file for editing in the Nano editor.
+- `vim file.txt` : Opens a file for editing in the Vim editor.
+
+## 87. Using `crontab` for Scheduling Tasks
+- `crontab -e` : Edits the current user's crontab.
+- `* * * * * command` : A sample cron job that runs every minute.
+
+## 88. Using `shutdown` and `reboot`
+- `sudo shutdown now` : Shuts down the system immediately.
+- `sudo reboot` : Reboots the system.
+
+## 89. Environment Variable Expansion
+- `echo "User: $USER"` : Displays the current username using environment variable expansion.
+- `echo "Home Directory: $HOME"` : Displays the home directory.
+
+## 90. Customizing the Shell Prompt
+- `PS1='\u@\h:\w\$ '` : Changes the shell prompt to show username, hostname, and current directory.
+
+## 91. Using `last` to View Login History
+- `last` : Displays the last login history of users.
+
+## 92. Using `uptime` to Check System Load
+- `uptime` : Shows how long the system has been running and the load averages.
+
+## 93. Using `mount` to Attach File Systems
+- `mount /dev/sr0 /mnt` : Mounts a CD-ROM to /mnt.
+
+## 94. Using `umount` to Detach File Systems
+- `umount /mnt` : Unmounts a mounted file system.
+
+## 95. Using `top` and `htop` for Monitoring Processes
+- `top` : Displays running processes and system resource usage.
+- `htop` : A more user-friendly process viewer (if installed).
+
+## 96. Using `vmstat` for Memory Statistics
+- `vmstat 1` : Displays memory usage and other statistics every second.
+
+## 97. Using `ifconfig` and `ip` for Networking
+- `ifconfig eth0` : Displays information about the eth0 interface.
+- `ip link show` : Shows all network interfaces.
+
+## 98. Using `lastb` for Failed Login Attempts
+- `lastb` : Displays the history of failed login attempts.
+
+## 99. Using `free` to Check Memory Usage
+- `free -h` : Displays memory usage in a human-readable format.
+
+## 100. Using `curl` with FTP
+- `curl -u username:password ftp://ftp.example.com/file.txt` : Downloads a file via FTP.
+
+## Conclusion
+These commands provide a comprehensive guide for advanced shell scripting and system management in a production environment. They will help you enhance your skills and productivity while working with Linux.
+"""
+
+
