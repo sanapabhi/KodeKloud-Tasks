@@ -1952,8 +1952,313 @@ bash_commands_content = """
 ## 100. Using `curl` with FTP
 - `curl -u username:password ftp://ftp.example.com/file.txt` : Downloads a file via FTP.
 
+## 101. Using `locate` for Quick File Searches
+- `locate filename` : Quickly finds files by name using a database.
+
+## 102. Using `grep` with Regular Expressions
+- `grep -E 'pattern1|pattern2' file.txt` : Searches for multiple patterns using extended regex.
+
+## 103. Using `echo` for Text Output
+- `echo -e "Hello\nWorld"` : Outputs text with new lines.
+
+## 104. Disk Usage Reporting
+- `du -ah /path/to/dir` : Shows human-readable sizes for all files and directories.
+
+## 105. Using `sed` for In-Place Editing
+- `sed -i 's/old/new/g' file.txt` : Replaces 'old' with 'new' in a file directly.
+
+## 106. Searching in Command History
+- `history | grep command` : Searches command history for a specific command.
+
+## 107. Using `screen` for Session Management
+- `screen -S session_name` : Starts a new screen session.
+- `screen -r session_name` : Reattaches to a named screen session.
+
+## 108. Using `tee` for Output Redirection
+- `command | tee file.txt` : Saves the output of a command to a file while displaying it.
+
+## 109. Checking Open Ports with `netstat`
+- `netstat -tuln` : Displays all listening ports and their status.
+
+## 110. Monitoring Logs with `tail`
+- `tail -f /var/log/syslog` : Monitors the system log file in real-time.
+
+## 111. Using `chmod` for File Permissions
+- `chmod 755 file.sh` : Sets the permissions of a file to read, write, and execute for owner and read/execute for group and others.
+
+## 112. Process Priority Management
+- `nice -n 10 command` : Runs a command with a lower priority.
+
+## 113. Using `rename` for Bulk File Renaming
+- `rename 's/\.txt$/\.bak/' *.txt` : Renames all .txt files to .bak.
+
+## 114. Using `bc` for Calculations
+- `echo "scale=2; 10/3" | bc` : Performs decimal calculations using the bc command.
+
+## 115. Using `xargs` for Command Execution
+- `find . -name "*.txt" | xargs wc -l` : Counts lines in all .txt files found.
+
+## 116. Batch Processing with `parallel`
+- `cat list.txt | parallel -j 4 command {}` : Runs a command in parallel using multiple jobs.
+
+## 117. Using `fdisk` for Disk Partitioning
+- `sudo fdisk /dev/sda` : Opens the fdisk tool for managing partitions.
+
+## 118. Using `mount` with Options
+- `mount -o ro /dev/sda1 /mnt` : Mounts a partition as read-only.
+
+## 119. File Integrity Checking with `md5sum`
+- `md5sum file.txt` : Calculates and displays the MD5 checksum of a file.
+
+## 120. Using `dd` for Disk Imaging
+- `dd if=/dev/sda of=/dev/sdb bs=64K conv=noerror,sync` : Copies data from one disk to another.
+
+## 121. User Account Management
+- `passwd username` : Changes the password for a user.
+
+## 122. File Descriptor Manipulation
+- `exec 3<> file.txt` : Opens a file descriptor for reading and writing.
+
+## 123. Using `find` with `exec`
+- `find . -name "*.log" -exec rm {} \;` : Finds and deletes all .log files.
+
+## 124. Using `wget` for Recursive Downloads
+- `wget -r -np -N http://example.com` : Downloads an entire website while avoiding duplicate downloads.
+
+## 125. Using `scp` for Secure Copy
+- `scp file.txt user@remote:/path/to/destination` : Securely copies a file to a remote server.
+
+## 126. Using `git` for Version Control
+- `git clone repo_url` : Clones a repository from a remote source.
+- `git commit -m "message"` : Commits changes to the local repository.
+
+## 127. Using `curl` for File Uploads
+- `curl -T file.txt ftp://username:password@ftp.example.com/` : Uploads a file to an FTP server.
+
+## 128. Using `nslookup` for DNS Queries
+- `nslookup example.com` : Retrieves DNS information for a domain.
+
+## 129. Network Traffic Analysis with `iftop`
+- `sudo iftop` : Displays bandwidth usage on an interface.
+
+## 130. Using `ssh-keygen` for Key Generation
+- `ssh-keygen -t rsa -b 4096` : Generates a new SSH key pair.
+
+## 131. Setting Up SSH Configurations
+- `nano ~/.ssh/config` : Edits the SSH configuration file for easier access.
+
+## 132. Managing Firewall with `iptables`
+- `sudo iptables -L` : Lists current iptables rules.
+
+## 133. Using `rsync` with SSH
+- `rsync -avz -e ssh /local/dir/ user@remote:/remote/dir/` : Synchronizes a directory over SSH.
+
+## 134. Viewing Network Connections
+- `ss -tuln` : Displays all TCP and UDP connections.
+
+## 135. Using `chmod` to Set SUID Bit
+- `chmod u+s /usr/bin/somebinary` : Sets the SUID bit on a binary.
+
+## 136. Disk Quota Management
+- `quota -u username` : Displays the disk usage and limits for a user.
+
+## 137. Using `pgrep` for Process Lookup
+- `pgrep -u username` : Lists all processes owned by a specific user.
+
+## 138. Creating and Extracting ZIP Files
+- `zip -r archive.zip directory/` : Compresses a directory into a ZIP file.
+- `unzip archive.zip` : Extracts a ZIP file.
+
+## 139. Using `stat` for File Status
+- `stat file.txt` : Displays detailed information about a file.
+
+## 140. Network Configuration with `nmcli`
+- `nmcli device status` : Displays the status of network devices.
+
+## 141. Using `lsof` for Open Files
+- `lsof -u username` : Lists all open files for a specific user.
+
+## 142. Editing System Files with `visudo`
+- `visudo` : Safely edits the sudoers file.
+
+## 143. Using `cgroups` for Resource Management
+- `cgcreate -g cpu,memory:/mygroup` : Creates a control group.
+
+## 144. Viewing System Logs with `journalctl`
+- `journalctl -xe` : Views the systemd journal logs in a detailed manner.
+
+## 145. Using `fuser` to Identify Processes
+- `fuser -m /path/to/mount` : Identifies processes using a specified filesystem.
+
+## 146. Viewing System Load Average
+- `uptime` : Displays how long the system has been running and the load average.
+
+## 147. Modifying File Attributes with `setfacl`
+- `setfacl -m u:username:rw file.txt` : Sets Access Control List (ACL) for a file.
+
+## 148. Using `ar` for Archive Management
+- `ar rcs libmylib.a file1.o file2.o` : Creates a static library from object files.
+
+## 149. Finding Duplicate Files with `fdupes`
+- `fdupes -r /path/to/directory` : Finds duplicate files in a directory recursively.
+
+## 150. Using `timeout` to Limit Command Execution
+- `timeout 5s command` : Runs a command and kills it after 5 seconds.
+
+## 151. Using `chmod` to Change Group Ownership
+- `chmod g+s directory` : Sets the setgid bit on a directory, ensuring new files inherit the group.
+
+## 152. Using `tr` for Character Translation
+- `echo "hello" | tr 'a-z' 'A-Z'` : Converts all lowercase letters to uppercase.
+
+## 153. Using `find` with `delete`
+- `find . -name "*.tmp" -delete` : Finds and deletes temporary files.
+
+## 154. Using `ps` with Format Options
+- `ps -eo pid,comm,%mem,%cpu --sort=-%mem` : Displays processes sorted by memory usage.
+
+## 155. Batch Downloading with `wget`
+- `wget -i list.txt` : Downloads all URLs listed in a text file.
+
+## 156. Checking Disk Usage with `df`
+- `df -h` : Displays disk space usage in a human-readable format.
+
+## 157. Using `fg` to Bring Jobs to Foreground
+- `fg %1` : Brings the first job to the foreground.
+
+## 158. Using `bg` to Move Jobs to Background
+- `bg %1` : Moves the first job to the background.
+
+## 159. Using `at` for Scheduled Commands
+- `echo "command" | at 15:00` : Schedules a command to run at 3 PM.
+
+## 160. Using `crontab` for Cron Jobs
+- `crontab -e` : Edits the current user's crontab file to schedule jobs.
+
+## 161. Searching with `ag` (The Silver Searcher)
+- `ag 'search_term'` : Searches recursively in the current directory for a term.
+
+## 162. Using `alias` for Command Shortcuts
+- `alias ll='ls -la'` : Creates a shortcut for listing files in long format.
+
+## 163. Using `nano` for Simple Text Editing
+- `nano file.txt` : Opens a text file in the nano text editor.
+
+## 164. Using `vim` for Advanced Text Editing
+- `vim file.txt` : Opens a file in the vim text editor.
+
+## 165. Using `sed` for Stream Editing
+- `echo "Hello World" | sed 's/World/Universe/'` : Replaces 'World' with 'Universe' in the output.
+
+## 166. Using `awk` for Text Processing
+- `awk '{print $1}' file.txt` : Prints the first column of a file.
+
+## 167. Using `rsync` for Backups
+- `rsync -av /source/ /destination/` : Synchronizes files from source to destination.
+
+## 168. Using `scp` for Secure Copying with a Key
+- `scp -i ~/.ssh/key.pem file.txt user@remote:/path/` : Securely copies a file using a specific SSH key.
+
+## 169. Using `dig` for DNS Lookups
+- `dig example.com` : Queries DNS records for a domain.
+
+## 170. Using `chmod` for Sticky Bit
+- `chmod +t /path/to/directory` : Sets the sticky bit on a directory.
+
+## 171. Using `history` with Grep
+- `history | grep 'command'` : Searches command history for specific commands.
+
+## 172. Finding Processes by Name with `pgrep`
+- `pgrep -fl process_name` : Lists all processes matching a name.
+
+## 173. Using `killall` to Terminate Processes
+- `killall process_name` : Kills all processes with a specific name.
+
+## 174. Checking File System Type with `df`
+- `df -T` : Shows the type of each mounted filesystem.
+
+## 175. Using `gzip` for Compression
+- `gzip file.txt` : Compresses a file using gzip.
+
+## 176. Using `gunzip` for Decompression
+- `gunzip file.txt.gz` : Decompresses a gzipped file.
+
+## 177. Monitoring Disk Activity with `iotop`
+- `sudo iotop` : Displays disk I/O usage by processes in real-time.
+
+## 178. Using `strace` for Debugging
+- `strace -p PID` : Attaches to a running process and traces system calls.
+
+## 179. Using `curl` for API Requests
+- `curl -X GET https://api.example.com` : Sends a GET request to an API endpoint.
+
+## 180. Using `jq` for JSON Processing
+- `curl -s https://api.example.com | jq '.'` : Parses JSON output from an API.
+
+## 181. Using `ssh` with Tunneling
+- `ssh -L local_port:remote_host:remote_port user@ssh_server` : Sets up a local tunnel.
+
+## 182. Using `watch` to Monitor Command Output
+- `watch -n 5 'df -h'` : Runs a command every 5 seconds to monitor output.
+
+## 183. Checking System Load with `top`
+- `top` : Displays real-time system resource usage.
+
+## 184. Using `vmstat` for System Statistics
+- `vmstat 1` : Reports virtual memory statistics every second.
+
+## 185. Using `free` for Memory Usage
+- `free -h` : Displays memory usage in a human-readable format.
+
+## 186. Using `lsof` to List Open Files by PID
+- `lsof -p PID` : Lists all open files associated with a specific process ID.
+
+## 187. Using `uptime` for System Load Average
+- `uptime` : Shows how long the system has been running and current load averages.
+
+## 188. Finding File Size with `find`
+- `find . -size +100M` : Finds files larger than 100MB.
+
+## 189. Using `basename` to Extract File Name
+- `basename /path/to/file.txt` : Outputs just the filename without the path.
+
+## 190. Using `dirname` to Extract Directory Name
+- `dirname /path/to/file.txt` : Outputs just the directory path.
+
+## 191. Using `basename` with Command Substitution
+- `file_name=$(basename /path/to/file.txt)` : Assigns the filename to a variable.
+
+## 192. Using `shuf` for Random Selection
+- `shuf -n 1 list.txt` : Randomly selects one line from a file.
+
+## 193. Using `seq` for Number Sequences
+- `seq 1 10` : Generates a sequence of numbers from 1 to 10.
+
+## 194. Using `md5sum` for File Checksums
+- `md5sum file.txt` : Computes the MD5 checksum of a file.
+
+## 195. Using `sha256sum` for Secure Checksums
+- `sha256sum file.txt` : Computes the SHA256 checksum of a file.
+
+## 196. Using `htop` for Enhanced Process Monitoring
+- `htop` : An interactive process viewer and system monitor.
+
+## 197. Using `basename` with Different Extensions
+- `basename file.txt .txt` : Removes the specified extension from the filename.
+
+## 198. Using `chown` for Changing Ownership
+- `chown user:group file.txt` : Changes the owner and group of a file.
+
+## 199. Using `find` for Executable Files
+- `find /path/to/search -type f -executable` : Finds all executable files in a directory.
+
+## 200. Creating User Groups with `groupadd`
+- `groupadd newgroup` : Creates a new user group.
+
 ## Conclusion
-These commands provide a comprehensive guide for advanced shell scripting and system management in a production environment. They will help you enhance your skills and productivity while working with Linux.
+This comprehensive collection of bash commands equips you with the necessary tools for efficient command-line management and scripting in a Linux environment. Use these commands to enhance your productivity and streamline your workflows.
 """
+
+
 
 
