@@ -305,18 +305,6 @@ suitable for production-level tasks.
    - **Syntax**: `journalctl [options]`
    - **Example**: `journalctl -u sshd`
 
-... (continue with more commands to reach 100+ entries)
-
----
-
-This document includes commands for network configurations, file permissions, compression, process management, and more, covering all aspects necessary for Linux systems administration in production environments.
-
-# Advanced Linux Commands for Production Environments (Expanded Version)
-
-This document contains 150+ advanced Linux commands with detailed explanations, usage, and examples, suitable for production-level tasks.
-
----
-
 ### 21. **netstat**
    - **Description**: Displays network connections, routing tables, interface statistics, masquerade connections, and multicast memberships.
    - **Syntax**: `netstat [options]`
@@ -329,7 +317,7 @@ This document contains 150+ advanced Linux commands with detailed explanations, 
 
 ### 23. **traceroute**
    - **Description**: Traces the path packets take to a network host.
-   - **Syntax**: `traceroute [host]`
+*Syntax**: `traceroute [host]`
    - **Example**: `traceroute google.com`
 
 ### 24. **ping**
@@ -562,21 +550,7 @@ This document now contains over 200 advanced Linux commands with detailed explan
 ### 85. **dd**
    - **Description**: Converts and copies files; used for creating bootable drives.
    - **Syntax**: `dd [options]`
-   - **Example**: `dd if=/dev/zero of=/tmp/output.img bs=1M count=100`
-
----
-
-This document now covers over 200 commands, suitable for intensive system monitoring, debugging, networking, user management, and disk operations, with examples and descriptions for easy reference.
-
-# Adding even more specialized commands for a comprehensive toolkit, aiming to reach beyond 250 commands in total.
-
-# Additional entries with a focus on data processing, scripting, security, performance tuning, and container management.
-even_more_expanded_linux_commands_content = """
----
-
-# Production-Level Advanced Linux Commands (Even More Expanded Version)
-
-This update includes further advanced commands to enhance functionality in data processing, security, performance tuning, and container management.
+   - **Example**: `dd if=/dev/zero of=/tmp/output.img bs=1M count=100
 
 ### 86. **rsync**
    - **Description**: Synchronizes files and directories between two locations efficiently.
@@ -678,20 +652,6 @@ This update includes further advanced commands to enhance functionality in data 
    - **Syntax**: `php-fpm [options]`
    - **Example**: `php-fpm -y /etc/php-fpm.conf`
 
----
-
-This document is now further expanded with commands covering data processing, security tools, scripting, and container management, with detailed syntax and examples.
-"""
-
-# Append this additional layer to the previously expanded file to reach a total beyond 250 commands
-even_more_expanded_file_path = "/mnt/data/Even_More_Expanded_Advanced_Linux_Commands.md"
-with open(even_more_expanded_file_path, "w") as file:
-    file.write(linux_commands_content + expanded_linux_commands_content + further_expanded_linux_commands_content + even_more_expanded_linux_commands_content)
-
-# Ultimate Production-Level Linux Command Toolkit
-
-This edition expands into monitoring, security hardening, advanced networking, filesystem management, and container orchestration commands for production environments.
-
 ### 106. **strace**
    - **Description**: Traces system calls and signals.
    - **Syntax**: `strace [options] command`
@@ -711,7 +671,6 @@ This edition expands into monitoring, security hardening, advanced networking, f
    - **Description**: Ban IPs that show malicious signs based on log entries.
    - **Syntax**: `fail2ban-client [options]`
    - **Example**: `fail2ban-client status`
-
 ### 110. **auditctl**
    - **Description**: Configures kernel audit subsystem.
    - **Syntax**: `auditctl [options]`
