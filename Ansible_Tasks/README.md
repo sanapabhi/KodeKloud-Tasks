@@ -529,31 +529,40 @@ Ensures the Windows Update service is running.
 # Summary of Key Concepts
 
 **Playbook Structure
-A playbook is a YAML file containing plays. Each play defines a set of tasks to execute on specified hosts.
+		
+  	A playbook is a YAML file containing plays. Each play defines a set of tasks to execute on specified hosts.
 
 **Inventory
-An inventory is a file that lists all the hosts Ansible will manage. It can be in INI, YAML, or dynamic formats.
+
+	An inventory is a file that lists all the hosts Ansible will manage. It can be in INI, YAML, or dynamic formats.
 
 **Variables
-Ansible supports variables to make playbooks more dynamic. Variables can be defined in playbooks, inventory files, or external sources.
+
+	Ansible supports variables to make playbooks more dynamic. Variables can be defined in playbooks, inventory files, or external sources.
 
 **Roles
-Roles are a way to organize playbooks and tasks into reusable components. Each role has its own directory structure.
+
+	Roles are a way to organize playbooks and tasks into reusable components. Each role has its own directory structure.
 
 **Handlers
-Handlers are special tasks that only run when notified by another task. This is useful for managing services.
+
+	Handlers are special tasks that only run when notified by another task. This is useful for managing services.
 
 **Facts
-Ansible collects information about remote hosts, known as facts. These can be used to make decisions in playbooks.
+
+	Ansible collects information about remote hosts, known as facts. These can be used to make decisions in playbooks.
 
 **Templates
-Ansible uses Jinja2 templates to dynamically create files based on variables.
+
+	Ansible uses Jinja2 templates to dynamically create files based on variables.
 
 **Vault
-Ansible Vault is used to encrypt sensitive data, such as passwords or API keys, in your playbooks.
+
+	Ansible Vault is used to encrypt sensitive data, such as passwords or API keys, in your playbooks.
 
 **Modules
-Ansible has a wide range of modules for various tasks, including system management, cloud management, and more.
+
+	Ansible has a wide range of modules for various tasks, including system management, cloud management, and more.
 
 ---------------------------------------------------------------------------------------------------
 
