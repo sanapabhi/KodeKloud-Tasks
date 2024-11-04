@@ -528,39 +528,39 @@ Ensures the Windows Update service is running.
 
 # Summary of Key Concepts
 
-**Playbook Structure
+**Playbook Structure**
 		
   	A playbook is a YAML file containing plays. Each play defines a set of tasks to execute on specified hosts.
 
-**Inventory
+**Inventory**
 
 	An inventory is a file that lists all the hosts Ansible will manage. It can be in INI, YAML, or dynamic formats.
 
-**Variables
+**Variables**
 
 	Ansible supports variables to make playbooks more dynamic. Variables can be defined in playbooks, inventory files, or external sources.
 
-**Roles
+**Roles**
 
 	Roles are a way to organize playbooks and tasks into reusable components. Each role has its own directory structure.
 
-**Handlers
+**Handlers**
 
 	Handlers are special tasks that only run when notified by another task. This is useful for managing services.
 
-**Facts
+**Facts**
 
 	Ansible collects information about remote hosts, known as facts. These can be used to make decisions in playbooks.
 
-**Templates
+**Templates**
 
 	Ansible uses Jinja2 templates to dynamically create files based on variables.
 
-**Vault
+**Vault**
 
 	Ansible Vault is used to encrypt sensitive data, such as passwords or API keys, in your playbooks.
 
-**Modules
+**Modules**
 
 	Ansible has a wide range of modules for various tasks, including system management, cloud management, and more.
 
