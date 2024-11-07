@@ -1,0 +1,132 @@
+Question:3. The Nautilus DevOps team is strategizing the migration of a portion of their infrastructure to the Azure cloud. 
+Recognizing the scale of this undertaking, they have opted to approach the migration in incremental steps rather than as a single massive transition. 
+To achieve this, they have segmented large tasks into smaller, more manageable units. 
+This granular approach enables the team to execute the migration in gradual phases, ensuring smoother implementation and minimizing disruption to ongoing operations.
+
+Create a Virtual Network (VNet) named datacenter-vnet in the East US region with any IPv4 CIDR block.
+
+Use below given Azure Credentials: (You can run the showcreds command on the azure-client host to retrieve these credentials)
+
+------------------------------------------------------------------------------------------
+| Portal URL	  |	https://portal.azure.com											                         |
+------------------------------------------------------------------------------------------
+| Username   	  |kk_lab_user_main-1aa509dbd09f4287@azurekmlprodkodekloud.onmicrosoft.com |
+------------------------------------------------------------------------------------------
+| Password	    | b%XpR4P^3Ad!%y!F												                         		   |
+------------------------------------------------------------------------------------------
+| Start Time	  |	Thu Nov 07 11:15:29 UTC 2024								                       		 |
+------------------------------------------------------------------------------------------
+| End Time	    |      Thu Nov 07 12:15:29 UTC 2024							                			   |
+------------------------------------------------------------------------------------------
+
+we had two meeting internally we will share you rfq in next week in monday or tuesday we plan meeting with you at next thursday
+
+1. Open the Azure Portal: Navigate to Azure Portal.
+
+![image](https://github.com/user-attachments/assets/789f51f0-0b7d-4e39-b08f-8ba3127ff40d)
+
+2. Enter Your Credentials:
+
+● Username: kk_lab_user_main-1aa509dbd09f4287@azurekmlprodkodekloud.onmicrosoft.com
+
+● Password: b%XpR4P^3Ad!%y!F	
+
+![image](https://github.com/user-attachments/assets/c055fc59-c7e3-42bd-a5fa-c78290215cc8)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 2: Create a Virtual Machine
+
+3. Get Started: Click on the "Get started" button or navigate through the main page.
+
+![image](https://github.com/user-attachments/assets/b4eb8065-f6d5-48c1-a4f0-e92ecfb5d3cf)
+
+4. Select Plans & Next: Follow the on-screen instructions and select the relevant plans.
+
+![image](https://github.com/user-attachments/assets/a0602dc4-8017-4756-9407-d6cf8945d31e)
+
+5. Start Tour: You may choose to start a tour of the portal to familiarize yourself.
+
+![image](https://github.com/user-attachments/assets/40196b8a-5531-44fc-bc6e-651d3460d299)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 3: Search for "Virtual Network"
+Once logged in, use the search bar at the top of the Azure Portal.
+Type Virtual Network or VNet into the search bar to find the relevant service.
+Click on the Virtual Networks option that appears in the search results.
+
+![image](https://github.com/user-attachments/assets/faf2fc35-c3e8-4026-a810-4eedbab2c43a)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 4: Click on "Create"
+In the Virtual Networks page, click on the + Create button located on the top left side.
+
+![image](https://github.com/user-attachments/assets/ad957178-84d8-429b-b07c-c2d6e0829b86)
+
+● Overview of Virtual network tab
+![image](https://github.com/user-attachments/assets/c3fc47e0-e492-4b1c-aef5-b98f03120ad8)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 5: Fill Out the Instance Details
+In the Create Virtual Network wizard, fill in the necessary details:
+
+Subscription: Choose the appropriate subscription from the dropdown.
+Resource Group: You can either select an existing resource group or create a new one.
+Region: Set the region to East US to meet the requirement.
+Name: Set the VNet name to datacenter-vnet.
+Once all the details are entered, click on the Next: IP Addresses button to move to the next configuration step.
+
+![image](https://github.com/user-attachments/assets/d6132884-6ad4-4d8f-9bda-49c832dfb1c0)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 6: Configure IP Addressing
+In the IP Addresses tab, you can either:
+Keep the default IPv4 CIDR block (e.g., 10.0.0.0/16) or
+Modify the CIDR block to meet your specific needs (e.g., 192.168.0.0/16).
+Review the settings and click on the Next: Review + Create button to proceed.
+
+![image](https://github.com/user-attachments/assets/907fb02b-2987-4577-bef8-9235de3ee02c)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 7: Review the Configuration
+The Review + Create tab will display all the configuration settings for your VNet.
+Ensure that all the details (such as name, region, IP addresses, etc.) are correct.
+Once reviewed, click on the Create button to start the deployment of the VNet.
+![image](https://github.com/user-attachments/assets/2c3daaaa-498a-4060-9b0a-791d797a5c8d)
+
+---------------------------------------------------------------------------------------------------
+
+# Step 8: Monitor the Deployment
+The Deployment in Progress page will appear, indicating that the VNet is being created.
+Wait for the process to complete. Once it finishes, you will see a Deployment Succeeded message.
+
+![image](https://github.com/user-attachments/assets/11f48bdd-6ab4-4775-8cfc-ed88922ad05a)
+
+---------------------------------------------------------------------------------------------------
+
+# Validation and Verification
+Once the VNet is successfully created, you can verify its creation and properties by navigating to the Virtual Networks page in the Azure Portal.
+
+In the Azure portal, go to Virtual Networks and search for datacenter-vnet.
+Click on the newly created VNet to see its details, including the IP address range, subnet configuration, and more.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
