@@ -133,7 +133,222 @@
 - **`az monitor log-query`**: Query logs for troubleshooting.
 - **`az monitor alert list`**: List active alerts.
 
----
+# Azure CLI Commands
+
+## Basic Commands
+
+### Authentication and Login
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az login`             | Log in to your Azure account.                           |
+| `az account set`       | Set your default subscription.                          |
+| `az account show`      | Display information about the current account.          |
+
+### Resource Groups
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az group create`      | Create a new resource group.                            |
+| `az group list`        | List all resource groups.                               |
+| `az group delete`      | Delete a resource group.                                |
+| `az group show`        | Show details of a specific resource group.              |
+
+### Virtual Machines
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az vm create`         | Create a new virtual machine.                           |
+| `az vm list`           | List all virtual machines.                              |
+| `az vm start`          | Start a virtual machine.                                |
+| `az vm stop`           | Stop a virtual machine.                                 |
+| `az vm delete`         | Delete a virtual machine.                               |
+
+### Virtual Machine Scale Sets
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az vmss create`       | Create a virtual machine scale set.                     |
+| `az vmss scale`        | Scale a virtual machine scale set.                      |
+
+### Storage Accounts
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az storage account create` | Create a new storage account.                         |
+| `az storage account list`   | List all storage accounts.                            |
+| `az storage account delete` | Delete a storage account.                             |
+
+### Blobs
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az storage blob upload-blob` | Upload a blob to a storage account.                  |
+| `az storage blob download-blob` | Download a blob from a storage account.            |
+
+### Files
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az storage file service create` | Create a file share.                               |
+| `az storage file upload-file`  | Upload a file to a file share.                      |
+
+### Virtual Networks
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az network vnet create` | Create a new virtual network.                          |
+| `az network vnet list`   | List all virtual networks.                             |
+| `az network vnet delete` | Delete a virtual network.                              |
+
+### Network Security Groups
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az network nsg create` | Create a new network security group.                    |
+| `az network nsg rule create` | Create a new security rule.                         |
+| `az network nsg rule list`   | List security rules.                                |
+
+### Public IP Addresses
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az network public-ip create` | Create a public IP address.                         |
+| `az network public-ip delete` | Delete a public IP address.                         |
+
+### Load Balancers
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az network lb create` | Create a load balancer.                                 |
+| `az network lb rule create` | Create a load balancer rule.                        |
+| `az network lb probe create` | Create a health probe for the load balancer.        |
+
+## Advanced Commands
+
+### Azure Resource Manager (ARM) Templates
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az deployment group create` | Deploy resources using an ARM template.             |
+| `az deployment group validate` | Validate an ARM template.                        |
+| `az deployment group what-if` | Preview the changes that would be made by a deployment. |
+
+### Azure Functions
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az functionapp create` | Create a new Azure Function app.                        |
+| `az functionapp deploy` | Deploy a function app.                                  |
+
+### Azure App Service
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az webapp create`     | Create a new web app.                                   |
+| `az webapp deploy`     | Deploy a web app.                                       |
+
+### Azure Kubernetes Service (AKS)
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az aks create`        | Create a new AKS cluster.                               |
+| `az aks get-credentials` | Get Kubernetes credentials.                            |
+
+### Azure Monitor
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az monitor log-query` | Query Azure Monitor logs.                               |
+| `az monitor alert create` | Create a new alert.                                  |
+| `az monitor alert list` | List all active alerts.                                |
+
+## Production-Level Commands
+
+### Azure Automation
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az automation runbook create` | Create a new runbook.                            |
+| `az automation job schedule` | Schedule a runbook job.                         |
+| `az automation job list` | List all runbook jobs.                               |
+
+### Azure Policy
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az policy assignment create` | Assign a policy to a resource group.                |
+| `az policy definition create` | Create a new policy definition.                   |
+
+### Azure Backup
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az backup protection enable-for-vm` | Enable backup for a VM.                        |
+| `az backup restore restore-disks` | Restore disks from a backup.                   |
+
+### Azure Site Recovery
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az site-recovery replication-group create` | Create a replication group.                |
+| `az site-recovery replication-group failover` | Failover a replication group.            |
+
+## Security and Compliance Commands
+
+### Azure Security Center
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az security center assessment list` | List security assessments for your subscriptions. |
+| `az security center policy assignment create` | Assign a security policy to a resource group. |
+
+### Azure Key Vault
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az keyvault create`    | Create a key vault to store secrets.                    |
+| `az keyvault secret set` | Set a secret in a key vault.                           |
+
+### Azure Active Directory
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az ad sp create-for-rbac` | Create a service principal for RBAC.                   |
+| `az ad group create`    | Create an Azure AD group.                               |
+
+### Azure Blueprints
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az blueprint definition create` | Create a blueprint definition.                    |
+| `az blueprint assignment create` | Assign a blueprint to a scope.                    |
+
+## Troubleshooting Commands
+
+### Azure CLI
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az --version`         | Check the Azure CLI version.                            |
+| `az account show`      | Show the current account information.                   |
+| `az group show`        | Show information about a resource group.                |
+| `az vm show`           | Show information about a virtual machine.               |
+
+### Azure Resource Manager
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az deployment group show` | Show information about a deployment.                  |
+| `az deployment group validate` | Validate an ARM template.                         |
+
+### Azure Monitor
+
+| **Command**            | **Description**                                         |
+|------------------------|---------------------------------------------------------|
+| `az monitor log-query` | Query logs for troubleshooting.                         |
+| `az monitor alert list` | List active alerts.                                    |
+
 
 ### Additional Tips
 - **Use Azure CLI Extensions**: Install and use extensions to extend the functionality of the Azure CLI.
